@@ -5,14 +5,13 @@
   },
   "info": {
     "title": "OpenAPI definition",
-    "version": "v0"
-  },
-  "servers": [
-    {
-      "url": "http://www.ku-ring.com",
-      "description": "Generated server url"
+    "version": "v2",
+    "description": "",
+    "contact": {
+      "name": ""
     }
-  ],
+  },
+  "servers": [],
   "tags": [
     {
       "name": "Admin-Query",
@@ -3181,6 +3180,7 @@
           "id": "1vr4q6juzbod5"
         }
       }
-    }
+    },
+    "securitySchemes": {}
   }
 }
