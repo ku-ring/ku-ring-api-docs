@@ -22,8 +22,6 @@ components:
 tags:
   - name: Draft
     description: 📝 설계 초안 단계입니다. 실제 호출이 불가능하거나 구조가 변경될 수 있습니다.
-  - name: Completed
-    description: ✅ 개발 및 배포가 완료되어 실제 서버에서 호출 가능한 API입니다.
   - name: Deprecated
     description: ⚠️ 곧 삭제될 예정인 API입니다. 신규 개발 시 사용을 지양하세요.
 
@@ -282,7 +280,8 @@ paths:
                 $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/users/notifications/academic-events:
     patch:
-      tags: [Completed, User]
+      tags:
+        - User
       summary: 사용자 학사일정 알림 설정 수정
       operationId: updateAcademicEventNotification
       security:
