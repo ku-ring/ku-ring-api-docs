@@ -52,7 +52,9 @@ paths:
   # ------------------------------------------------------------------
   /api/v2/users/login:
     post:
-      tags: [Completed, User]
+      tags:
+        - Completed
+        - User
       summary: 사용자 로그인
       operationId: login
       security:
