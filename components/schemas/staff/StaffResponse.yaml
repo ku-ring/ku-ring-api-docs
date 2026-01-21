@@ -1,0 +1,21 @@
+type: object
+description: 교직원 정보
+properties:
+  name:
+    type: string
+    example: "김건국"
+  major:
+    type: string
+    example: "컴퓨터공학부"
+  lab:
+    type: string
+    example: "공학관 123호"
+  phone:
+    type: string
+    example: "02-450-1234"
+  email:
+    type: string
+    example: "kimkk@konkuk.ac.kr"
+  dept:
+    type: string
+    example: "공과대학"

@@ -1,0 +1,15 @@
+type: object
+description: 학사일정 정보
+properties:
+  subject:
+    type: string
+    description: 일정 제목
+    example: "1학기 수강신청"
+  startDate:
+    type: string
+    format: date
+    example: "2024-02-14"
+  endDate:
+    type: string
+    format: date
+    example: "2024-02-16"

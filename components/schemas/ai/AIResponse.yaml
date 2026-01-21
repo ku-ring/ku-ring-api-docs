@@ -1,0 +1,7 @@
+type: object
+description: AI 응답 메시지
+properties:
+  answer:
+    type: string
+    description: AI 답변 내용
+    example: "전과 신청 기간은 1월 15일부터입니다."

@@ -1,0 +1,10 @@
+type: object
+description: 인증번호 발송 요청
+properties:
+  email:
+    type: string
+    format: email
+    description: 인증할 건국대 이메일
+    example: "kuring@konkuk.ac.kr"
+required:
+  - email

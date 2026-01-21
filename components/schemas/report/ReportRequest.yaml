@@ -1,0 +1,19 @@
+type: object
+description: 신고 접수 요청
+properties:
+  boardId:
+    type: string
+    description: 게시글 ID (댓글 신고 시에는 해당 댓글의 게시글 ID)
+    example: "56281"
+  commentId:
+    type: string
+    description: 댓글 ID (게시글 신고 시 생략)
+    nullable: true
+    example: "comment_123"
+  category:
+    type: string
+    description: 신고 사유
+    example: "욕설/비하"
+required:
+  - boardId
+  - category

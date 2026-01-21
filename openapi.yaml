@@ -17,11 +17,21 @@ components:
       
 tags:
   - name: User
-    description: 사용자 관련 API (로그인, 정보, 구독 등)
+    description: 사용자 관련 API
   - name: Notice
     description: 공지사항 관련 API
   - name: Admin
     description: 관리자 전용 API
+  - name: Verification
+    description: 이메일 인증 API
+  - name: Staff
+    description: 교직원 검색 API
+  - name: AI
+    description: AI 챗봇 API
+  - name: Academic
+    description: 학사일정 API
+  - name: Report
+    description: 신고 기능 API
 
 # 2. API 경로 정의
 paths:
@@ -779,3 +789,172 @@ paths:
                         type: array
                         items:
                           $ref: './components/schemas/admin/AdminFeedbackResponse.yaml'
+  # ------------------------------------------------------------------
+  # [인증] Verification
+  # ------------------------------------------------------------------
+  /api/v2/verification-code/signup:
+    post:
+      tags: [Verification]
+      summary: 회원가입용 인증번호 발송
+      operationId: sendSignupCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/schemas/verification/VerificationCodeRequest.yaml'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas/common/BaseResponse.yaml'
+
+  /api/v2/verification-code/password-reset:
+    post:
+      tags: [Verification]
+      summary: 비밀번호 재설정용 인증번호 발송
+      operationId: sendPasswordResetCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/schemas/verification/VerificationCodeRequest.yaml'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas/common/BaseResponse.yaml'
+
+  /api/v2/verification-code/verify:
+    post:
+      tags: [Verification]
+      summary: 인증번호 검증
+      operationId: verifyCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/schemas/verification/VerificationCheckRequest.yaml'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas/common/BaseResponse.yaml'
+
+  # ------------------------------------------------------------------
+  # [교직원] Staff
+  # ------------------------------------------------------------------
+  /api/v2/staffs/search:
+    get:
+      tags: [Staff]
+      summary: 교직원 검색
+      operationId: searchStaffs
+      parameters:
+        - name: content
+          in: query
+          description: 검색어 (이름, 학과 등)
+          required: true
+          schema:
+            type: string
+            example: "김건국"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: './components/schemas/staff/StaffResponse.yaml'
+
+  # ------------------------------------------------------------------
+  # [AI] Chatbot
+  # ------------------------------------------------------------------
+  /api/v2/ai/messages:
+    get:
+      tags: [AI]
+      summary: AI에게 질문하기
+      description: "SSE(Server-Sent Events) 스트림 방식으로 응답이 올 수 있습니다."
+      operationId: askAI
+      security:
+        - UserTokenAuth: []
+      parameters:
+        - name: question
+          in: query
+          description: 질문 내용
+          required: true
+          schema:
+            type: string
+            example: "전과 신청 언제까지야?"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './components/schemas/ai/AIResponse.yaml'
+
+  # ------------------------------------------------------------------
+  # [학사일정] Academic
+  # ------------------------------------------------------------------
+  /api/v2/academic-events:
+    get:
+      tags: [Academic]
+      summary: 학사일정 조회
+      operationId: getAcademicEvents
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: './components/schemas/academic/AcademicEventResponse.yaml'
+
+  # ------------------------------------------------------------------
+  # [신고] Report
+  # ------------------------------------------------------------------
+  /api/v2/reports:
+    post:
+      tags: [Report]
+      summary: 게시글/댓글 신고
+      operationId: createReport
+      security:
+        - UserTokenAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/schemas/report/ReportRequest.yaml'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas/common/BaseResponse.yaml'

@@ -1,0 +1,15 @@
+type: object
+description: 인증번호 검증 요청
+properties:
+  email:
+    type: string
+    format: email
+    description: 이메일
+    example: "kuring@konkuk.ac.kr"
+  code:
+    type: string
+    description: 전송받은 인증번호
+    example: "123456"
+required:
+  - email
+  - code
