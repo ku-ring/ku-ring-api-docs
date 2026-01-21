@@ -789,6 +789,37 @@ paths:
                         type: array
                         items:
                           $ref: './components/schemas/admin/AdminFeedbackResponse.yaml'
+  /api/v2/admin/embedding:
+    post:
+      tags: [Admin]
+      summary: 데이터 임베딩 실행
+      description: 최신 공지사항이나 학사 정보를 AI 검색용 데이터로 변환합니다.
+      operationId: runEmbedding
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas/common/BaseResponse.yaml'
+
+  /api/v2/admin/academic/dev:
+    post:
+      tags: [Admin]
+      summary: 테스트 학사일정 알림 전송 (Dev)
+      description: 개발 서버 환경에서 학사일정 푸시 알림을 테스트합니다.
+      operationId: sendDevAcademicAlert
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas/common/BaseResponse.yaml'
   # ------------------------------------------------------------------
   # [인증] Verification
   # ------------------------------------------------------------------
