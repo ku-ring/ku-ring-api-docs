@@ -1,0 +1,10 @@
+type: object
+description: 댓글 작성/수정 요청
+properties:
+  content:
+    type: string
+    description: 댓글 내용 (최대 256자)
+    maxLength: 256
+    example: "전과 신청 기간이 정확히 언제까지인가요?"
+required:
+  - content

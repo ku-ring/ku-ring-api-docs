@@ -2,9 +2,13 @@ type: object
 properties:
   name:
     type: string
-    description: 카테고리 이름 (key)
+    description: 카테고리 코드 (Key)
+    example: "bachelor"
   hostPrefix:
     type: string
+    description: 호스트 접두사
+    example: "bachelor"
   korName:
     type: string
-    description: 카테고리 한글 이름
+    description: 카테고리 한글명
+    example: "학사"

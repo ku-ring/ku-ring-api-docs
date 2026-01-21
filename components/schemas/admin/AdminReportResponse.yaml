@@ -1,0 +1,21 @@
+type: object
+description: 신고 내용 조회
+properties:
+  id:
+    type: string
+    example: "report_55"
+  reason:
+    type: string
+    example: "욕설/비하 발언"
+  targetContent:
+    type: string
+    description: 신고된 댓글/게시글 내용
+    example: "야 이 바보야"
+  reporterId:
+    type: string
+    description: 신고자 ID
+    example: "user_123"
+  createdAt:
+    type: string
+    format: date-time
+    example: "2024-05-01T10:00:00"

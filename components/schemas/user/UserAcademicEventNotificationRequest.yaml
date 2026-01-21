@@ -2,5 +2,7 @@ type: object
 properties:
   enabled:
     type: boolean
+    description: 학사일정 알림 수신 여부
+    example: true
 required:
   - enabled

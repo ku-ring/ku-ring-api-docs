@@ -2,5 +2,7 @@ type: object
 properties:
   articleId:
     type: string
+    description: 북마크할 게시글 ID
+    example: "51234"
 required:
   - articleId

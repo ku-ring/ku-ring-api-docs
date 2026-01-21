@@ -1,0 +1,20 @@
+type: object
+description: 예약 알림 정보
+properties:
+  id:
+    type: string
+    example: "alert_999"
+  title:
+    type: string
+    example: "수강신청 10분 전입니다!"
+  message:
+    type: string
+    example: "잊지 말고 준비하세요."
+  reservedTime:
+    type: string
+    format: date-time
+    example: "2024-02-15T09:50:00"
+  status:
+    type: string
+    enum: [PENDING, SENT, FAILED]
+    example: "PENDING"

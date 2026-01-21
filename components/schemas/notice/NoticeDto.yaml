@@ -1,0 +1,27 @@
+type: object
+description: 공지사항 단일 객체 정보
+properties:
+  articleId:
+    type: string
+    description: 게시글 ID
+    example: "56281"
+  postedDate:
+    type: string
+    description: 게시일 (YYYY-MM-DD)
+    example: "2023-10-31"
+  subject:
+    type: string
+    description: 제목
+    example: "[학사] 2024학년도 1학기 전과 신청 안내"
+  category:
+    type: string
+    description: 카테고리 (student, bachelor, scholarship, etc.)
+    example: "bachelor"
+  important:
+    type: boolean
+    description: 중요 공지 여부
+    example: true
+  baseUrl:
+    type: string
+    description: 원본 URL
+    example: "https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281"

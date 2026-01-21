@@ -3,10 +3,12 @@ properties:
   email:
     type: string
     format: email
-    example: "user@example.com"
+    description: 건국대 이메일
+    example: "kuring@konkuk.ac.kr"
   password:
     type: string
-    example: "password1234"
+    description: 비밀번호
+    example: "password1234!"
 required:
   - email
   - password

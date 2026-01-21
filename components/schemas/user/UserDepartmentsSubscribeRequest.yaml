@@ -2,7 +2,10 @@ type: object
 properties:
   departments:
     type: array
+    description: 구독할 학과 코드 목록
     items:
       type: string
+      example: "computer_cse"
+    example: ["computer_cse", "bachelor_korea"]
 required:
   - departments

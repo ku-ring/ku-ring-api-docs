@@ -2,5 +2,5 @@ type: object
 properties:
   accessToken:
     type: string
-    description: "JWT Access Token"
-    example: "eyJhbGciOiJIUzI1NiIsIn..."
+    description: JWT 액세스 토큰
+    example: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ..."

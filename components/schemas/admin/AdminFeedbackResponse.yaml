@@ -1,0 +1,16 @@
+type: object
+description: 사용자 피드백 조회
+properties:
+  id:
+    type: string
+    example: "fb_77"
+  content:
+    type: string
+    example: "다크모드가 안 돼요."
+  userId:
+    type: string
+    example: "user_999"
+  createdAt:
+    type: string
+    format: date-time
+    example: "2024-05-02T15:30:00"

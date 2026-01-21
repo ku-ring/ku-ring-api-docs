@@ -1,0 +1,16 @@
+type: object
+description: 공지사항 지원 학과 목록
+properties:
+  departments:
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 학과 코드
+          example: "computer_cse"
+        korName:
+          type: string
+          description: 학과 한글명
+          example: "컴퓨터공학부"

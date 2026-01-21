@@ -1,0 +1,7 @@
+type: object
+description: 공지사항 목록 응답
+properties:
+  notices:
+    type: array
+    items:
+      $ref: './NoticeDto.yaml'

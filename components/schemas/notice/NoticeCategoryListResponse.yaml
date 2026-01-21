@@ -1,0 +1,9 @@
+type: object
+description: 공지사항 지원 카테고리 목록
+properties:
+  categories:
+    type: array
+    items:
+      type: string
+      description: 카테고리 이름
+      example: "bachelor"

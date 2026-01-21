@@ -2,7 +2,9 @@ type: object
 properties:
   content:
     type: string
+    description: 피드백 내용 (5~256자)
     minLength: 5
     maxLength: 256
+    example: "앱이 너무 편리해요! 다크 모드도 추가해주세요."
 required:
   - content

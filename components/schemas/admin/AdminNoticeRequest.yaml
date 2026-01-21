@@ -1,0 +1,23 @@
+type: object
+description: 관리자 공지 등록 요청
+properties:
+  subject:
+    type: string
+    description: 공지 제목
+    example: "[점검] 서버 점검 안내"
+  content:
+    type: string
+    description: 공지 내용
+    example: "새벽 2시부터 점검이 있습니다."
+  category:
+    type: string
+    description: 카테고리
+    example: "app_notice"
+  important:
+    type: boolean
+    description: 중요 여부
+    example: true
+required:
+  - subject
+  - content
+  - category

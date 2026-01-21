@@ -3,7 +3,9 @@ properties:
   email:
     type: string
     format: email
-    example: "user@example.com"
+    description: 사용자 이메일
+    example: "kuring@konkuk.ac.kr"
   nickname:
     type: string
+    description: 사용자 닉네임
     example: "쿠링이"

@@ -1,0 +1,24 @@
+type: object
+description: 댓글 정보
+properties:
+  id:
+    type: string
+    description: 댓글 ID
+    example: "comment_123"
+  articleId:
+    type: string
+    description: 게시글 ID
+    example: "56281"
+  content:
+    type: string
+    description: 댓글 내용
+    example: "전과 신청 기간이 정확히 언제까지인가요?"
+  userId:
+    type: string
+    description: 작성자 익명 ID
+    example: "kuring***"
+  createdAt:
+    type: string
+    format: date-time
+    description: 작성 시간
+    example: "2024-01-15T14:30:00"
