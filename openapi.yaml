@@ -1,4 +1,6 @@
 openapi: 3.0.1
+x-stoplight:
+  id: 68a341c676710
 info:
   title: Kuring API
   version: v2
@@ -11,15 +13,14 @@ servers:
 components:
   securitySchemes:
     UserTokenAuth:
-      name: apiKey
       type: apiKey
-      in: query
+      in: header
+      name: User-Token
     BearerAuth:
       type: http
       scheme: bearer
 # 2. API 경로 연결 (User 도메인)
 paths:
-  # --- User Domain ---
   /api/v2/users/login:
     $ref: ./paths/users/login.yaml
   /api/v2/users/logout:
