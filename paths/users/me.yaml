@@ -1,0 +1,18 @@
+get:
+  tags: [User-Query]
+  summary: 사용자 정보 조회
+  operationId: lookupUserInfo
+  security:
+    - BearerAuth: []
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../components/schemas/common/BaseResponse.yaml'
+              - type: object
+                properties:
+                  data:
+                    $ref: '../../components/schemas/user/UserInfoResponse.yaml'

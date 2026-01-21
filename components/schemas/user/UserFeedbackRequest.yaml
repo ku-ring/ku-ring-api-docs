@@ -1,0 +1,8 @@
+type: object
+properties:
+  content:
+    type: string
+    minLength: 5
+    maxLength: 256
+required:
+  - content

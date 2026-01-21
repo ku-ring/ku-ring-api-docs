@@ -1,0 +1,19 @@
+post:
+  tags: [User-Command]
+  summary: 사용자 피드백 작성
+  operationId: saveFeedback
+  security:
+    - UserTokenAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/user/UserFeedbackRequest.yaml'
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/common/BaseResponse.yaml'

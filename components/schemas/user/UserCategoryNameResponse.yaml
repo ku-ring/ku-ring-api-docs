@@ -1,0 +1,10 @@
+type: object
+properties:
+  name:
+    type: string
+    description: 카테고리 이름 (key)
+  hostPrefix:
+    type: string
+  korName:
+    type: string
+    description: 카테고리 한글 이름

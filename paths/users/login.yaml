@@ -1,0 +1,24 @@
+post:
+  tags: [User-Command]
+  summary: 사용자 로그인
+  operationId: login
+  security:
+    - UserTokenAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/user/UserLoginRequest.yaml'
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../components/schemas/common/BaseResponse.yaml'
+              - type: object
+                properties:
+                  data:
+                    $ref: '../../components/schemas/user/UserLoginResponse.yaml'

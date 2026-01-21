@@ -1,0 +1,39 @@
+get:
+  tags: [User-Query]
+  summary: 사용자 학과 조회
+  operationId: lookupUserSubscribeDepartments
+  security:
+    - UserTokenAuth: []
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../components/schemas/common/BaseResponse.yaml'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '../../components/schemas/user/UserDepartmentNameResponse.yaml'
+post:
+  tags: [User-Command]
+  summary: 사용자 학과 수정
+  operationId: editUserSubscribeDepartments
+  security:
+    - UserTokenAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/user/UserDepartmentsSubscribeRequest.yaml'
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/common/BaseResponse.yaml'

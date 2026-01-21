@@ -1,0 +1,9 @@
+type: object
+properties:
+  email:
+    type: string
+    format: email
+    example: "user@example.com"
+  nickname:
+    type: string
+    example: "쿠링이"

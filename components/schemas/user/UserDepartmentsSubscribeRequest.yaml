@@ -1,0 +1,8 @@
+type: object
+properties:
+  departments:
+    type: array
+    items:
+      type: string
+required:
+  - departments

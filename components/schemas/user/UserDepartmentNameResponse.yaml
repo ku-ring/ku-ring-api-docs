@@ -1,0 +1,11 @@
+type: object
+properties:
+  name:
+    type: string
+    description: 학과 이름 (key)
+  hostPrefix:
+    type: string
+    description: 호스트 접두사
+  korName:
+    type: string
+    description: 학과 한글 이름

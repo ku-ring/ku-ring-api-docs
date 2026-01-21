@@ -1,0 +1,46 @@
+openapi: 3.0.1
+info:
+  title: Kuring API
+  version: v2
+  description: Kuring 서비스 API 명세서
+servers:
+  - url: 'https://api.kuring.com'
+    description: Production Server
+# 1. 보안 설정 (전역 설정)
+# 모든 API에 공통으로 적용될 보안 스키마를 정의하거나 불러옵니다.
+components:
+  securitySchemes:
+    UserTokenAuth:
+      name: apiKey
+      type: apiKey
+      in: query
+    BearerAuth:
+      type: http
+      scheme: bearer
+# 2. API 경로 연결 (User 도메인)
+paths:
+  # --- User Domain ---
+  /api/v2/users/login:
+    $ref: ./paths/users/login.yaml
+  /api/v2/users/logout:
+    $ref: ./paths/users/logout.yaml
+  /api/v2/users/signup:
+    $ref: ./paths/users/signup.yaml
+  /api/v2/users/withdraw:
+    $ref: ./paths/users/withdraw.yaml
+  /api/v2/users/password:
+    $ref: ./paths/users/password.yaml
+  /api/v2/users/user-me:
+    $ref: ./paths/users/me.yaml
+  /api/v2/users/ask-counts:
+    $ref: ./paths/users/ask-counts.yaml
+  /api/v2/users/feedbacks:
+    $ref: ./paths/users/feedbacks.yaml
+  /api/v2/users/bookmarks:
+    $ref: ./paths/users/bookmarks.yaml
+  /api/v2/users/subscriptions/departments:
+    $ref: ./paths/users/subscriptions-departments.yaml
+  /api/v2/users/subscriptions/categories:
+    $ref: ./paths/users/subscriptions-categories.yaml
+  /api/v2/users/notifications/academic-events:
+    $ref: ./paths/users/notifications-academic.yaml

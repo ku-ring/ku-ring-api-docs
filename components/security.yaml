@@ -1,0 +1,10 @@
+# API Key 방식 (User-Token)
+UserTokenAuth:
+  type: apiKey
+  in: header
+  name: User-Token
+
+# Bearer Token 방식 (Authorization)
+BearerAuth:
+  type: http
+  scheme: bearer

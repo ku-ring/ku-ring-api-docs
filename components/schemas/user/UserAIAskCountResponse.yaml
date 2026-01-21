@@ -1,0 +1,10 @@
+type: object
+properties:
+  leftAskCount:
+    type: integer
+    format: int32
+    description: 남은 질문 횟수
+  maxAskCount:
+    type: integer
+    format: int32
+    description: 최대 질문 가능 횟수

@@ -1,0 +1,17 @@
+type: object
+properties:
+  articleId:
+    type: string
+    description: 게시글 ID
+  postedDate:
+    type: string
+    description: 게시일
+  subject:
+    type: string
+    description: 제목
+  category:
+    type: string
+    description: 카테고리
+  baseUrl:
+    type: string
+    description: 원본 URL

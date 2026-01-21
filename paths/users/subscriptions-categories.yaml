@@ -1,0 +1,39 @@
+get:
+  tags: [User-Query]
+  summary: 사용자 카테고리 조회
+  operationId: lookupUserSubscribeCategories
+  security:
+    - UserTokenAuth: []
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../components/schemas/common/BaseResponse.yaml'
+              - type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '../../components/schemas/user/UserCategoryNameResponse.yaml'
+post:
+  tags: [User-Command]
+  summary: 사용자 카테고리 수정
+  operationId: editUserSubscribeCategories
+  security:
+    - UserTokenAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/user/UserCategoriesSubscribeRequest.yaml'
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/common/BaseResponse.yaml'

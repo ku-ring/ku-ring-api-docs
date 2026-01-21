@@ -1,0 +1,6 @@
+type: object
+properties:
+  accessToken:
+    type: string
+    description: "JWT Access Token"
+    example: "eyJhbGciOiJIUzI1NiIsIn..."

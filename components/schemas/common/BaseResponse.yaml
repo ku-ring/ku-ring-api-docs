@@ -1,0 +1,14 @@
+type: object
+required:
+  - code
+  - message
+properties:
+  code:
+    type: integer
+    format: int32
+    example: 200
+    description: 응답 코드
+  message:
+    type: string
+    example: "OK"
+    description: 응답 메시지
