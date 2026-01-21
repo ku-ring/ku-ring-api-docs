@@ -20,6 +20,11 @@ components:
       type: http
       scheme: bearer
 tags:
+  - name: Draft
+    description: 📝 설계 초안 단계입니다. 실제 호출이 불가능하거나 구조가 변경될 수 있습니다.
+  - name: Deprecated
+    description: ⚠️ 곧 삭제될 예정인 API입니다. 신규 개발 시 사용을 지양하세요.
+
   - name: User
     description: 사용자 관련 API
   - name: Notice
@@ -36,6 +41,8 @@ tags:
     description: 학사일정 API
   - name: Report
     description: 신고 기능 API
+  - name: Club
+    description: 교내 동아리 정보 조회 및 관리 API
 # 2. API 경로 정의
 paths:
   # ------------------------------------------------------------------
@@ -1005,3 +1012,43 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+  # ------------------------------------------------------------------
+  # [동아리] Club
+  # ------------------------------------------------------------------
+  /api/v2/clubs/{id}:
+    get:
+      tags:
+        - Draft
+      summary: 동아리 상세 정보 조회
+      description: 특정 ID를 가진 동아리의 상세 정보를 조회합니다.
+      operationId: getClubDetail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 조회할 동아리 ID
+          schema:
+            type: string
+            example: "club_001"
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './components/schemas/club/ClubDetailResponse.yaml'
+        '404':
+          description: 해당 ID의 동아리를 찾을 수 없음
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas/common/ErrorResponse.yaml'
+              example:
+                isSuccess: false
+                resultMsg: "존재하지 않는 동아리입니다."
+                resultCode: 404
