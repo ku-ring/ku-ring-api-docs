@@ -45,3 +45,4 @@ paths:
     $ref: ./paths/users/subscriptions-categories.yaml
   /api/v2/users/notifications/academic-events:
     $ref: ./paths/users/notifications-academic.yaml
+x-internal: false

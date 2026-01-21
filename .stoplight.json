@@ -1,0 +1,11 @@
+{
+  "formats": {
+    "openapi": {
+      "rootDir": "openapi.yaml",
+      "include": [
+        "openapi.yaml"
+      ]
+    }
+  },
+  "exclude": []
+}
