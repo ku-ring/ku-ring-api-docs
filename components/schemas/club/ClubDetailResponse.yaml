@@ -1,0 +1,65 @@
+type: object
+description: 동아리 상세 정보 객체
+properties:
+  id:
+    type: string
+    description: 동아리 고유 ID
+    example: "club_001"
+  name:
+    type: string
+    description: 동아리 이름
+    example: "쿠링 (Kuring)"
+  summary:
+    type: string
+    description: 한 줄 요약
+    example: "건국대학교 공지사항 알림 서비스 개발 동아리"
+  instagramId:
+    type: string
+    description: 인스타그램 ID
+    example: "kuring.official"
+  location:
+    type: string
+    description: 동아리방 위치 (텍스트)
+    example: "학생회관 403호"
+  latitude:
+    type: number
+    format: double
+    description: 동아리방 위도
+    example: 37.541
+  longitude:
+    type: number
+    format: double
+    description: 동아리방 경도
+    example: 127.079
+  description:
+    type: string
+    description: 동아리 상세 설명
+    example: "쿠링은 대학 생활의 불편함을 IT 기술로 해결하는 팀입니다."
+  qualification:
+    type: string
+    description: 지원 자격
+    example: "건국대학교 재학생 및 휴학생 (전공 무관)"
+  applyStartDate:
+    type: string
+    format: date-time
+    description: 모집 시작 일시
+    example: "2026-03-02T09:00:00"
+  applyEndDate:
+    type: string
+    format: date-time
+    description: 모집 종료 일시
+    example: "2026-03-15T23:59:59"
+  images:
+    type: array
+    description: 동아리 본문 사진 URL 목록
+    items:
+      type: string
+    example: ["https://cdn.kuring.com/club/1.jpg", "https://cdn.kuring.com/club/2.jpg"]
+  applyUrl:
+    type: string
+    description: 지원 링크 (구글 폼 등)
+    example: "https://forms.gle/kuring2026"
+required:
+  - id
+  - name
+  - summary
