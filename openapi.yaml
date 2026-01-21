@@ -2,7 +2,12 @@ openapi: 3.0.1
 info:
   title: Kuring API
   version: v2
-  description: Kuring 서비스 API 명세서
+  description: "### \U0001F393 건국대 공지사항 알림 서비스 '쿠링'의 공식 API 명세서입니다.    \n이 문서는 **Kuring 프로젝트**의 백엔드 기능을 정의합니다. \n\n* **담당자**: 쿠링 팀 (kuring.korea@gmail.com)\n* **문서 업데이트**: 2026-01-21"
+  contact:
+    name: Github
+    url: 'https://github.com/ku-ring'
+    email: kuring.korea@gmail.com
+  termsOfService: ''
 
 # 1. 보안 설정 (전역)
 components:
@@ -14,7 +19,6 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
-      
 tags:
   - name: User
     description: 사용자 관련 API
@@ -32,7 +36,6 @@ tags:
     description: 학사일정 API
   - name: Report
     description: 신고 기능 API
-
 # 2. API 경로 정의
 paths:
   # ------------------------------------------------------------------
@@ -40,7 +43,8 @@ paths:
   # ------------------------------------------------------------------
   /api/v2/users/login:
     post:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 로그인
       operationId: login
       security:
@@ -50,7 +54,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/user/UserLoginRequest.yaml'
+              $ref: ./components/schemas/user/UserLoginRequest.yaml
       responses:
         '200':
           description: OK
@@ -58,15 +62,15 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
-                        $ref: './components/schemas/user/UserLoginResponse.yaml'
-
+                        $ref: ./components/schemas/user/UserLoginResponse.yaml
   /api/v2/users/logout:
     post:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 로그아웃
       operationId: logout
       security:
@@ -78,11 +82,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/users/signup:
     post:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 회원가입
       operationId: signup
       security:
@@ -92,18 +96,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/user/UserSignupRequest.yaml'
+              $ref: ./components/schemas/user/UserSignupRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/users/withdraw:
     delete:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 회원 탈퇴
       operationId: withdraw
       security:
@@ -114,11 +118,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/users/password:
     patch:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 비밀번호 변경
       operationId: modifyPassword
       security:
@@ -128,21 +132,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/user/UserPasswordModifyRequest.yaml'
+              $ref: ./components/schemas/user/UserPasswordModifyRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   # ------------------------------------------------------------------
   # [사용자 정보]
   # ------------------------------------------------------------------
   /api/v2/users/user-me:
     get:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 정보 조회
       operationId: lookupUserInfo
       security:
@@ -154,15 +158,15 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
-                        $ref: './components/schemas/user/UserInfoResponse.yaml'
-
+                        $ref: ./components/schemas/user/UserInfoResponse.yaml
   /api/v2/users/ask-counts:
     get:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 질문 가능횟수 조회
       operationId: lookupUserAIAskCount
       security:
@@ -175,18 +179,18 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
-                        $ref: './components/schemas/user/UserAIAskCountResponse.yaml'
-
-  # ------------------------------------------------------------------
-  # [구독 및 알림]
-  # ------------------------------------------------------------------
+                        $ref: ./components/schemas/user/UserAIAskCountResponse.yaml
+                # ------------------------------------------------------------------
+                # [구독 및 알림]
+                # ------------------------------------------------------------------
   /api/v2/users/subscriptions/departments:
     get:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 학과 조회
       operationId: lookupUserSubscribeDepartments
       security:
@@ -198,15 +202,16 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
-                          $ref: './components/schemas/user/UserDepartmentNameResponse.yaml'
+                          $ref: ./components/schemas/user/UserDepartmentNameResponse.yaml
     post:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 학과 수정
       operationId: editUserSubscribeDepartments
       security:
@@ -216,18 +221,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/user/UserDepartmentsSubscribeRequest.yaml'
+              $ref: ./components/schemas/user/UserDepartmentsSubscribeRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/users/subscriptions/categories:
     get:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 카테고리 조회
       operationId: lookupUserSubscribeCategories
       security:
@@ -239,15 +244,16 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
-                          $ref: './components/schemas/user/UserCategoryNameResponse.yaml'
+                          $ref: ./components/schemas/user/UserCategoryNameResponse.yaml
     post:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 카테고리 수정
       operationId: editUserSubscribeCategories
       security:
@@ -257,18 +263,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/user/UserCategoriesSubscribeRequest.yaml'
+              $ref: ./components/schemas/user/UserCategoriesSubscribeRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/users/notifications/academic-events:
     patch:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 학사일정 알림 설정 수정
       operationId: updateAcademicEventNotification
       security:
@@ -278,21 +284,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/user/UserAcademicEventNotificationRequest.yaml'
+              $ref: ./components/schemas/user/UserAcademicEventNotificationRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   # ------------------------------------------------------------------
   # [기타 기능]
   # ------------------------------------------------------------------
   /api/v2/users/feedbacks:
     post:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 피드백 작성
       operationId: saveFeedback
       security:
@@ -302,18 +308,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/user/UserFeedbackRequest.yaml'
+              $ref: ./components/schemas/user/UserFeedbackRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/users/bookmarks:
     get:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 북마크 조회
       operationId: lookupUserBookmarks
       security:
@@ -325,15 +331,16 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
-                          $ref: './components/schemas/user/UserBookmarkResponse.yaml'
+                          $ref: ./components/schemas/user/UserBookmarkResponse.yaml
     post:
-      tags: [User]
+      tags:
+        - User
       summary: 사용자 북마크 작성
       operationId: saveBookmark
       security:
@@ -343,44 +350,47 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/user/UserBookmarkRequest.yaml'
+              $ref: ./components/schemas/user/UserBookmarkRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
+                $ref: ./components/schemas/common/BaseResponse.yaml
   # ------------------------------------------------------------------
   # [공지사항] Notice
   # ------------------------------------------------------------------
   /api/v2/notices:
     get:
-      tags: [Notice]
+      tags:
+        - Notice
       summary: 공지사항 목록 조회
       description: 특정 학과나 카테고리의 공지사항 목록을 조회합니다.
       operationId: getNotices
       parameters:
         - name: type
           in: query
-          description: 조회 타입 (school=학교공지, dep=학과공지)
+          description: '조회 타입 (school=학교공지, dep=학과공지)'
           required: true
           schema:
             type: string
-            enum: [school, dep]
-            example: "dep"
+            enum:
+              - school
+              - dep
+            example: dep
         - name: department
           in: query
           description: 학과 코드 (type이 dep일 때 필수)
           schema:
             type: string
-            example: "computer_cse"
+            example: computer_cse
         - name: category
           in: query
           description: 카테고리 (type이 school일 때 필수)
           schema:
             type: string
-            example: "bachelor"
+            example: bachelor
         - name: page
           in: query
           description: 페이지 번호 (0부터 시작)
@@ -400,15 +410,15 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
-                        $ref: './components/schemas/notice/NoticeListResponse.yaml'
-
+                        $ref: ./components/schemas/notice/NoticeListResponse.yaml
   /api/v2/notices/search:
     get:
-      tags: [Notice]
+      tags:
+        - Notice
       summary: 공지사항 키워드 검색
       operationId: searchNotices
       parameters:
@@ -418,7 +428,7 @@ paths:
           required: true
           schema:
             type: string
-            example: "장학금 수강신청"
+            example: 장학금 수강신청
         - name: page
           in: query
           schema:
@@ -436,15 +446,15 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
-                        $ref: './components/schemas/notice/NoticeListResponse.yaml'
-
+                        $ref: ./components/schemas/notice/NoticeListResponse.yaml
   /api/v2/notices/departments:
     get:
-      tags: [Notice]
+      tags:
+        - Notice
       summary: 공지 조회 지원 학과 목록
       operationId: getNoticeDepartments
       responses:
@@ -454,15 +464,15 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
-                        $ref: './components/schemas/notice/NoticeDepartmentListResponse.yaml'
-
+                        $ref: ./components/schemas/notice/NoticeDepartmentListResponse.yaml
   /api/v2/notices/categories:
     get:
-      tags: [Notice]
+      tags:
+        - Notice
       summary: 공지 조회 지원 카테고리 목록
       operationId: getNoticeCategories
       responses:
@@ -472,18 +482,18 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
-                        $ref: './components/schemas/notice/NoticeCategoryListResponse.yaml'
-
-  # ------------------------------------------------------------------
-  # [공지사항 댓글] Notice Comments
-  # ------------------------------------------------------------------
-  /api/v2/notices/{articleId}/comments:
+                        $ref: ./components/schemas/notice/NoticeCategoryListResponse.yaml
+                # ------------------------------------------------------------------
+                # [공지사항 댓글] Notice Comments
+                # ------------------------------------------------------------------
+  '/api/v2/notices/{articleId}/comments':
     get:
-      tags: [Notice]
+      tags:
+        - Notice
       summary: 공지사항 댓글 조회
       operationId: getNoticeComments
       parameters:
@@ -493,7 +503,7 @@ paths:
           description: 게시글 ID
           schema:
             type: string
-            example: "56281"
+            example: '56281'
       responses:
         '200':
           description: OK
@@ -501,15 +511,16 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
-                          $ref: './components/schemas/notice/NoticeCommentDto.yaml'
+                          $ref: ./components/schemas/notice/NoticeCommentDto.yaml
     post:
-      tags: [Notice]
+      tags:
+        - Notice
       summary: 공지사항 댓글 작성
       operationId: createNoticeComment
       security:
@@ -525,20 +536,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/notice/NoticeCommentRequest.yaml'
+              $ref: ./components/schemas/notice/NoticeCommentRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
-  /api/v2/notices/{articleId}/comments/{commentId}:
+                $ref: ./components/schemas/common/BaseResponse.yaml
+  '/api/v2/notices/{articleId}/comments/{commentId}':
     post:
-      tags: [Notice]
+      tags:
+        - Notice
       summary: 공지사항 댓글 수정
-      description: "주의: REST 표준(PATCH)이 아닌 POST 메서드를 사용합니다."
+      description: '주의: REST 표준(PATCH)이 아닌 POST 메서드를 사용합니다.'
       operationId: updateNoticeComment
       security:
         - UserTokenAuth: []
@@ -559,16 +570,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/notice/NoticeCommentRequest.yaml'
+              $ref: ./components/schemas/notice/NoticeCommentRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
+                $ref: ./components/schemas/common/BaseResponse.yaml
     delete:
-      tags: [Notice]
+      tags:
+        - Notice
       summary: 공지사항 댓글 삭제
       operationId: deleteNoticeComment
       security:
@@ -590,13 +602,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
+                $ref: ./components/schemas/common/BaseResponse.yaml
   # ------------------------------------------------------------------
   # [관리자] Admin
   # ------------------------------------------------------------------
   /api/v2/admin/notices/prod:
     post:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 실제 공지사항 전송 (Prod)
       description: 앱 사용자 전체에게 푸시 알림과 함께 공지를 등록합니다.
       operationId: createProdNotice
@@ -607,18 +620,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/admin/AdminNoticeRequest.yaml'
+              $ref: ./components/schemas/admin/AdminNoticeRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/admin/notices/dev:
     post:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 테스트 공지사항 전송 (Dev)
       description: 개발 서버 혹은 테스터에게만 공지를 전송합니다.
       operationId: createDevNotice
@@ -629,18 +642,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/admin/AdminNoticeRequest.yaml'
+              $ref: ./components/schemas/admin/AdminNoticeRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/admin/users/subscriptions/all:
     post:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 사용자 전체 재구독 처리
       description: 모든 사용자의 구독 정보를 갱신합니다. (비상용)
       operationId: refreshAllSubscriptions
@@ -652,11 +665,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/admin/alerts:
     get:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 예약 알림 목록 조회
       operationId: getAdminAlerts
       security:
@@ -668,15 +681,16 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
-                          $ref: './components/schemas/admin/AdminAlertDto.yaml'
+                          $ref: ./components/schemas/admin/AdminAlertDto.yaml
     post:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 예약 알림 등록
       operationId: createAdminAlert
       security:
@@ -686,18 +700,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/admin/AdminAlertRequest.yaml'
+              $ref: ./components/schemas/admin/AdminAlertRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
-  /api/v2/admin/alerts/{id}:
+                $ref: ./components/schemas/common/BaseResponse.yaml
+  '/api/v2/admin/alerts/{id}':
     delete:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 예약 알림 취소/삭제
       operationId: deleteAdminAlert
       security:
@@ -714,11 +728,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/admin/whitelist-words/reload:
     post:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 허용 단어 사전 리로드
       operationId: reloadWhitelist
       security:
@@ -729,11 +743,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/admin/badwords/reload:
     post:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 금칙어 사전 리로드
       operationId: reloadBadwords
       security:
@@ -744,11 +758,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/admin/reports:
     get:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 신고 목록 조회
       operationId: getReports
       security:
@@ -760,17 +774,17 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
-                          $ref: './components/schemas/admin/AdminReportResponse.yaml'
-
+                          $ref: ./components/schemas/admin/AdminReportResponse.yaml
   /api/v2/admin/feedbacks:
     get:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 피드백 목록 조회
       operationId: getFeedbacks
       security:
@@ -782,16 +796,17 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
-                          $ref: './components/schemas/admin/AdminFeedbackResponse.yaml'
+                          $ref: ./components/schemas/admin/AdminFeedbackResponse.yaml
   /api/v2/admin/embedding:
     post:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 데이터 임베딩 실행
       description: 최신 공지사항이나 학사 정보를 AI 검색용 데이터로 변환합니다.
       operationId: runEmbedding
@@ -803,11 +818,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/admin/academic/dev:
     post:
-      tags: [Admin]
+      tags:
+        - Admin
       summary: 테스트 학사일정 알림 전송 (Dev)
       description: 개발 서버 환경에서 학사일정 푸시 알림을 테스트합니다.
       operationId: sendDevAcademicAlert
@@ -819,13 +834,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
+                $ref: ./components/schemas/common/BaseResponse.yaml
   # ------------------------------------------------------------------
   # [인증] Verification
   # ------------------------------------------------------------------
   /api/v2/verification-code/signup:
     post:
-      tags: [Verification]
+      tags:
+        - Verification
       summary: 회원가입용 인증번호 발송
       operationId: sendSignupCode
       requestBody:
@@ -833,18 +849,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/verification/VerificationCodeRequest.yaml'
+              $ref: ./components/schemas/verification/VerificationCodeRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/verification-code/password-reset:
     post:
-      tags: [Verification]
+      tags:
+        - Verification
       summary: 비밀번호 재설정용 인증번호 발송
       operationId: sendPasswordResetCode
       requestBody:
@@ -852,18 +868,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/verification/VerificationCodeRequest.yaml'
+              $ref: ./components/schemas/verification/VerificationCodeRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   /api/v2/verification-code/verify:
     post:
-      tags: [Verification]
+      tags:
+        - Verification
       summary: 인증번호 검증
       operationId: verifyCode
       requestBody:
@@ -871,31 +887,31 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/verification/VerificationCheckRequest.yaml'
+              $ref: ./components/schemas/verification/VerificationCheckRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
-
+                $ref: ./components/schemas/common/BaseResponse.yaml
   # ------------------------------------------------------------------
   # [교직원] Staff
   # ------------------------------------------------------------------
   /api/v2/staffs/search:
     get:
-      tags: [Staff]
+      tags:
+        - Staff
       summary: 교직원 검색
       operationId: searchStaffs
       parameters:
         - name: content
           in: query
-          description: 검색어 (이름, 학과 등)
+          description: '검색어 (이름, 학과 등)'
           required: true
           schema:
             type: string
-            example: "김건국"
+            example: 김건국
       responses:
         '200':
           description: OK
@@ -903,22 +919,22 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
-                          $ref: './components/schemas/staff/StaffResponse.yaml'
-
-  # ------------------------------------------------------------------
-  # [AI] Chatbot
-  # ------------------------------------------------------------------
+                          $ref: ./components/schemas/staff/StaffResponse.yaml
+                # ------------------------------------------------------------------
+                # [AI] Chatbot
+                # ------------------------------------------------------------------
   /api/v2/ai/messages:
     get:
-      tags: [AI]
+      tags:
+        - AI
       summary: AI에게 질문하기
-      description: "SSE(Server-Sent Events) 스트림 방식으로 응답이 올 수 있습니다."
+      description: SSE(Server-Sent Events) 스트림 방식으로 응답이 올 수 있습니다.
       operationId: askAI
       security:
         - UserTokenAuth: []
@@ -929,7 +945,7 @@ paths:
           required: true
           schema:
             type: string
-            example: "전과 신청 언제까지야?"
+            example: 전과 신청 언제까지야?
       responses:
         '200':
           description: OK
@@ -937,18 +953,18 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
-                        $ref: './components/schemas/ai/AIResponse.yaml'
-
-  # ------------------------------------------------------------------
-  # [학사일정] Academic
-  # ------------------------------------------------------------------
+                        $ref: ./components/schemas/ai/AIResponse.yaml
+                # ------------------------------------------------------------------
+                # [학사일정] Academic
+                # ------------------------------------------------------------------
   /api/v2/academic-events:
     get:
-      tags: [Academic]
+      tags:
+        - Academic
       summary: 학사일정 조회
       operationId: getAcademicEvents
       responses:
@@ -958,20 +974,20 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
-                          $ref: './components/schemas/academic/AcademicEventResponse.yaml'
-
-  # ------------------------------------------------------------------
-  # [신고] Report
-  # ------------------------------------------------------------------
+                          $ref: ./components/schemas/academic/AcademicEventResponse.yaml
+                # ------------------------------------------------------------------
+                # [신고] Report
+                # ------------------------------------------------------------------
   /api/v2/reports:
     post:
-      tags: [Report]
+      tags:
+        - Report
       summary: 게시글/댓글 신고
       operationId: createReport
       security:
@@ -981,11 +997,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas/report/ReportRequest.yaml'
+              $ref: ./components/schemas/report/ReportRequest.yaml
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/BaseResponse.yaml'
+                $ref: ./components/schemas/common/BaseResponse.yaml
