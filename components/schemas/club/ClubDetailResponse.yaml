@@ -1,37 +1,137 @@
 type: object
+description: 동아리 상세 정보 응답 객체
+examples:
+  - id: 1
+    name: 리드미
+    summary: '단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임'
+    category: null
+    affiliation: CENTRAL
+    division: string
+    isSubscribed: true
+    subscriberCount: 128
+    instagramUrl: 'https://instagram.com/kuring.official'
+    description: 저희 리드미는 2020년부터 시작된...
+    qualifications: |-
+      건국대학교 재학생 및 휴학생 누구나
+      (매주 목요일 활동 가능하신 분)
+    isRecruiting: true
+    recruitStartAt: '2026-03-02T00:00:00'
+    recruitEndAt: '2026-03-15T23:59:59'
+    applyUrl: 'https://forms.gle/xyz...'
+    descriptionImageUrl: string
+    location:
+      building: string
+      room: string
 properties:
   id:
     type: integer
-    description: "동아리 ID"
+    format: int64
+    description: 동아리 ID
     example: 1
+  # ----------------------------------------
+  # [1] 헤더 및 기본 정보
+  # ----------------------------------------
   name:
     type: string
-    description: "동아리 이름"
-    example: "Kuring"
-  description:
+    description: '동아리 이름 ({Title})'
+    example: 리드미
+  summary:
     type: string
-    description: "동아리 상세 설명 (Markdown 또는 Text)"
-    example: "쿠링은 건국대학교 학생들을 위한..."
+    description: '한 줄 소개 ({SubTitle})'
+    example: '단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임'
+  # ----------------------------------------
+  # [2] 배지 및 태그 정보
+  # ----------------------------------------
   category:
     type: string
-    example: "학술"
-  imageUrl:
+    description: 동아리카테고리
+  affiliation:
     type: string
-    description: "대표 이미지(포스터) URL"
-    example: "https://api.kuring.com/images/club_detail.png"
-  instagramUrl:
+    description: |
+      소속 구분 (배지 표시용)
+      * `CENTRAL`: 중앙동아리
+      * `COLLEGE`: 단과대 소모임
+    enum:
+      - CENTRAL
+      - COLLEGE
+    example: CENTRAL
+  division:
+    description: |
+      구체적인 소속 부서/단과대명
+      (affiliation이 CENTRAL이면 분과명, COLLEGE면 단과대명)
     type: string
-    description: "인스타그램 링크"
-    example: "https://instagram.com/ku_ring"
-  youtubeUrl:
-    type: string
-    description: "유튜브 링크"
-    example: "https://youtube.com/..."
-  place:
-    type: string
-    description: "동아리방 위치"
-    example: "학생회관 301호"
+  # ----------------------------------------
+  # [3] 메타 데이터 (좋아요/구독)
+  # ----------------------------------------
   isSubscribed:
     type: boolean
-    description: "사용자의 구독 여부"
+    description: 현재 사용자의 구독/즐겨찾기 여부 (별 아이콘 채움 여부)
     example: true
+  subscriberCount:
+    type: integer
+    description: '총 구독자 수 ({n}+)'
+    example: 128
+  # ----------------------------------------
+  # [4] 링크 및 위치 정보 (하이퍼링크)
+  # ----------------------------------------
+  instagramUrl:
+    type: string
+    description: 인스타그램 프로필 링크 (없으면 null)
+    example: 'https://instagram.com/kuring.official'
+  # ----------------------------------------
+  # [5] 상세 내용
+  # ----------------------------------------
+  description:
+    type: string
+    description: '동아리 상세 소개글 ({ClubInfoTextLong}) - 줄바꿈(\n) 포함'
+    example: 저희 리드미는 2020년부터 시작된...
+  qualifications:
+    type: string
+    description: 지원 자격 텍스트 (줄바꿈 포함)
+    example: |-
+      건국대학교 재학생 및 휴학생 누구나
+      (매주 목요일 활동 가능하신 분)
+  # ----------------------------------------
+  # [6] 모집 관련 정보
+  # ----------------------------------------
+  isRecruiting:
+    type: boolean
+    description: 현재 모집 중 여부 (D-day 배지 계산용)
+    example: true
+  recruitStartAt:
+    type: string
+    format: date-time
+    description: 모집 시작 일시
+    example: '2026-03-02T00:00:00'
+  recruitEndAt:
+    type: string
+    format: date-time
+    description: 모집 마감 일시 (D-day 계산용)
+    example: '2026-03-15T23:59:59'
+  applyUrl:
+    type: string
+    description: 지원하기 버튼 클릭 시 이동할 구글폼 URL
+    example: 'https://forms.gle/xyz...'
+  descriptionImageUrl:
+    type: string
+    description: |
+      본문에 포함될 홍보 이미지/포스터 URL 목록
+      (첫 번째 이미지가 대표 썸네일로 사용될 수 있음)
+    x-stoplight:
+      id: tfxf5822txk09
+  location:
+    type: object
+    x-stoplight:
+      id: xu4s7c5plrq8q
+    description: 동아리 위치 정보
+    properties:
+      building:
+        type: string
+        x-stoplight:
+          id: hafkb0pl5w0e5
+        description: 동아리방 건물
+      room:
+        type: string
+        x-stoplight:
+          id: x0lkhthhf4gy5
+        description: 동아리 방 호수
