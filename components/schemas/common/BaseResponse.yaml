@@ -8,11 +8,9 @@ properties:
   code:
     type: integer
     description: 응답 코드 (성공 시 200)
-    example: 200
   message:
     type: string
     description: 응답 메시지
-    example: 요청이 성공하였습니다.
   data:
     type:
       - object

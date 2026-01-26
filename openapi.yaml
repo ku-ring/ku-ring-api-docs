@@ -1130,7 +1130,7 @@ paths:
       operationId: getClubDetail
       security: []
       parameters:
-        - name: clubId
+        - name: id
           in: path
           required: true
           schema:
@@ -1222,6 +1222,7 @@ paths:
       summary: 사용자 동아리 즐겨찾기 추가
       operationId: addUserSubscribeClub
       security:
+        - {}
         - BearerAuth: []
         - UserTokenAuth: []
       requestBody:
@@ -1231,9 +1232,11 @@ paths:
             schema:
               type: object
               properties:
-                clubId:
+                id:
                   type: integer
                   example: 15
+                  x-stoplight:
+                    id: 6gj18cdzbuxr1
       responses:
         '200':
           description: 구독 성공
@@ -1249,9 +1252,15 @@ paths:
                       data:
                         nullable: true
                         example: null
+              examples:
+                Example 1:
+                  value:
+                    code: 200
+                    message: 구독에 성공했습니다.
+                    data: null
       x-stoplight:
         id: avx1ex1702exu
-      description: 사용자가 동아리 즐겨찾기를 추가합니다.
+      description: 로그인한 사용자가 동아리 즐겨찾기를 추가합니다.
     delete:
       tags:
         - Draft
@@ -1268,9 +1277,15 @@ paths:
             schema:
               type: object
               properties:
-                clubId:
+                id:
                   type: integer
                   example: 15
+                  x-stoplight:
+                    id: tyxamaarexozv
+            examples:
+              Example 1:
+                value:
+                  id: 15
       responses:
         '200':
           description: 취소 성공
@@ -1286,19 +1301,12 @@ paths:
                       data:
                         nullable: true
                         example: null
-        '400':
-          description: 구독 정보 없음
-          content:
-            application/json:
-              schema:
-                $ref: ./components/schemas/common/ErrorResponse.yaml
               examples:
-                NotSubscribed:
-                  summary: 구독하지 않은 상태
+                Example 1:
                   value:
-                    isSuccess: false
-                    resultCode: 4002
-                    resultMsg: 구독 중인 동아리가 아닙니다.
+                    code: 200
+                    message: 구독이 취소되었습니다.
+                    data: null
       x-stoplight:
         id: 6qd89rl96a1he
       description: 사용자가 동아리 즐겨찾기를 제거합니다.
