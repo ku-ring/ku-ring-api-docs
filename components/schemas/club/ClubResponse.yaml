@@ -2,25 +2,43 @@ type: object
 properties:
   id:
     type: integer
-    description: "동아리 ID"
+    description: 동아리 ID
     example: 1
   name:
     type: string
-    description: "동아리 이름"
-    example: "Kuring"
+    description: 동아리 이름
+    example: Kuring
   content:
     type: string
-    description: "동아리 한줄 소개"
-    example: "건국대학교 공지사항 알림 서비스 개발 동아리"
+    description: 동아리 한줄 소개
+    example: 건국대학교 공지사항 알림 서비스 개발 동아리
   category:
     type: string
-    description: "카테고리"
-    example: "학술"
+    description: 카테고리
+    example: OUTDOOR
   thumbnailUrl:
     type: string
-    description: "썸네일 이미지 URL"
-    example: "https://api.kuring.com/images/club_thumbnail.png"
+    description: 썸네일 이미지 URL
+    example: 'https://api.kuring.com/images/club_thumbnail.png'
   isSubscribed:
     type: boolean
-    description: "사용자의 구독 여부 (True: 구독중)"
+    description: '사용자의 구독 여부 (True: 구독중)'
     example: false
+  bookmarkCount:
+    type: integer
+    x-stoplight:
+      id: iosvd3nzwj77q
+    description: 즐겨찾기 수
+    example: 19
+  recuritEndDate:
+    type: string
+    x-stoplight:
+      id: y5hnmfqsj9bdu
+    example: '2026-06-03T12:18:00.00000'
+    description: 공고 마감일
+  division:
+    type: string
+    x-stoplight:
+      id: 9bk3s4xaz2uea
+    description: 소속
+    example: CENTRAL
