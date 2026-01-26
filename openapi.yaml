@@ -8,7 +8,6 @@ info:
     url: 'https://github.com/ku-ring'
     email: kuring.korea@gmail.com
   termsOfService: ''
-
 # 1. 보안 설정 (전역)
 components:
   securitySchemes:
@@ -21,10 +20,9 @@ components:
       scheme: bearer
 tags:
   - name: Draft
-    description: 📝 설계 초안 단계입니다. 실제 호출이 불가능하거나 구조가 변경될 수 있습니다.
+    description: 설계 초안 단계입니다. 실제 호출이 불가능하거나 구조가 변경될 수 있습니다.
   - name: Deprecated
     description: ⚠️ 곧 삭제될 예정인 API입니다. 신규 개발 시 사용을 지양하세요.
-
   - name: User
     description: 사용자 관련 API
   - name: Notice
@@ -358,6 +356,57 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserBookmarkRequest.yaml
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/BaseResponse.yaml
+  /api/v2/users/subscriptions/clubs:
+    get:
+      tags:
+        - Draft
+        - User
+      summary: 내 구독 동아리 조회
+      description: "사용자가 구독(즐겨찾기)한 동아리 목록을 조회합니다."
+      operationId: lookupUserSubscribeClubs
+      security:
+        - UserTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: ./components/schemas/club/ClubResponse.yaml
+    post:
+      tags:
+        - Draft
+        - User
+      summary: 동아리 구독 추가
+      description: "특정 동아리를 구독 목록에 추가합니다."
+      operationId: addUserSubscribeClub
+      security:
+        - UserTokenAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clubId:
+                  type: integer
+                  description: "구독할 동아리 ID"
+                  example: 15
       responses:
         '200':
           description: OK
@@ -842,6 +891,29 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+  /api/v2/admin/clubs:
+    post:
+      tags:
+        - Draft
+        - Admin
+      summary: 동아리 등록
+      description: "새로운 동아리 정보를 시스템에 등록합니다."
+      operationId: createClub
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./components/schemas/admin/AdminClubCreateRequest.yaml
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/BaseResponse.yaml
   # ------------------------------------------------------------------
   # [인증] Verification
   # ------------------------------------------------------------------
@@ -1015,40 +1087,65 @@ paths:
   # ------------------------------------------------------------------
   # [동아리] Club
   # ------------------------------------------------------------------
-  /api/v2/clubs/{id}:
+  /api/v2/clubs:
     get:
       tags:
         - Draft
-      summary: 동아리 상세 정보 조회
-      description: 특정 ID를 가진 동아리의 상세 정보를 조회합니다.
-      operationId: getClubDetail
+        - Club
+      summary: 동아리 목록 조회
+      description: "카테고리별 동아리 목록을 조회하거나 키워드로 검색합니다."
+      operationId: getClubs
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: 조회할 동아리 ID
+        - name: category
+          in: query
+          description: "카테고리 (예: 학술, 운동, 봉사 등)"
+          required: false
           schema:
             type: string
-            example: "club_001"
+        - name: keyword
+          in: query
+          description: "검색어 (동아리명)"
+          required: false
+          schema:
+            type: string
       responses:
         '200':
-          description: 성공
+          description: OK
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
                       data:
-                        $ref: './components/schemas/club/ClubDetailResponse.yaml'
-        '404':
-          description: 해당 ID의 동아리를 찾을 수 없음
+                        type: array
+                        items:
+                          $ref: ./components/schemas/club/ClubResponse.yaml
+
+  /api/v2/clubs/{clubId}:
+    get:
+      tags:
+        - Draft
+        - Club
+      summary: 동아리 상세 조회
+      description: "특정 동아리의 상세 정보(소개글, 이미지 등)를 조회합니다."
+      operationId: getClubDetail
+      parameters:
+        - name: clubId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/ErrorResponse.yaml'
-              example:
-                isSuccess: false
-                resultMsg: "존재하지 않는 동아리입니다."
-                resultCode: 404
+                allOf:
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
+                  - type: object
+                    properties:
+                      data:
+                        $ref: ./components/schemas/club/ClubDetailResponse.yaml
