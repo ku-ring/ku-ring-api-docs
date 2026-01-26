@@ -1,0 +1,26 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: "동아리 ID"
+    example: 1
+  name:
+    type: string
+    description: "동아리 이름"
+    example: "Kuring"
+  content:
+    type: string
+    description: "동아리 한줄 소개"
+    example: "건국대학교 공지사항 알림 서비스 개발 동아리"
+  category:
+    type: string
+    description: "카테고리"
+    example: "학술"
+  thumbnailUrl:
+    type: string
+    description: "썸네일 이미지 URL"
+    example: "https://api.kuring.com/images/club_thumbnail.png"
+  isSubscribed:
+    type: boolean
+    description: "사용자의 구독 여부 (True: 구독중)"
+    example: false
