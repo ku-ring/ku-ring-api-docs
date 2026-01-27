@@ -11,8 +11,6 @@ info:
 # 1. 보안 설정 (전역)
 components:
   securitySchemes:
-    UserTokenAuth:
-      $ref: ./components/security.yaml#/UserTokenAuth
     BearerAuth:
       $ref: ./components/security.yaml#/BearerAuth
 tags:
@@ -49,14 +47,19 @@ paths:
         - User
       summary: 사용자 로그인
       operationId: login
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderOptional.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserLoginRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: "kuring@konkuk.ac.kr"
+                  password: "password1234!"
       responses:
         '200':
           description: OK
@@ -69,6 +72,13 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/user/UserLoginResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ..."
   /api/v2/users/logout:
     post:
       tags:
@@ -76,8 +86,9 @@ paths:
       summary: 사용자 로그아웃
       operationId: logout
       security:
-        - UserTokenAuth: []
         - BearerAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -85,20 +96,30 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/users/signup:
     post:
       tags:
         - User
       summary: 사용자 회원가입
       operationId: signup
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderOptional.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserSignupRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: "kuring@konkuk.ac.kr"
+                  password: "password1234!"
       responses:
         '200':
           description: OK
@@ -106,6 +127,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/users/withdraw:
     delete:
       tags:
@@ -121,6 +147,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/users/password:
     patch:
       tags:
@@ -135,6 +166,11 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserPasswordModifyRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: "kuring@konkuk.ac.kr"
+                  password: "newPassword1234!"
       responses:
         '200':
           description: OK
@@ -142,6 +178,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   # ------------------------------------------------------------------
   # [사용자 정보]
   # ------------------------------------------------------------------
@@ -165,6 +206,14 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/user/UserInfoResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      email: "kuring@konkuk.ac.kr"
+                      nickname: "쿠링이"
   /api/v2/users/ask-counts:
     get:
       tags:
@@ -172,8 +221,9 @@ paths:
       summary: 사용자 질문 가능횟수 조회
       operationId: lookupUserAIAskCount
       security:
-        - UserTokenAuth: []
         - BearerAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderOptional.yaml
       responses:
         '200':
           description: OK
@@ -186,6 +236,14 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/user/UserAIAskCountResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      leftAskCount: 3
+                      maxAskCount: 10
                 # ------------------------------------------------------------------
                 # [구독 및 알림]
                 # ------------------------------------------------------------------
@@ -195,8 +253,8 @@ paths:
         - User
       summary: 사용자 학과 조회
       operationId: lookupUserSubscribeDepartments
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -211,19 +269,33 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/user/UserDepartmentNameResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      - name: "computer_cse"
+                        hostPrefix: "cse"
+                        korName: "컴퓨터공학부"
     post:
       tags:
         - User
       summary: 사용자 학과 수정
       operationId: editUserSubscribeDepartments
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserDepartmentsSubscribeRequest.yaml
+            examples:
+              Success:
+                value:
+                  departments:
+                    - "computer_cse"
       responses:
         '200':
           description: OK
@@ -231,14 +303,19 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/users/subscriptions/categories:
     get:
       tags:
         - User
       summary: 사용자 카테고리 조회
       operationId: lookupUserSubscribeCategories
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -253,19 +330,33 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/user/UserCategoryNameResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      - name: "bachelor"
+                        hostPrefix: "bachelor"
+                        korName: "학사"
     post:
       tags:
         - User
       summary: 사용자 카테고리 수정
       operationId: editUserSubscribeCategories
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserCategoriesSubscribeRequest.yaml
+            examples:
+              Success:
+                value:
+                  categories:
+                    - "bachelor"
       responses:
         '200':
           description: OK
@@ -273,20 +364,29 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/users/notifications/academic-events:
     patch:
       tags:
         - User
       summary: 사용자 학사일정 알림 설정 수정
       operationId: updateAcademicEventNotification
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserAcademicEventNotificationRequest.yaml
+            examples:
+              Success:
+                value:
+                  enabled: true
       responses:
         '200':
           description: OK
@@ -294,6 +394,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   # ------------------------------------------------------------------
   # [기타 기능]
   # ------------------------------------------------------------------
@@ -303,14 +408,18 @@ paths:
         - User
       summary: 사용자 피드백 작성
       operationId: saveFeedback
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserFeedbackRequest.yaml
+            examples:
+              Success:
+                value:
+                  content: "앱 사용성이 좋아요. 다만 검색 필터가 더 있으면 좋겠습니다."
       responses:
         '200':
           description: OK
@@ -318,14 +427,19 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/users/bookmarks:
     get:
       tags:
         - User
       summary: 사용자 북마크 조회
       operationId: lookupUserBookmarks
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -340,19 +454,34 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/user/UserBookmarkResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      - articleId: "51234"
+                        postedDate: "2023-10-25"
+                        subject: "2023학년도 2학기 수강신청 안내"
+                        category: "bachelor"
+                        baseUrl: "https://www.konkuk.ac.kr/do/MessageBoard/..."
     post:
       tags:
         - User
       summary: 사용자 북마크 작성
       operationId: saveBookmark
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserBookmarkRequest.yaml
+            examples:
+              Success:
+                value:
+                  articleId: "51234"
       responses:
         '200':
           description: OK
@@ -360,6 +489,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   # ------------------------------------------------------------------
   # [공지사항] Notice
   # ------------------------------------------------------------------
@@ -399,12 +533,14 @@ paths:
           schema:
             type: integer
             default: 0
+            example: 0
         - name: size
           in: query
           description: 페이지 크기
           schema:
             type: integer
             default: 10
+            example: 10
       responses:
         '200':
           description: OK
@@ -417,6 +553,19 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/notice/NoticeListResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      notices:
+                        - articleId: "56281"
+                          postedDate: "2023-10-31"
+                          subject: "[학사] 2024학년도 1학기 전과 신청 안내"
+                          category: "bachelor"
+                          important: true
+                          baseUrl: "https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281"
   /api/v2/notices/search:
     get:
       tags:
@@ -436,11 +585,13 @@ paths:
           schema:
             type: integer
             default: 0
+            example: 0
         - name: size
           in: query
           schema:
             type: integer
             default: 10
+            example: 10
       responses:
         '200':
           description: OK
@@ -453,6 +604,19 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/notice/NoticeListResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      notices:
+                        - articleId: "56281"
+                          postedDate: "2023-10-31"
+                          subject: "[학사] 2024학년도 1학기 전과 신청 안내"
+                          category: "bachelor"
+                          important: true
+                          baseUrl: "https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281"
   /api/v2/notices/departments:
     get:
       tags:
@@ -471,6 +635,15 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/notice/NoticeDepartmentListResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      departments:
+                        - name: "computer_cse"
+                          korName: "컴퓨터공학부"
   /api/v2/notices/categories:
     get:
       tags:
@@ -489,6 +662,15 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/notice/NoticeCategoryListResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      categories:
+                        - "bachelor"
+                        - "scholarship"
                 # ------------------------------------------------------------------
                 # [공지사항 댓글] Notice Comments
                 # ------------------------------------------------------------------
@@ -520,25 +702,37 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/notice/NoticeCommentDto.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      - id: "comment_123"
+                        content: "전과 신청 기간은 공지 본문을 확인해주세요."
+                        createdAt: "2024-01-21T09:00:00Z"
     post:
       tags:
         - Notice
       summary: 공지사항 댓글 작성
       operationId: createNoticeComment
-      security:
-        - UserTokenAuth: []
       parameters:
         - name: articleId
           in: path
           required: true
           schema:
             type: string
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/notice/NoticeCommentRequest.yaml
+            examples:
+              Success:
+                value:
+                  content: "전과 신청 기간이 정확히 언제까지인가요?"
       responses:
         '200':
           description: OK
@@ -546,6 +740,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   '/api/v2/notices/{articleId}/comments/{commentId}':
     post:
       tags:
@@ -553,8 +752,6 @@ paths:
       summary: 공지사항 댓글 수정
       description: '주의: REST 표준(PATCH)이 아닌 POST 메서드를 사용합니다.'
       operationId: updateNoticeComment
-      security:
-        - UserTokenAuth: []
       parameters:
         - name: articleId
           in: path
@@ -567,12 +764,17 @@ paths:
           description: 수정할 댓글 ID
           schema:
             type: string
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/notice/NoticeCommentRequest.yaml
+            examples:
+              Success:
+                value:
+                  content: "확인했습니다. 감사합니다!"
       responses:
         '200':
           description: OK
@@ -580,13 +782,16 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
     delete:
       tags:
         - Notice
       summary: 공지사항 댓글 삭제
       operationId: deleteNoticeComment
-      security:
-        - UserTokenAuth: []
       parameters:
         - name: articleId
           in: path
@@ -598,6 +803,7 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -605,6 +811,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   # ------------------------------------------------------------------
   # [관리자] Admin
   # ------------------------------------------------------------------
@@ -623,6 +834,13 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/admin/AdminNoticeRequest.yaml
+            examples:
+              Success:
+                value:
+                  subject: "[점검] 서버 점검 안내"
+                  content: "새벽 2시부터 점검이 있습니다."
+                  category: "app_notice"
+                  important: true
       responses:
         '200':
           description: OK
@@ -630,6 +848,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/admin/notices/dev:
     post:
       tags:
@@ -645,6 +868,13 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/admin/AdminNoticeRequest.yaml
+            examples:
+              Success:
+                value:
+                  subject: "[테스트] 공지 전송 테스트"
+                  content: "이 공지는 테스트용입니다."
+                  category: "app_notice"
+                  important: false
       responses:
         '200':
           description: OK
@@ -652,6 +882,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/admin/users/subscriptions/all:
     post:
       tags:
@@ -668,6 +903,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/admin/alerts:
     get:
       tags:
@@ -676,6 +916,26 @@ paths:
       operationId: getAdminAlerts
       security:
         - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: 페이지
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+            example: 0
+        - name: size
+          in: query
+          description: 단일 페이지의 사이즈, 1 ~ 30까지 허용
+          required: true
+          schema:
+            maximum: 30
+            minimum: 1
+            type: integer
+            format: int32
+            example: 10
       responses:
         '200':
           description: OK
@@ -690,6 +950,17 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/admin/AdminAlertDto.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      - id: "alert_999"
+                        title: "수강신청 10분 전입니다!"
+                        message: "잊지 말고 준비하세요."
+                        reservedTime: "2024-02-15T09:50:00"
+                        status: "PENDING"
     post:
       tags:
         - Admin
@@ -703,6 +974,12 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/admin/AdminAlertRequest.yaml
+            examples:
+              Success:
+                value:
+                  title: "중간고사 간식 행사"
+                  message: "학생회관에서 햄버거 받아가세요!"
+                  reservedTime: "2024-04-20T12:00:00"
       responses:
         '200':
           description: OK
@@ -710,6 +987,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   '/api/v2/admin/alerts/{id}':
     delete:
       tags:
@@ -731,6 +1013,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/admin/whitelist-words/reload:
     post:
       tags:
@@ -746,6 +1033,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/admin/badwords/reload:
     post:
       tags:
@@ -761,6 +1053,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/admin/reports:
     get:
       tags:
@@ -769,6 +1066,26 @@ paths:
       operationId: getReports
       security:
         - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: 페이지
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+            example: 0
+        - name: size
+          in: query
+          description: 단일 페이지의 사이즈, 1 ~ 30까지 허용
+          required: true
+          schema:
+            maximum: 30
+            minimum: 1
+            type: integer
+            format: int32
+            example: 10
       responses:
         '200':
           description: OK
@@ -783,6 +1100,12 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/admin/AdminReportResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: []
   /api/v2/admin/feedbacks:
     get:
       tags:
@@ -791,6 +1114,26 @@ paths:
       operationId: getFeedbacks
       security:
         - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: 페이지
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+            example: 0
+        - name: size
+          in: query
+          description: 단일 페이지의 사이즈, 1 ~ 30까지 허용
+          required: true
+          schema:
+            maximum: 30
+            minimum: 1
+            type: integer
+            format: int32
+            example: 10
       responses:
         '200':
           description: OK
@@ -805,6 +1148,12 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/admin/AdminFeedbackResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: []
   /api/v2/admin/embedding:
     post:
       tags:
@@ -821,6 +1170,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/admin/academic/dev:
     post:
       tags:
@@ -837,6 +1191,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   # ------------------------------------------------------------------
   # [인증] Verification
   # ------------------------------------------------------------------
@@ -852,6 +1211,10 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/verification/VerificationCodeRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: "kuring@konkuk.ac.kr"
       responses:
         '200':
           description: OK
@@ -859,6 +1222,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/verification-code/password-reset:
     post:
       tags:
@@ -871,6 +1239,10 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/verification/VerificationCodeRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: "kuring@konkuk.ac.kr"
       responses:
         '200':
           description: OK
@@ -878,6 +1250,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   /api/v2/verification-code/verify:
     post:
       tags:
@@ -890,6 +1267,11 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/verification/VerificationCheckRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: "kuring@konkuk.ac.kr"
+                  code: "123456"
       responses:
         '200':
           description: OK
@@ -897,6 +1279,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   # ------------------------------------------------------------------
   # [교직원] Staff
   # ------------------------------------------------------------------
@@ -928,6 +1315,18 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/staff/StaffResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      - name: "김건국"
+                        major: "컴퓨터공학부"
+                        lab: "공학관 123호"
+                        phone: "02-450-1234"
+                        email: "kimkk@konkuk.ac.kr"
+                        dept: "공과대학"
                 # ------------------------------------------------------------------
                 # [AI] Chatbot
                 # ------------------------------------------------------------------
@@ -938,8 +1337,6 @@ paths:
       summary: AI에게 질문하기
       description: SSE(Server-Sent Events) 스트림 방식으로 응답이 올 수 있습니다.
       operationId: askAI
-      security:
-        - UserTokenAuth: []
       parameters:
         - name: question
           in: query
@@ -948,6 +1345,7 @@ paths:
           schema:
             type: string
             example: 전과 신청 언제까지야?
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -960,6 +1358,13 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/ai/AIResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      answer: "전과 신청 기간은 공지사항을 기준으로 합니다."
                 # ------------------------------------------------------------------
                 # [학사일정] Academic
                 # ------------------------------------------------------------------
@@ -969,6 +1374,23 @@ paths:
         - Academic
       summary: 학사일정 조회
       operationId: getAcademicEvents
+      parameters:
+        - name: startDate
+          in: query
+          description: 조회 시작일 (yyyy-MM-dd 형식)
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-02-01"
+        - name: endDate
+          in: query
+          description: 조회 종료일 (yyyy-MM-dd 형식)
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-03-01"
       responses:
         '200':
           description: OK
@@ -983,6 +1405,15 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/academic/AcademicEventResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data:
+                      - subject: "1학기 수강신청"
+                        startDate: "2024-02-14"
+                        endDate: "2024-02-16"
                 # ------------------------------------------------------------------
                 # [신고] Report
                 # ------------------------------------------------------------------
@@ -992,14 +1423,20 @@ paths:
         - Report
       summary: 게시글/댓글 신고
       operationId: createReport
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/report/ReportRequest.yaml
+            examples:
+              Success:
+                value:
+                  boardId: "56281"
+                  commentId: "comment_123"
+                  category: "욕설/비하"
       responses:
         '200':
           description: OK
@@ -1007,6 +1444,11 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
   # ------------------------------------------------------------------
   # [동아리] Club
   # ------------------------------------------------------------------
@@ -1018,9 +1460,9 @@ paths:
       summary: 사용자 동아리 즐겨찾기 추가
       operationId: addUserSubscribeClub
       security:
-        - {}
         - BearerAuth: []
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
@@ -1049,7 +1491,7 @@ paths:
                         nullable: true
                         example: null
               examples:
-                Example 1:
+                Success:
                   value:
                     code: 200
                     message: 구독에 성공했습니다.
@@ -1065,7 +1507,8 @@ paths:
       operationId: deleteUserSubscribeClub
       security:
         - BearerAuth: []
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
@@ -1079,7 +1522,7 @@ paths:
                   x-stoplight:
                     id: tyxamaarexozv
             examples:
-              Example 1:
+              Success:
                 value:
                   id: 15
       responses:
@@ -1098,7 +1541,7 @@ paths:
                         nullable: true
                         example: null
               examples:
-                Example 1:
+                Success:
                   value:
                     code: 200
                     message: 구독이 취소되었습니다.
