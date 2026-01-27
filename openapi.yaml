@@ -12,12 +12,9 @@ info:
 components:
   securitySchemes:
     UserTokenAuth:
-      type: apiKey
-      in: header
-      name: User-Token
+      $ref: ./components/security.yaml#/UserTokenAuth
     BearerAuth:
-      type: http
-      scheme: bearer
+      $ref: ./components/security.yaml#/BearerAuth
 tags:
   - name: Draft
     description: 설계 초안 단계입니다. 실제 호출이 불가능하거나 구조가 변경될 수 있습니다.
