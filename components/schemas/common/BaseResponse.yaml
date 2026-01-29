@@ -12,9 +12,5 @@ properties:
     type: string
     description: 응답 메시지
   data:
-    type:
-      - object
-      - array
-    nullable: true
     description: 응답 데이터 (Payload). 데이터가 없을 경우 null.
     example: null
