@@ -59,8 +59,8 @@ paths:
             examples:
               Success:
                 value:
-                  email: "kuring@konkuk.ac.kr"
-                  password: "password1234!"
+                  email: kuring@konkuk.ac.kr
+                  password: password1234!
       responses:
         '200':
           description: OK
@@ -77,9 +77,9 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
-                      accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ..."
+                      accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ...
   /api/v2/users/logout:
     post:
       tags:
@@ -122,8 +122,8 @@ paths:
             examples:
               Success:
                 value:
-                  email: "kuring@konkuk.ac.kr"
-                  password: "password1234!"
+                  email: kuring@konkuk.ac.kr
+                  password: password1234!
       responses:
         '200':
           description: OK
@@ -177,8 +177,8 @@ paths:
             examples:
               Success:
                 value:
-                  email: "kuring@konkuk.ac.kr"
-                  password: "newPassword1234!"
+                  email: kuring@konkuk.ac.kr
+                  password: newPassword1234!
       responses:
         '200':
           description: OK
@@ -220,10 +220,10 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
-                      email: "kuring@konkuk.ac.kr"
-                      nickname: "쿠링이"
+                      email: kuring@konkuk.ac.kr
+                      nickname: 쿠링이
   /api/v2/users/ask-counts:
     get:
       tags:
@@ -251,13 +251,13 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
                       leftAskCount: 3
                       maxAskCount: 10
-                # ------------------------------------------------------------------
-                # [구독 및 알림]
-                # ------------------------------------------------------------------
+  # ------------------------------------------------------------------
+  # [구독 및 알림]
+  # ------------------------------------------------------------------
   /api/v2/users/subscriptions/departments:
     get:
       tags:
@@ -285,11 +285,11 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
-                      - name: "computer_cse"
-                        hostPrefix: "cse"
-                        korName: "컴퓨터공학부"
+                      - name: computer_cse
+                        hostPrefix: cse
+                        korName: 컴퓨터공학부
     post:
       tags:
         - User
@@ -308,7 +308,7 @@ paths:
               Success:
                 value:
                   departments:
-                    - "computer_cse"
+                    - computer_cse
       responses:
         '200':
           description: OK
@@ -349,11 +349,11 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
-                      - name: "bachelor"
-                        hostPrefix: "bachelor"
-                        korName: "학사"
+                      - name: bachelor
+                        hostPrefix: bachelor
+                        korName: 학사
     post:
       tags:
         - User
@@ -372,7 +372,7 @@ paths:
               Success:
                 value:
                   categories:
-                    - "bachelor"
+                    - bachelor
       responses:
         '200':
           description: OK
@@ -439,7 +439,7 @@ paths:
             examples:
               Success:
                 value:
-                  content: "앱 사용성이 좋아요. 다만 검색 필터가 더 있으면 좋겠습니다."
+                  content: 앱 사용성이 좋아요. 다만 검색 필터가 더 있으면 좋겠습니다.
       responses:
         '200':
           description: OK
@@ -480,13 +480,13 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
-                      - articleId: "51234"
-                        postedDate: "2023-10-25"
-                        subject: "2023학년도 2학기 수강신청 안내"
-                        category: "bachelor"
-                        baseUrl: "https://www.konkuk.ac.kr/do/MessageBoard/..."
+                      - articleId: '51234'
+                        postedDate: '2023-10-25'
+                        subject: 2023학년도 2학기 수강신청 안내
+                        category: bachelor
+                        baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/...'
     post:
       tags:
         - User
@@ -504,7 +504,7 @@ paths:
             examples:
               Success:
                 value:
-                  articleId: "51234"
+                  articleId: '51234'
       responses:
         '200':
           description: OK
@@ -581,15 +581,15 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
                       notices:
-                        - articleId: "56281"
-                          postedDate: "2023-10-31"
-                          subject: "[학사] 2024학년도 1학기 전과 신청 안내"
-                          category: "bachelor"
+                        - articleId: '56281'
+                          postedDate: '2023-10-31'
+                          subject: '[학사] 2024학년도 1학기 전과 신청 안내'
+                          category: bachelor
                           important: true
-                          baseUrl: "https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281"
+                          baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281'
   /api/v2/notices/search:
     get:
       tags:
@@ -633,15 +633,15 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
                       notices:
-                        - articleId: "56281"
-                          postedDate: "2023-10-31"
-                          subject: "[학사] 2024학년도 1학기 전과 신청 안내"
-                          category: "bachelor"
+                        - articleId: '56281'
+                          postedDate: '2023-10-31'
+                          subject: '[학사] 2024학년도 1학기 전과 신청 안내'
+                          category: bachelor
                           important: true
-                          baseUrl: "https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281"
+                          baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281'
   /api/v2/notices/departments:
     get:
       tags:
@@ -665,11 +665,11 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
                       departments:
-                        - name: "computer_cse"
-                          korName: "컴퓨터공학부"
+                        - name: computer_cse
+                          korName: 컴퓨터공학부
   /api/v2/notices/categories:
     get:
       tags:
@@ -693,14 +693,14 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
                       categories:
-                        - "bachelor"
-                        - "scholarship"
-                # ------------------------------------------------------------------
-                # [공지사항 댓글] Notice Comments
-                # ------------------------------------------------------------------
+                        - bachelor
+                        - scholarship
+                      # ------------------------------------------------------------------
+                      # [공지사항 댓글] Notice Comments
+                      # ------------------------------------------------------------------
   '/api/v2/notices/{articleId}/comments':
     get:
       tags:
@@ -734,11 +734,11 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
-                      - id: "comment_123"
-                        content: "전과 신청 기간은 공지 본문을 확인해주세요."
-                        createdAt: "2024-01-21T09:00:00Z"
+                      - id: comment_123
+                        content: 전과 신청 기간은 공지 본문을 확인해주세요.
+                        createdAt: '2024-01-21T09:00:00Z'
     post:
       tags:
         - Notice
@@ -761,7 +761,7 @@ paths:
             examples:
               Success:
                 value:
-                  content: "전과 신청 기간이 정확히 언제까지인가요?"
+                  content: 전과 신청 기간이 정확히 언제까지인가요?
       responses:
         '200':
           description: OK
@@ -804,7 +804,7 @@ paths:
             examples:
               Success:
                 value:
-                  content: "확인했습니다. 감사합니다!"
+                  content: 확인했습니다. 감사합니다!
       responses:
         '200':
           description: OK
@@ -870,9 +870,9 @@ paths:
             examples:
               Success:
                 value:
-                  subject: "[점검] 서버 점검 안내"
-                  content: "새벽 2시부터 점검이 있습니다."
-                  category: "app_notice"
+                  subject: '[점검] 서버 점검 안내'
+                  content: 새벽 2시부터 점검이 있습니다.
+                  category: app_notice
                   important: true
       responses:
         '200':
@@ -905,9 +905,9 @@ paths:
             examples:
               Success:
                 value:
-                  subject: "[테스트] 공지 전송 테스트"
-                  content: "이 공지는 테스트용입니다."
-                  category: "app_notice"
+                  subject: '[테스트] 공지 전송 테스트'
+                  content: 이 공지는 테스트용입니다.
+                  category: app_notice
                   important: false
       responses:
         '200':
@@ -965,7 +965,7 @@ paths:
             example: 0
         - name: size
           in: query
-          description: 단일 페이지의 사이즈, 1 ~ 30까지 허용
+          description: '단일 페이지의 사이즈, 1 ~ 30까지 허용'
           required: true
           schema:
             maximum: 30
@@ -991,13 +991,13 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
-                      - id: "alert_999"
-                        title: "수강신청 10분 전입니다!"
-                        message: "잊지 말고 준비하세요."
-                        reservedTime: "2024-02-15T09:50:00"
-                        status: "PENDING"
+                      - id: alert_999
+                        title: 수강신청 10분 전입니다!
+                        message: 잊지 말고 준비하세요.
+                        reservedTime: '2024-02-15T09:50:00'
+                        status: PENDING
     post:
       tags:
         - Admin
@@ -1015,9 +1015,9 @@ paths:
             examples:
               Success:
                 value:
-                  title: "중간고사 간식 행사"
-                  message: "학생회관에서 햄버거 받아가세요!"
-                  reservedTime: "2024-04-20T12:00:00"
+                  title: 중간고사 간식 행사
+                  message: 학생회관에서 햄버거 받아가세요!
+                  reservedTime: '2024-04-20T12:00:00'
       responses:
         '200':
           description: OK
@@ -1124,7 +1124,7 @@ paths:
             example: 0
         - name: size
           in: query
-          description: 단일 페이지의 사이즈, 1 ~ 30까지 허용
+          description: '단일 페이지의 사이즈, 1 ~ 30까지 허용'
           required: true
           schema:
             maximum: 30
@@ -1150,7 +1150,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data: []
   /api/v2/admin/feedbacks:
     get:
@@ -1173,7 +1173,7 @@ paths:
             example: 0
         - name: size
           in: query
-          description: 단일 페이지의 사이즈, 1 ~ 30까지 허용
+          description: '단일 페이지의 사이즈, 1 ~ 30까지 허용'
           required: true
           schema:
             maximum: 30
@@ -1199,7 +1199,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data: []
   /api/v2/admin/embedding:
     post:
@@ -1264,7 +1264,7 @@ paths:
             examples:
               Success:
                 value:
-                  email: "kuring@konkuk.ac.kr"
+                  email: kuring@konkuk.ac.kr
       responses:
         '200':
           description: OK
@@ -1294,7 +1294,7 @@ paths:
             examples:
               Success:
                 value:
-                  email: "kuring@konkuk.ac.kr"
+                  email: kuring@konkuk.ac.kr
       responses:
         '200':
           description: OK
@@ -1324,8 +1324,8 @@ paths:
             examples:
               Success:
                 value:
-                  email: "kuring@konkuk.ac.kr"
-                  code: "123456"
+                  email: kuring@konkuk.ac.kr
+                  code: '123456'
       responses:
         '200':
           description: OK
@@ -1375,17 +1375,17 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
-                      - name: "김건국"
-                        major: "컴퓨터공학부"
-                        lab: "공학관 123호"
-                        phone: "02-450-1234"
-                        email: "kimkk@konkuk.ac.kr"
-                        dept: "공과대학"
-                # ------------------------------------------------------------------
-                # [AI] Chatbot
-                # ------------------------------------------------------------------
+                      - name: 김건국
+                        major: 컴퓨터공학부
+                        lab: 공학관 123호
+                        phone: 02-450-1234
+                        email: kimkk@konkuk.ac.kr
+                        dept: 공과대학
+                    # ------------------------------------------------------------------
+                    # [AI] Chatbot
+                    # ------------------------------------------------------------------
   /api/v2/ai/messages:
     get:
       tags:
@@ -1418,12 +1418,12 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
-                      answer: "전과 신청 기간은 공지사항을 기준으로 합니다."
-                # ------------------------------------------------------------------
-                # [학사일정] Academic
-                # ------------------------------------------------------------------
+                      answer: 전과 신청 기간은 공지사항을 기준으로 합니다.
+  # ------------------------------------------------------------------
+  # [학사일정] Academic
+  # ------------------------------------------------------------------
   /api/v2/academic-events:
     get:
       tags:
@@ -1439,7 +1439,7 @@ paths:
           schema:
             type: string
             format: date
-            example: "2024-02-01"
+            example: '2024-02-01'
         - name: endDate
           in: query
           description: 조회 종료일 (yyyy-MM-dd 형식)
@@ -1447,7 +1447,7 @@ paths:
           schema:
             type: string
             format: date
-            example: "2024-03-01"
+            example: '2024-03-01'
       responses:
         '200':
           description: OK
@@ -1466,14 +1466,14 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: OK
                     data:
-                      - subject: "1학기 수강신청"
-                        startDate: "2024-02-14"
-                        endDate: "2024-02-16"
-                # ------------------------------------------------------------------
-                # [신고] Report
-                # ------------------------------------------------------------------
+                      - subject: 1학기 수강신청
+                        startDate: '2024-02-14'
+                        endDate: '2024-02-16'
+                    # ------------------------------------------------------------------
+                    # [신고] Report
+                    # ------------------------------------------------------------------
   /api/v2/reports:
     post:
       tags:
@@ -1492,9 +1492,9 @@ paths:
             examples:
               Success:
                 value:
-                  boardId: "56281"
-                  commentId: "comment_123"
-                  category: "욕설/비하"
+                  boardId: '56281'
+                  commentId: comment_123
+                  category: 욕설/비하
       responses:
         '200':
           description: OK
