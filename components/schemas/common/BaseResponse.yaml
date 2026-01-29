@@ -1,14 +1,16 @@
 type: object
+description: API 요청 성공 시 기본 응답 구조
 required:
   - code
   - message
+  - data
 properties:
   code:
     type: integer
-    format: int32
-    example: 200
-    description: 응답 코드
+    description: 응답 코드 (성공 시 200)
   message:
     type: string
-    example: "OK"
     description: 응답 메시지
+  data:
+    description: 응답 데이터 (Payload). 데이터가 없을 경우 null.
+    example: null

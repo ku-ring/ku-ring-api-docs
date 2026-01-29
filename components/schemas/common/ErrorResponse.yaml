@@ -1,20 +1,19 @@
 type: object
-description: 에러 발생 시 반환되는 공통 응답 객체
+description: API 요청 실패 시 응답 구조
+required:
+  - isSuccess
+  - resultCode
+  - resultMsg
 properties:
   isSuccess:
     type: boolean
-    description: 성공 여부 (에러 응답이므로 항상 false)
+    description: "성공 여부 (실패 응답이므로 항상 false)"
     example: false
-  resultMsg:
-    type: string
-    description: 에러 메시지
-    example: "잘못된 요청입니다."
   resultCode:
     type: integer
-    format: int32
-    description: HTTP 상태 코드 또는 커스텀 에러 코드
+    description: "에러 코드 (HTTP 상태 코드와 다를 수 있음)"
     example: 400
-required:
-  - isSuccess
-  - resultMsg
-  - resultCode
+  resultMsg:
+    type: string
+    description: "에러 상세 메시지"
+    example: "잘못된 요청입니다."

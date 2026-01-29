@@ -8,41 +8,37 @@ info:
     url: 'https://github.com/ku-ring'
     email: kuring.korea@gmail.com
   termsOfService: ''
-
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
 # 1. 보안 설정 (전역)
 components:
   securitySchemes:
-    UserTokenAuth:
-      type: apiKey
-      in: header
-      name: User-Token
     BearerAuth:
-      type: http
-      scheme: bearer
+      $ref: ./components/security.yaml#/BearerAuth
 tags:
-  - name: Draft
-    description: 📝 설계 초안 단계입니다. 실제 호출이 불가능하거나 구조가 변경될 수 있습니다.
-  - name: Deprecated
-    description: ⚠️ 곧 삭제될 예정인 API입니다. 신규 개발 시 사용을 지양하세요.
-
-  - name: User
-    description: 사용자 관련 API
-  - name: Notice
-    description: 공지사항 관련 API
-  - name: Admin
-    description: 관리자 전용 API
-  - name: Verification
-    description: 이메일 인증 API
-  - name: Staff
-    description: 교직원 검색 API
-  - name: AI
-    description: AI 챗봇 API
   - name: Academic
     description: 학사일정 API
-  - name: Report
-    description: 신고 기능 API
+  - name: Admin
+    description: 관리자 전용 API
+  - name: AI
+    description: AI 챗봇 API
   - name: Club
     description: 교내 동아리 정보 조회 및 관리 API
+  - name: Deprecated
+    description: ⚠️ 곧 삭제될 예정인 API입니다. 신규 개발 시 사용을 지양하세요.
+  - name: Draft
+    description: 설계 초안 단계입니다. 실제 호출이 불가능하거나 구조가 변경될 수 있습니다.
+  - name: Notice
+    description: 공지사항 관련 API
+  - name: Report
+    description: 신고 기능 API
+  - name: Staff
+    description: 교직원 검색 API
+  - name: User
+    description: 사용자 관련 API
+  - name: Verification
+    description: 이메일 인증 API
 # 2. API 경로 정의
 paths:
   # ------------------------------------------------------------------
@@ -53,15 +49,21 @@ paths:
       tags:
         - User
       summary: 사용자 로그인
+      description: 사용자가 이메일과 비밀번호로 로그인하여 액세스 토큰을 발급받습니다.
       operationId: login
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderOptional.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserLoginRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: kuring@konkuk.ac.kr
+                  password: password1234!
       responses:
         '200':
           description: OK
@@ -74,15 +76,24 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/user/UserLoginResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ...
   /api/v2/users/logout:
     post:
       tags:
         - User
       summary: 사용자 로그아웃
+      description: 현재 로그인된 사용자의 세션을 만료시키고 토큰을 무효화합니다.
       operationId: logout
       security:
-        - UserTokenAuth: []
         - BearerAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -90,20 +101,32 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/users/signup:
     post:
       tags:
         - User
       summary: 사용자 회원가입
+      description: FCM 디바이스 토큰을 포함하여 새로운 사용자를 회원가입 처리합니다.
       operationId: signup
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderOptional.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserSignupRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: kuring@konkuk.ac.kr
+                  password: password1234!
       responses:
         '200':
           description: OK
@@ -111,11 +134,18 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/users/withdraw:
     delete:
       tags:
         - User
       summary: 사용자 회원 탈퇴
+      description: 로그인된 사용자의 계정을 삭제하고 모든 관련 데이터를 정리합니다.
       operationId: withdraw
       security:
         - BearerAuth: []
@@ -126,11 +156,18 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/users/password:
     patch:
       tags:
         - User
       summary: 사용자 비밀번호 변경
+      description: 로그인된 사용자가 비밀번호를 새 값으로 변경합니다.
       operationId: modifyPassword
       security:
         - BearerAuth: []
@@ -140,6 +177,11 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserPasswordModifyRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: kuring@konkuk.ac.kr
+                  password: newPassword1234!
       responses:
         '200':
           description: OK
@@ -147,6 +189,12 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   # ------------------------------------------------------------------
   # [사용자 정보]
   # ------------------------------------------------------------------
@@ -155,6 +203,7 @@ paths:
       tags:
         - User
       summary: 사용자 정보 조회
+      description: 현재 로그인된 사용자의 프로필 정보를 조회합니다.
       operationId: lookupUserInfo
       security:
         - BearerAuth: []
@@ -170,15 +219,25 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/user/UserInfoResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      email: kuring@konkuk.ac.kr
+                      nickname: 쿠링이
   /api/v2/users/ask-counts:
     get:
       tags:
         - User
       summary: 사용자 질문 가능횟수 조회
+      description: 오늘 남은 AI 질문 횟수와 하루 최대 질문 가능 횟수를 조회합니다.
       operationId: lookupUserAIAskCount
       security:
-        - UserTokenAuth: []
         - BearerAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderOptional.yaml
       responses:
         '200':
           description: OK
@@ -191,17 +250,26 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/user/UserAIAskCountResponse.yaml
-                # ------------------------------------------------------------------
-                # [구독 및 알림]
-                # ------------------------------------------------------------------
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      leftAskCount: 3
+                      maxAskCount: 10
+  # ------------------------------------------------------------------
+  # [구독 및 알림]
+  # ------------------------------------------------------------------
   /api/v2/users/subscriptions/departments:
     get:
       tags:
         - User
       summary: 사용자 학과 조회
+      description: 사용자가 구독 중인 학과 목록을 조회합니다.
       operationId: lookupUserSubscribeDepartments
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -216,19 +284,34 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/user/UserDepartmentNameResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      - name: computer_cse
+                        hostPrefix: cse
+                        korName: 컴퓨터공학부
     post:
       tags:
         - User
       summary: 사용자 학과 수정
+      description: 사용자가 구독할 학과 목록을 추가·수정합니다.
       operationId: editUserSubscribeDepartments
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserDepartmentsSubscribeRequest.yaml
+            examples:
+              Success:
+                value:
+                  departments:
+                    - computer_cse
       responses:
         '200':
           description: OK
@@ -236,14 +319,21 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/users/subscriptions/categories:
     get:
       tags:
         - User
       summary: 사용자 카테고리 조회
+      description: 사용자가 구독 중인 공지 카테고리 목록을 조회합니다.
       operationId: lookupUserSubscribeCategories
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -258,19 +348,34 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/user/UserCategoryNameResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      - name: bachelor
+                        hostPrefix: bachelor
+                        korName: 학사
     post:
       tags:
         - User
       summary: 사용자 카테고리 수정
+      description: 사용자가 구독할 공지 카테고리 목록을 추가·수정합니다.
       operationId: editUserSubscribeCategories
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserCategoriesSubscribeRequest.yaml
+            examples:
+              Success:
+                value:
+                  categories:
+                    - bachelor
       responses:
         '200':
           description: OK
@@ -278,20 +383,31 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/users/notifications/academic-events:
     patch:
       tags:
         - User
       summary: 사용자 학사일정 알림 설정 수정
+      description: 사용자의 학사일정 알림 활성화 여부를 변경합니다.
       operationId: updateAcademicEventNotification
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserAcademicEventNotificationRequest.yaml
+            examples:
+              Success:
+                value:
+                  enabled: true
       responses:
         '200':
           description: OK
@@ -299,6 +415,12 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   # ------------------------------------------------------------------
   # [기타 기능]
   # ------------------------------------------------------------------
@@ -307,15 +429,20 @@ paths:
       tags:
         - User
       summary: 사용자 피드백 작성
+      description: 앱 사용성이나 오류 등에 대한 사용자의 피드백을 서버에 전송합니다.
       operationId: saveFeedback
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserFeedbackRequest.yaml
+            examples:
+              Success:
+                value:
+                  content: 앱 사용성이 좋아요. 다만 검색 필터가 더 있으면 좋겠습니다.
       responses:
         '200':
           description: OK
@@ -323,14 +450,21 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/users/bookmarks:
     get:
       tags:
         - User
       summary: 사용자 북마크 조회
+      description: 사용자가 저장해 둔 공지사항 북마크 목록을 조회합니다.
       operationId: lookupUserBookmarks
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -345,19 +479,35 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/user/UserBookmarkResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      - articleId: '51234'
+                        postedDate: '2023-10-25'
+                        subject: 2023학년도 2학기 수강신청 안내
+                        category: bachelor
+                        baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/...'
     post:
       tags:
         - User
       summary: 사용자 북마크 작성
+      description: 특정 공지사항을 북마크에 추가합니다.
       operationId: saveBookmark
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/user/UserBookmarkRequest.yaml
+            examples:
+              Success:
+                value:
+                  articleId: '51234'
       responses:
         '200':
           description: OK
@@ -365,6 +515,12 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   # ------------------------------------------------------------------
   # [공지사항] Notice
   # ------------------------------------------------------------------
@@ -404,12 +560,14 @@ paths:
           schema:
             type: integer
             default: 0
+            example: 0
         - name: size
           in: query
           description: 페이지 크기
           schema:
             type: integer
             default: 10
+            example: 10
       responses:
         '200':
           description: OK
@@ -422,11 +580,25 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/notice/NoticeListResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      notices:
+                        - articleId: '56281'
+                          postedDate: '2023-10-31'
+                          subject: '[학사] 2024학년도 1학기 전과 신청 안내'
+                          category: bachelor
+                          important: true
+                          baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281'
   /api/v2/notices/search:
     get:
       tags:
         - Notice
       summary: 공지사항 키워드 검색
+      description: 키워드를 기준으로 학교 및 학과 공지사항을 검색합니다.
       operationId: searchNotices
       parameters:
         - name: content
@@ -438,14 +610,18 @@ paths:
             example: 장학금 수강신청
         - name: page
           in: query
+          description: 결과 페이지 번호 (0부터 시작)
           schema:
             type: integer
             default: 0
+            example: 0
         - name: size
           in: query
+          description: 한 페이지에 포함될 결과 개수
           schema:
             type: integer
             default: 10
+            example: 10
       responses:
         '200':
           description: OK
@@ -458,11 +634,25 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/notice/NoticeListResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      notices:
+                        - articleId: '56281'
+                          postedDate: '2023-10-31'
+                          subject: '[학사] 2024학년도 1학기 전과 신청 안내'
+                          category: bachelor
+                          important: true
+                          baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281'
   /api/v2/notices/departments:
     get:
       tags:
         - Notice
       summary: 공지 조회 지원 학과 목록
+      description: 공지 조회 기능이 지원되는 학과 목록을 조회합니다.
       operationId: getNoticeDepartments
       responses:
         '200':
@@ -476,11 +666,21 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/notice/NoticeDepartmentListResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      departments:
+                        - name: computer_cse
+                          korName: 컴퓨터공학부
   /api/v2/notices/categories:
     get:
       tags:
         - Notice
       summary: 공지 조회 지원 카테고리 목록
+      description: 공지 조회 기능이 지원되는 카테고리 목록을 조회합니다.
       operationId: getNoticeCategories
       responses:
         '200':
@@ -494,14 +694,24 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/notice/NoticeCategoryListResponse.yaml
-                # ------------------------------------------------------------------
-                # [공지사항 댓글] Notice Comments
-                # ------------------------------------------------------------------
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      categories:
+                        - bachelor
+                        - scholarship
+                      # ------------------------------------------------------------------
+                      # [공지사항 댓글] Notice Comments
+                      # ------------------------------------------------------------------
   '/api/v2/notices/{articleId}/comments':
     get:
       tags:
         - Notice
       summary: 공지사항 댓글 조회
+      description: 특정 공지사항에 달린 댓글 목록을 조회합니다.
       operationId: getNoticeComments
       parameters:
         - name: articleId
@@ -525,25 +735,39 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/notice/NoticeCommentDto.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      - id: comment_123
+                        content: 전과 신청 기간은 공지 본문을 확인해주세요.
+                        createdAt: '2024-01-21T09:00:00Z'
     post:
       tags:
         - Notice
       summary: 공지사항 댓글 작성
+      description: 특정 공지사항에 새로운 댓글을 작성합니다.
       operationId: createNoticeComment
-      security:
-        - UserTokenAuth: []
       parameters:
         - name: articleId
           in: path
+          description: 댓글을 작성할 공지사항의 ID
           required: true
           schema:
             type: string
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/notice/NoticeCommentRequest.yaml
+            examples:
+              Success:
+                value:
+                  content: 전과 신청 기간이 정확히 언제까지인가요?
       responses:
         '200':
           description: OK
@@ -551,6 +775,12 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   '/api/v2/notices/{articleId}/comments/{commentId}':
     post:
       tags:
@@ -558,11 +788,10 @@ paths:
       summary: 공지사항 댓글 수정
       description: '주의: REST 표준(PATCH)이 아닌 POST 메서드를 사용합니다.'
       operationId: updateNoticeComment
-      security:
-        - UserTokenAuth: []
       parameters:
         - name: articleId
           in: path
+          description: 댓글이 속한 공지사항의 ID
           required: true
           schema:
             type: string
@@ -572,12 +801,17 @@ paths:
           description: 수정할 댓글 ID
           schema:
             type: string
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/notice/NoticeCommentRequest.yaml
+            examples:
+              Success:
+                value:
+                  content: 확인했습니다. 감사합니다!
       responses:
         '200':
           description: OK
@@ -585,24 +819,32 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
     delete:
       tags:
         - Notice
       summary: 공지사항 댓글 삭제
+      description: 특정 공지사항에 달린 댓글을 삭제합니다.
       operationId: deleteNoticeComment
-      security:
-        - UserTokenAuth: []
       parameters:
         - name: articleId
           in: path
+          description: 댓글이 속한 공지사항의 ID
           required: true
           schema:
             type: string
         - name: commentId
           in: path
+          description: 삭제할 댓글 ID
           required: true
           schema:
             type: string
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -610,6 +852,12 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   # ------------------------------------------------------------------
   # [관리자] Admin
   # ------------------------------------------------------------------
@@ -628,6 +876,13 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/admin/AdminNoticeRequest.yaml
+            examples:
+              Success:
+                value:
+                  subject: '[점검] 서버 점검 안내'
+                  content: 새벽 2시부터 점검이 있습니다.
+                  category: app_notice
+                  important: true
       responses:
         '200':
           description: OK
@@ -635,6 +890,12 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/admin/notices/dev:
     post:
       tags:
@@ -650,6 +911,13 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/admin/AdminNoticeRequest.yaml
+            examples:
+              Success:
+                value:
+                  subject: '[테스트] 공지 전송 테스트'
+                  content: 이 공지는 테스트용입니다.
+                  category: app_notice
+                  important: false
       responses:
         '200':
           description: OK
@@ -657,6 +925,12 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/admin/users/subscriptions/all:
     post:
       tags:
@@ -673,14 +947,41 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/admin/alerts:
     get:
       tags:
         - Admin
       summary: 예약 알림 목록 조회
+      description: 관리자가 등록한 예약 알림 목록을 페이지 단위로 조회합니다.
       operationId: getAdminAlerts
       security:
         - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: 페이지
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+            example: 0
+        - name: size
+          in: query
+          description: '단일 페이지의 사이즈, 1 ~ 30까지 허용'
+          required: true
+          schema:
+            maximum: 30
+            minimum: 1
+            type: integer
+            format: int32
+            example: 10
       responses:
         '200':
           description: OK
@@ -695,10 +996,22 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/admin/AdminAlertDto.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      - id: alert_999
+                        title: 수강신청 10분 전입니다!
+                        message: 잊지 말고 준비하세요.
+                        reservedTime: '2024-02-15T09:50:00'
+                        status: PENDING
     post:
       tags:
         - Admin
       summary: 예약 알림 등록
+      description: 지정한 시간에 발송될 새로운 예약 알림을 등록합니다.
       operationId: createAdminAlert
       security:
         - BearerAuth: []
@@ -708,6 +1021,12 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/admin/AdminAlertRequest.yaml
+            examples:
+              Success:
+                value:
+                  title: 중간고사 간식 행사
+                  message: 학생회관에서 햄버거 받아가세요!
+                  reservedTime: '2024-04-20T12:00:00'
       responses:
         '200':
           description: OK
@@ -715,17 +1034,25 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   '/api/v2/admin/alerts/{id}':
     delete:
       tags:
         - Admin
       summary: 예약 알림 취소/삭제
+      description: 특정 예약 알림을 취소하거나 삭제합니다.
       operationId: deleteAdminAlert
       security:
         - BearerAuth: []
       parameters:
         - name: id
           in: path
+          description: 취소 또는 삭제할 예약 알림 ID
           required: true
           schema:
             type: string
@@ -736,11 +1063,18 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/admin/whitelist-words/reload:
     post:
       tags:
         - Admin
       summary: 허용 단어 사전 리로드
+      description: 서버에 저장된 허용 단어 사전을 다시 로드하여 필터링에 반영합니다.
       operationId: reloadWhitelist
       security:
         - BearerAuth: []
@@ -751,11 +1085,18 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/admin/badwords/reload:
     post:
       tags:
         - Admin
       summary: 금칙어 사전 리로드
+      description: 서버에 저장된 금칙어 사전을 다시 로드하여 필터링에 반영합니다.
       operationId: reloadBadwords
       security:
         - BearerAuth: []
@@ -766,14 +1107,41 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/admin/reports:
     get:
       tags:
         - Admin
       summary: 신고 목록 조회
+      description: 사용자가 등록한 신고 내역을 페이지 단위로 조회합니다.
       operationId: getReports
       security:
         - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: 페이지
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+            example: 0
+        - name: size
+          in: query
+          description: '단일 페이지의 사이즈, 1 ~ 30까지 허용'
+          required: true
+          schema:
+            maximum: 30
+            minimum: 1
+            type: integer
+            format: int32
+            example: 10
       responses:
         '200':
           description: OK
@@ -788,14 +1156,41 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/admin/AdminReportResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data: []
   /api/v2/admin/feedbacks:
     get:
       tags:
         - Admin
       summary: 피드백 목록 조회
+      description: 사용자 피드백 내역을 페이지 단위로 조회합니다.
       operationId: getFeedbacks
       security:
         - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: 페이지
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+            example: 0
+        - name: size
+          in: query
+          description: '단일 페이지의 사이즈, 1 ~ 30까지 허용'
+          required: true
+          schema:
+            maximum: 30
+            minimum: 1
+            type: integer
+            format: int32
+            example: 10
       responses:
         '200':
           description: OK
@@ -810,6 +1205,12 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/admin/AdminFeedbackResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data: []
   /api/v2/admin/embedding:
     post:
       tags:
@@ -826,6 +1227,12 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/admin/academic/dev:
     post:
       tags:
@@ -842,6 +1249,12 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   # ------------------------------------------------------------------
   # [인증] Verification
   # ------------------------------------------------------------------
@@ -850,6 +1263,7 @@ paths:
       tags:
         - Verification
       summary: 회원가입용 인증번호 발송
+      description: 회원가입을 위해 사용자의 이메일로 인증번호를 발송합니다.
       operationId: sendSignupCode
       requestBody:
         required: true
@@ -857,6 +1271,10 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/verification/VerificationCodeRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: kuring@konkuk.ac.kr
       responses:
         '200':
           description: OK
@@ -864,11 +1282,18 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/verification-code/password-reset:
     post:
       tags:
         - Verification
       summary: 비밀번호 재설정용 인증번호 발송
+      description: 비밀번호 재설정을 위해 사용자의 이메일로 인증번호를 발송합니다.
       operationId: sendPasswordResetCode
       requestBody:
         required: true
@@ -876,6 +1301,10 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/verification/VerificationCodeRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: kuring@konkuk.ac.kr
       responses:
         '200':
           description: OK
@@ -883,11 +1312,18 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   /api/v2/verification-code/verify:
     post:
       tags:
         - Verification
       summary: 인증번호 검증
+      description: 이메일로 발송된 인증번호를 검증하여 요청을 승인합니다.
       operationId: verifyCode
       requestBody:
         required: true
@@ -895,6 +1331,11 @@ paths:
           application/json:
             schema:
               $ref: ./components/schemas/verification/VerificationCheckRequest.yaml
+            examples:
+              Success:
+                value:
+                  email: kuring@konkuk.ac.kr
+                  code: '123456'
       responses:
         '200':
           description: OK
@@ -902,6 +1343,12 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   # ------------------------------------------------------------------
   # [교직원] Staff
   # ------------------------------------------------------------------
@@ -910,6 +1357,7 @@ paths:
       tags:
         - Staff
       summary: 교직원 검색
+      description: 교직원의 이름이나 학과를 기준으로 검색합니다.
       operationId: searchStaffs
       parameters:
         - name: content
@@ -933,9 +1381,21 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/staff/StaffResponse.yaml
-                # ------------------------------------------------------------------
-                # [AI] Chatbot
-                # ------------------------------------------------------------------
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      - name: 김건국
+                        major: 컴퓨터공학부
+                        lab: 공학관 123호
+                        phone: 02-450-1234
+                        email: kimkk@konkuk.ac.kr
+                        dept: 공과대학
+                    # ------------------------------------------------------------------
+                    # [AI] Chatbot
+                    # ------------------------------------------------------------------
   /api/v2/ai/messages:
     get:
       tags:
@@ -943,8 +1403,6 @@ paths:
       summary: AI에게 질문하기
       description: SSE(Server-Sent Events) 스트림 방식으로 응답이 올 수 있습니다.
       operationId: askAI
-      security:
-        - UserTokenAuth: []
       parameters:
         - name: question
           in: query
@@ -953,6 +1411,7 @@ paths:
           schema:
             type: string
             example: 전과 신청 언제까지야?
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       responses:
         '200':
           description: OK
@@ -965,15 +1424,40 @@ paths:
                     properties:
                       data:
                         $ref: ./components/schemas/ai/AIResponse.yaml
-                # ------------------------------------------------------------------
-                # [학사일정] Academic
-                # ------------------------------------------------------------------
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      answer: 전과 신청 기간은 공지사항을 기준으로 합니다.
+  # ------------------------------------------------------------------
+  # [학사일정] Academic
+  # ------------------------------------------------------------------
   /api/v2/academic-events:
     get:
       tags:
         - Academic
       summary: 학사일정 조회
+      description: 지정된 기간에 해당하는 학사일정 목록을 조회합니다.
       operationId: getAcademicEvents
+      parameters:
+        - name: startDate
+          in: query
+          description: 조회 시작일 (yyyy-MM-dd 형식)
+          required: false
+          schema:
+            type: string
+            format: date
+            example: '2024-02-01'
+        - name: endDate
+          in: query
+          description: 조회 종료일 (yyyy-MM-dd 형식)
+          required: false
+          schema:
+            type: string
+            format: date
+            example: '2024-03-01'
       responses:
         '200':
           description: OK
@@ -988,23 +1472,39 @@ paths:
                         type: array
                         items:
                           $ref: ./components/schemas/academic/AcademicEventResponse.yaml
-                # ------------------------------------------------------------------
-                # [신고] Report
-                # ------------------------------------------------------------------
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: OK
+                    data:
+                      - subject: 1학기 수강신청
+                        startDate: '2024-02-14'
+                        endDate: '2024-02-16'
+                    # ------------------------------------------------------------------
+                    # [신고] Report
+                    # ------------------------------------------------------------------
   /api/v2/reports:
     post:
       tags:
         - Report
       summary: 게시글/댓글 신고
+      description: 부적절한 게시글이나 댓글을 신고합니다.
       operationId: createReport
-      security:
-        - UserTokenAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: ./components/schemas/report/ReportRequest.yaml
+            examples:
+              Success:
+                value:
+                  boardId: '56281'
+                  commentId: comment_123
+                  category: 욕설/비하
       responses:
         '200':
           description: OK
@@ -1012,43 +1512,114 @@ paths:
             application/json:
               schema:
                 $ref: ./components/schemas/common/BaseResponse.yaml
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: "OK"
+                    data: null
   # ------------------------------------------------------------------
   # [동아리] Club
   # ------------------------------------------------------------------
-  /api/v2/clubs/{id}:
-    get:
+  /api/v2/users/bookmarks/clubs:
+    post:
       tags:
         - Draft
-      summary: 동아리 상세 정보 조회
-      description: 특정 ID를 가진 동아리의 상세 정보를 조회합니다.
-      operationId: getClubDetail
+        - User
+      summary: 사용자 동아리 즐겨찾기 추가
+      operationId: addUserSubscribeClub
+      security:
+        - BearerAuth: []
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: 조회할 동아리 ID
-          schema:
-            type: string
-            example: "club_001"
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 15
+                  x-stoplight:
+                    id: 6gj18cdzbuxr1
       responses:
         '200':
-          description: 성공
+          description: 구독 성공
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: './components/schemas/common/BaseResponse.yaml'
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
                   - type: object
                     properties:
+                      message:
+                        type: string
+                        example: 구독에 성공했습니다.
                       data:
-                        $ref: './components/schemas/club/ClubDetailResponse.yaml'
-        '404':
-          description: 해당 ID의 동아리를 찾을 수 없음
+                        type: object
+                        nullable: true
+                        example: null
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: 구독에 성공했습니다.
+                    data: null
+      x-stoplight:
+        id: avx1ex1702exu
+      description: 로그인한 사용자가 동아리 즐겨찾기를 추가합니다.
+    delete:
+      tags:
+        - Draft
+        - User
+      summary: 사용자 동아리 즐겨찾기 제거
+      operationId: deleteUserSubscribeClub
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 15
+                  x-stoplight:
+                    id: tyxamaarexozv
+            examples:
+              Success:
+                value:
+                  id: 15
+      responses:
+        '200':
+          description: 취소 성공
           content:
             application/json:
               schema:
-                $ref: './components/schemas/common/ErrorResponse.yaml'
-              example:
-                isSuccess: false
-                resultMsg: "존재하지 않는 동아리입니다."
-                resultCode: 404
+                allOf:
+                  - $ref: ./components/schemas/common/BaseResponse.yaml
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: 구독이 취소되었습니다.
+                      data:
+                        type: object
+                        nullable: true
+                        example: null
+              examples:
+                Success:
+                  value:
+                    code: 200
+                    message: 구독이 취소되었습니다.
+                    data: null
+      x-stoplight:
+        id: 6qd89rl96a1he
+      description: 사용자가 동아리 즐겨찾기를 제거합니다.
+    parameters: []
