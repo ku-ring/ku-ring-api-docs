@@ -8,34 +8,37 @@ info:
     url: 'https://github.com/ku-ring'
     email: kuring.korea@gmail.com
   termsOfService: ''
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
 # 1. 보안 설정 (전역)
 components:
   securitySchemes:
     BearerAuth:
       $ref: ./components/security.yaml#/BearerAuth
 tags:
-  - name: Draft
-    description: 설계 초안 단계입니다. 실제 호출이 불가능하거나 구조가 변경될 수 있습니다.
-  - name: Deprecated
-    description: ⚠️ 곧 삭제될 예정인 API입니다. 신규 개발 시 사용을 지양하세요.
-  - name: User
-    description: 사용자 관련 API
-  - name: Notice
-    description: 공지사항 관련 API
-  - name: Admin
-    description: 관리자 전용 API
-  - name: Verification
-    description: 이메일 인증 API
-  - name: Staff
-    description: 교직원 검색 API
-  - name: AI
-    description: AI 챗봇 API
   - name: Academic
     description: 학사일정 API
-  - name: Report
-    description: 신고 기능 API
+  - name: Admin
+    description: 관리자 전용 API
+  - name: AI
+    description: AI 챗봇 API
   - name: Club
     description: 교내 동아리 정보 조회 및 관리 API
+  - name: Deprecated
+    description: ⚠️ 곧 삭제될 예정인 API입니다. 신규 개발 시 사용을 지양하세요.
+  - name: Draft
+    description: 설계 초안 단계입니다. 실제 호출이 불가능하거나 구조가 변경될 수 있습니다.
+  - name: Notice
+    description: 공지사항 관련 API
+  - name: Report
+    description: 신고 기능 API
+  - name: Staff
+    description: 교직원 검색 API
+  - name: User
+    description: 사용자 관련 API
+  - name: Verification
+    description: 이메일 인증 API
 # 2. API 경로 정의
 paths:
   # ------------------------------------------------------------------
@@ -607,12 +610,14 @@ paths:
             example: 장학금 수강신청
         - name: page
           in: query
+          description: 결과 페이지 번호 (0부터 시작)
           schema:
             type: integer
             default: 0
             example: 0
         - name: size
           in: query
+          description: 한 페이지에 포함될 결과 개수
           schema:
             type: integer
             default: 10
@@ -748,6 +753,7 @@ paths:
       parameters:
         - name: articleId
           in: path
+          description: 댓글을 작성할 공지사항의 ID
           required: true
           schema:
             type: string
@@ -785,6 +791,7 @@ paths:
       parameters:
         - name: articleId
           in: path
+          description: 댓글이 속한 공지사항의 ID
           required: true
           schema:
             type: string
@@ -827,11 +834,13 @@ paths:
       parameters:
         - name: articleId
           in: path
+          description: 댓글이 속한 공지사항의 ID
           required: true
           schema:
             type: string
         - name: commentId
           in: path
+          description: 삭제할 댓글 ID
           required: true
           schema:
             type: string
@@ -1043,6 +1052,7 @@ paths:
       parameters:
         - name: id
           in: path
+          description: 취소 또는 삭제할 예약 알림 ID
           required: true
           schema:
             type: string
