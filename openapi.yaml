@@ -44,10 +44,9 @@ components:
           schema:
             $ref: ./components/schemas/common/ErrorResponse.yaml
           example:
-            value:
-              isSuccess: false
-              resultCode: 401
-              resultMsg: "유효하지 않거나 만료된 토큰입니다."
+            isSuccess: false
+            resultCode: 401
+            resultMsg: "유효하지 않거나 만료된 토큰입니다."
     BadRequestUserToken:
       description: 잘못된 요청 (User-Token 누락/형식 오류 등)
       content:
@@ -55,10 +54,9 @@ components:
           schema:
             $ref: ./components/schemas/common/ErrorResponse.yaml
           example:
-            value:
-              isSuccess: false
-              resultCode: 400
-              resultMsg: "User-Token이 필요하거나 올바르지 않습니다."
+            isSuccess: false
+            resultCode: 400
+            resultMsg: "User-Token이 필요하거나 올바르지 않습니다."
 tags:
   - name: Academic
     description: 학사일정 API
