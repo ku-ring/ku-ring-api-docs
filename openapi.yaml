@@ -36,6 +36,29 @@ components:
         type: string
       description: FCM 기반 사용자 기기 식별 토큰
       example: "fcm-token-sample-123"
+  responses:
+    UnauthorizedJwt:
+      description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+      content:
+        application/json:
+          schema:
+            $ref: ./components/schemas/common/ErrorResponse.yaml
+          example:
+            value:
+              isSuccess: false
+              resultCode: 401
+              resultMsg: "유효하지 않거나 만료된 토큰입니다."
+    BadRequestUserToken:
+      description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+      content:
+        application/json:
+          schema:
+            $ref: ./components/schemas/common/ErrorResponse.yaml
+          example:
+            value:
+              isSuccess: false
+              resultCode: 400
+              resultMsg: "User-Token이 필요하거나 올바르지 않습니다."
 tags:
   - name: Academic
     description: 학사일정 API
@@ -103,6 +126,8 @@ paths:
                     message: OK
                     data:
                       accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ...
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   /api/v2/users/logout:
     post:
       tags:
@@ -127,6 +152,10 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   /api/v2/users/signup:
     post:
       tags:
@@ -160,6 +189,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   /api/v2/users/withdraw:
     delete:
       tags:
@@ -182,6 +213,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   /api/v2/users/password:
     patch:
       tags:
@@ -215,6 +248,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   # ------------------------------------------------------------------
   # [사용자 정보]
   # ------------------------------------------------------------------
@@ -247,6 +282,8 @@ paths:
                     data:
                       email: kuring@konkuk.ac.kr
                       nickname: 쿠링이
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   /api/v2/users/ask-counts:
     get:
       tags:
@@ -278,6 +315,10 @@ paths:
                     data:
                       leftAskCount: 3
                       maxAskCount: 10
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   # ------------------------------------------------------------------
   # [구독 및 알림]
   # ------------------------------------------------------------------
@@ -313,6 +354,8 @@ paths:
                       - name: computer_cse
                         hostPrefix: cse
                         korName: 컴퓨터공학부
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
     post:
       tags:
         - User
@@ -345,6 +388,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   /api/v2/users/subscriptions/categories:
     get:
       tags:
@@ -377,6 +422,8 @@ paths:
                       - name: bachelor
                         hostPrefix: bachelor
                         korName: 학사
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
     post:
       tags:
         - User
@@ -409,6 +456,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   /api/v2/users/notifications/academic-events:
     patch:
       tags:
@@ -441,6 +490,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   # ------------------------------------------------------------------
   # [기타 기능]
   # ------------------------------------------------------------------
@@ -461,8 +512,8 @@ paths:
               $ref: ./components/schemas/user/UserFeedbackRequest.yaml
             examples:
               Success:
-                value:
-                  content: 앱 사용성이 좋아요. 다만 검색 필터가 더 있으면 좋겠습니다.
+                  value:
+                    content: 앱 사용성이 좋아요. 다만 검색 필터가 더 있으면 좋겠습니다.
       responses:
         '200':
           description: OK
@@ -476,6 +527,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   /api/v2/users/bookmarks:
     get:
       tags:
@@ -510,6 +563,8 @@ paths:
                         subject: 2023학년도 2학기 수강신청 안내
                         category: bachelor
                         baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/...'
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
     post:
       tags:
         - User
@@ -526,8 +581,8 @@ paths:
               $ref: ./components/schemas/user/UserBookmarkRequest.yaml
             examples:
               Success:
-                value:
-                  articleId: '51234'
+                  value:
+                    articleId: '51234'
       responses:
         '200':
           description: OK
@@ -541,6 +596,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   # ------------------------------------------------------------------
   # [공지사항] Notice
   # ------------------------------------------------------------------
@@ -801,6 +858,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   '/api/v2/notices/{articleId}/comments/{commentId}':
     post:
       tags:
@@ -830,8 +889,8 @@ paths:
               $ref: ./components/schemas/notice/NoticeCommentRequest.yaml
             examples:
               Success:
-                value:
-                  content: 확인했습니다. 감사합니다!
+                  value:
+                    content: 확인했습니다. 감사합니다!
       responses:
         '200':
           description: OK
@@ -845,6 +904,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
     delete:
       tags:
         - Notice
@@ -878,6 +939,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   # ------------------------------------------------------------------
   # [관리자] Admin
   # ------------------------------------------------------------------
@@ -916,6 +979,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   /api/v2/admin/notices/dev:
     post:
       tags:
@@ -951,6 +1016,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   /api/v2/admin/users/subscriptions/all:
     post:
       tags:
@@ -973,6 +1040,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   /api/v2/admin/alerts:
     get:
       tags:
@@ -1027,6 +1096,8 @@ paths:
                         message: 잊지 말고 준비하세요.
                         reservedTime: '2024-02-15T09:50:00'
                         status: PENDING
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
     post:
       tags:
         - Admin
@@ -1060,6 +1131,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   '/api/v2/admin/alerts/{id}':
     delete:
       tags:
@@ -1089,6 +1162,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   /api/v2/admin/whitelist-words/reload:
     post:
       tags:
@@ -1111,6 +1186,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   /api/v2/admin/badwords/reload:
     post:
       tags:
@@ -1133,6 +1210,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   /api/v2/admin/reports:
     get:
       tags:
@@ -1182,6 +1261,8 @@ paths:
                     code: 200
                     message: OK
                     data: []
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   /api/v2/admin/feedbacks:
     get:
       tags:
@@ -1231,6 +1312,8 @@ paths:
                     code: 200
                     message: OK
                     data: []
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   /api/v2/admin/embedding:
     post:
       tags:
@@ -1253,6 +1336,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   /api/v2/admin/academic/dev:
     post:
       tags:
@@ -1275,6 +1360,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
   # ------------------------------------------------------------------
   # [인증] Verification
   # ------------------------------------------------------------------
@@ -1451,6 +1538,8 @@ paths:
                     message: OK
                     data:
                       answer: 전과 신청 기간은 공지사항을 기준으로 합니다.
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   # ------------------------------------------------------------------
   # [학사일정] Academic
   # ------------------------------------------------------------------
@@ -1538,6 +1627,8 @@ paths:
                     code: 200
                     message: "OK"
                     data: null
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
   # ------------------------------------------------------------------
   # [동아리] Club
   # ------------------------------------------------------------------
@@ -1592,6 +1683,10 @@ paths:
                     message: 구독에 성공했습니다.
                     data:
                       bookmarkCount: 5
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
       x-stoplight:
         id: avx1ex1702exu
       description: 로그인한 사용자가 동아리 즐겨찾기를 추가합니다.
@@ -1649,6 +1744,10 @@ paths:
                     message: 구독이 취소되었습니다.
                     data:
                       bookmarkCount: 4
+        '400':
+          $ref: '#/components/responses/BadRequestUserToken'
+        '401':
+          $ref: '#/components/responses/UnauthorizedJwt'
       x-stoplight:
         id: 6qd89rl96a1he
       description: 사용자가 동아리 즐겨찾기를 제거합니다.
