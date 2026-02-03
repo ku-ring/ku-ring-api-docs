@@ -1,5 +1,10 @@
 type: object
-description: API 요청 실패 시 응답 구조
+description: |
+  API 요청 실패 시 공통 응답 구조입니다.
+  - isSuccess: 실패 응답이므로 항상 false입니다.
+  - resultCode: 에러 구분 코드. HTTP 상태 코드(400, 401, 404 등) 또는 서버 정의 코드일 수 있습니다.
+  - resultMsg: 에러 사유를 설명하는 메시지. 오류 유형·API에 따라 문구가 달라집니다.
+  응답 예시는 오류 유형·API마다 다르므로, 각 연산(operation)의 error responses 또는 components/responses 예시를 참고하세요.
 required:
   - isSuccess
   - resultCode
@@ -7,13 +12,10 @@ required:
 properties:
   isSuccess:
     type: boolean
-    description: "성공 여부 (실패 응답이므로 항상 false)"
-    example: false
+    description: 성공 여부(실패 응답이므로 항상 false)
   resultCode:
     type: integer
-    description: "에러 코드 (HTTP 상태 코드와 다를 수 있음)"
-    example: 400
+    description: 에러 코드(HTTP 상태 코드 또는 서버 정의 코드)
   resultMsg:
     type: string
-    description: "에러 상세 메시지"
-    example: "잘못된 요청입니다."
+    description: 에러 상세 메시지(오류 유형·API별 상이)

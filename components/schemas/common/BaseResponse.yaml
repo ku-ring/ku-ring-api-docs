@@ -1,5 +1,10 @@
 type: object
-description: API 요청 성공 시 기본 응답 구조
+description: |
+  API 요청 성공 시 공통 응답 구조입니다.
+  - code: HTTP 성공 코드(200 등). 모든 성공 응답이 동일한 필드를 가집니다.
+  - message: 성공 메시지. API(연산)마다 다를 수 있으며, 클라이언트에서는 주로 로깅/디버깅용으로 사용합니다.
+  - data: 실제 페이로드. 해당 API가 반환하는 성공 데이터이며, 없을 경우 null입니다. 형식과 내용은 API별로 상이합니다.
+  응답 예시는 API마다 다르므로, 각 연산(operation)의 responses 내 examples를 참고하세요.
 required:
   - code
   - message
@@ -7,10 +12,9 @@ required:
 properties:
   code:
     type: integer
-    description: 응답 코드 (성공 시 200)
+    description: HTTP 상태 코드(성공 시 200)
   message:
     type: string
-    description: 응답 메시지
+    description: 성공 메시지(API별 상이)
   data:
-    description: 응답 데이터 (Payload). 데이터가 없을 경우 null.
-    example: null
+    description: 성공 시 반환 데이터. 없으면 null. API별 스키마 상이

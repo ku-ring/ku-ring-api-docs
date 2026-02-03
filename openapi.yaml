@@ -27,7 +27,7 @@ components:
       schema:
         type: string
       description: FCM 기반 사용자 기기 식별 토큰
-      example: "fcm-token-sample-123"
+      example: "1234"
     UserTokenHeaderOptional:
       name: User-Token
       in: header
@@ -35,7 +35,7 @@ components:
       schema:
         type: string
       description: FCM 기반 사용자 기기 식별 토큰
-      example: "fcm-token-sample-123"
+      example: "1234"
   responses:
     UnauthorizedJwt:
       description: 인증 실패 (JWT 만료/없음/유효하지 않음)
@@ -103,8 +103,8 @@ paths:
             examples:
               Success:
                 value:
-                  email: kuring@konkuk.ac.kr
-                  password: password1234!
+                  email: user@konkuk.ac.kr
+                  password: "1234"
       responses:
         '200':
           description: OK
@@ -121,7 +121,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 로그인되었습니다.
                     data:
                       accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ...
         '400':
@@ -148,7 +148,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 로그아웃되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -172,8 +172,8 @@ paths:
             examples:
               Success:
                 value:
-                  email: kuring@konkuk.ac.kr
-                  password: password1234!
+                  email: user@konkuk.ac.kr
+                  password: "1234"
       responses:
         '200':
           description: OK
@@ -185,7 +185,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 회원가입이 완료되었습니다.
                     data: null
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
@@ -209,7 +209,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 탈퇴가 완료되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -231,8 +231,8 @@ paths:
             examples:
               Success:
                 value:
-                  email: kuring@konkuk.ac.kr
-                  password: newPassword1234!
+                  email: user@konkuk.ac.kr
+                  password: "5678"
       responses:
         '200':
           description: OK
@@ -244,7 +244,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 비밀번호가 변경되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -276,7 +276,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       email: kuring@konkuk.ac.kr
                       nickname: 쿠링이
@@ -309,7 +309,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       leftAskCount: 3
                       maxAskCount: 10
@@ -347,7 +347,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       - name: computer_cse
                         hostPrefix: cse
@@ -384,7 +384,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 학과 구독이 수정되었습니다.
                     data: null
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
@@ -415,7 +415,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       - name: bachelor
                         hostPrefix: bachelor
@@ -452,7 +452,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 카테고리 구독이 수정되었습니다.
                     data: null
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
@@ -486,7 +486,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 학사일정 알림 설정이 변경되었습니다.
                     data: null
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
@@ -510,8 +510,8 @@ paths:
               $ref: ./components/schemas/user/UserFeedbackRequest.yaml
             examples:
               Success:
-                  value:
-                    content: 앱 사용성이 좋아요. 다만 검색 필터가 더 있으면 좋겠습니다.
+                value:
+                  content: 테스트 피드백 내용
       responses:
         '200':
           description: OK
@@ -523,7 +523,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 피드백이 접수되었습니다.
                     data: null
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
@@ -554,7 +554,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       - articleId: '51234'
                         postedDate: '2023-10-25'
@@ -579,8 +579,8 @@ paths:
               $ref: ./components/schemas/user/UserBookmarkRequest.yaml
             examples:
               Success:
-                  value:
-                    articleId: '51234'
+                value:
+                  articleId: '1'
       responses:
         '200':
           description: OK
@@ -592,7 +592,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 북마크가 추가되었습니다.
                     data: null
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
@@ -659,7 +659,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       notices:
                         - articleId: '56281'
@@ -682,7 +682,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 장학금 수강신청
+            example: 장학금
         - name: page
           in: query
           description: 결과 페이지 번호 (0부터 시작)
@@ -713,7 +713,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       notices:
                         - articleId: '56281'
@@ -745,7 +745,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       departments:
                         - name: computer_cse
@@ -773,7 +773,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       categories:
                         - bachelor
@@ -795,7 +795,7 @@ paths:
           description: 게시글 ID
           schema:
             type: string
-            example: '56281'
+            example: '1'
       responses:
         '200':
           description: OK
@@ -814,7 +814,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       - id: comment_123
                         content: 전과 신청 기간은 공지 본문을 확인해주세요.
@@ -842,7 +842,7 @@ paths:
             examples:
               Success:
                 value:
-                  content: 전과 신청 기간이 정확히 언제까지인가요?
+                  content: 댓글 내용
       responses:
         '200':
           description: OK
@@ -854,7 +854,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 댓글이 등록되었습니다.
                     data: null
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
@@ -887,8 +887,8 @@ paths:
               $ref: ./components/schemas/notice/NoticeCommentRequest.yaml
             examples:
               Success:
-                  value:
-                    content: 확인했습니다. 감사합니다!
+                value:
+                  content: 수정한 댓글 내용
       responses:
         '200':
           description: OK
@@ -900,7 +900,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 댓글이 수정되었습니다.
                     data: null
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
@@ -935,7 +935,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 댓글이 삭제되었습니다.
                     data: null
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
@@ -960,8 +960,8 @@ paths:
             examples:
               Success:
                 value:
-                  subject: '[점검] 서버 점검 안내'
-                  content: 새벽 2시부터 점검이 있습니다.
+                  subject: 공지 제목
+                  content: 공지 내용
                   category: app_notice
                   important: true
       responses:
@@ -975,7 +975,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 공지가 전송되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -997,8 +997,8 @@ paths:
             examples:
               Success:
                 value:
-                  subject: '[테스트] 공지 전송 테스트'
-                  content: 이 공지는 테스트용입니다.
+                  subject: 테스트 공지
+                  content: 테스트 내용
                   category: app_notice
                   important: false
       responses:
@@ -1012,7 +1012,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 테스트 공지가 전송되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -1036,7 +1036,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 전체 구독이 갱신되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -1087,7 +1087,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       - id: alert_999
                         title: 수강신청 10분 전입니다!
@@ -1113,8 +1113,8 @@ paths:
             examples:
               Success:
                 value:
-                  title: 중간고사 간식 행사
-                  message: 학생회관에서 햄버거 받아가세요!
+                  title: 알림 제목
+                  message: 알림 내용
                   reservedTime: '2024-04-20T12:00:00'
       responses:
         '200':
@@ -1127,7 +1127,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 예약 알림이 등록되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -1158,7 +1158,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 예약 알림이 삭제되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -1182,7 +1182,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 허용 단어 사전이 갱신되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -1206,7 +1206,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 금칙어 사전이 갱신되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -1257,7 +1257,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data: []
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -1308,7 +1308,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data: []
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -1332,7 +1332,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 임베딩이 완료되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -1356,7 +1356,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 테스트 알림이 전송되었습니다.
                     data: null
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -1379,7 +1379,7 @@ paths:
             examples:
               Success:
                 value:
-                  email: kuring@konkuk.ac.kr
+                  email: user@konkuk.ac.kr
       responses:
         '200':
           description: OK
@@ -1391,7 +1391,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 인증번호가 발송되었습니다.
                     data: null
   /api/v2/verification-code/password-reset:
     post:
@@ -1409,7 +1409,7 @@ paths:
             examples:
               Success:
                 value:
-                  email: kuring@konkuk.ac.kr
+                  email: user@konkuk.ac.kr
       responses:
         '200':
           description: OK
@@ -1421,7 +1421,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 인증번호가 발송되었습니다.
                     data: null
   /api/v2/verification-code/verify:
     post:
@@ -1439,7 +1439,7 @@ paths:
             examples:
               Success:
                 value:
-                  email: kuring@konkuk.ac.kr
+                  email: user@konkuk.ac.kr
                   code: '123456'
       responses:
         '200':
@@ -1452,7 +1452,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 인증이 완료되었습니다.
                     data: null
   # ------------------------------------------------------------------
   # [교직원] Staff
@@ -1471,7 +1471,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 김건국
+            example: 홍길동
       responses:
         '200':
           description: OK
@@ -1490,7 +1490,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       - name: 김건국
                         major: 컴퓨터공학부
@@ -1515,7 +1515,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 전과 신청 언제까지야?
+            example: 전과 기간
         - $ref: '#/components/parameters/UserTokenHeaderRequired'
       responses:
         '200':
@@ -1533,7 +1533,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 응답되었습니다.
                     data:
                       answer: 전과 신청 기간은 공지사항을 기준으로 합니다.
         '400':
@@ -1583,7 +1583,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: OK
+                    message: 조회되었습니다.
                     data:
                       - subject: 1학기 수강신청
                         startDate: '2024-02-14'
@@ -1609,9 +1609,9 @@ paths:
             examples:
               Success:
                 value:
-                  boardId: '56281'
-                  commentId: comment_123
-                  category: 욕설/비하
+                  boardId: '1'
+                  commentId: '1'
+                  category: 욕설
       responses:
         '200':
           description: OK
@@ -1623,7 +1623,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: "OK"
+                    message: 신고가 접수되었습니다.
                     data: null
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
@@ -1649,7 +1649,7 @@ paths:
               properties:
                 id:
                   type: integer
-                  example: 15
+                  example: 1
                   x-stoplight:
                     id: 6gj18cdzbuxr1
       responses:
@@ -1706,13 +1706,13 @@ paths:
               properties:
                 id:
                   type: integer
-                  example: 15
+                  example: 1
                   x-stoplight:
                     id: tyxamaarexozv
             examples:
               Success:
                 value:
-                  id: 15
+                  id: 1
       responses:
         '200':
           description: 취소 성공
