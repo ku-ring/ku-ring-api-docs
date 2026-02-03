@@ -11,11 +11,31 @@ info:
   license:
     name: "MIT"
     url: "https://opensource.org/licenses/MIT"
-# 1. 보안 설정 (전역)
+# 1. 보안 설정 및 공통 파라미터 (Try it / 문서 도구에서 헤더·인증 입력란 노출용)
 components:
   securitySchemes:
     BearerAuth:
-      $ref: ./components/security.yaml#/BearerAuth
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT 액세스 토큰 (로그인 후 발급)
+  parameters:
+    UserTokenHeaderRequired:
+      name: User-Token
+      in: header
+      required: true
+      schema:
+        type: string
+      description: FCM 기반 사용자 기기 식별 토큰
+      example: "fcm-token-sample-123"
+    UserTokenHeaderOptional:
+      name: User-Token
+      in: header
+      required: false
+      schema:
+        type: string
+      description: FCM 기반 사용자 기기 식별 토큰
+      example: "fcm-token-sample-123"
 tags:
   - name: Academic
     description: 학사일정 API
@@ -52,7 +72,7 @@ paths:
       description: 사용자가 이메일과 비밀번호로 로그인하여 액세스 토큰을 발급받습니다.
       operationId: login
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderOptional.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderOptional'
       requestBody:
         required: true
         content:
@@ -93,7 +113,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       responses:
         '200':
           description: OK
@@ -115,7 +135,7 @@ paths:
       description: FCM 디바이스 토큰을 포함하여 새로운 사용자를 회원가입 처리합니다.
       operationId: signup
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderOptional.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderOptional'
       requestBody:
         required: true
         content:
@@ -237,7 +257,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderOptional.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderOptional'
       responses:
         '200':
           description: OK
@@ -269,7 +289,7 @@ paths:
       description: 사용자가 구독 중인 학과 목록을 조회합니다.
       operationId: lookupUserSubscribeDepartments
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       responses:
         '200':
           description: OK
@@ -300,7 +320,7 @@ paths:
       description: 사용자가 구독할 학과 목록을 추가·수정합니다.
       operationId: editUserSubscribeDepartments
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
         required: true
         content:
@@ -333,7 +353,7 @@ paths:
       description: 사용자가 구독 중인 공지 카테고리 목록을 조회합니다.
       operationId: lookupUserSubscribeCategories
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       responses:
         '200':
           description: OK
@@ -364,7 +384,7 @@ paths:
       description: 사용자가 구독할 공지 카테고리 목록을 추가·수정합니다.
       operationId: editUserSubscribeCategories
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
         required: true
         content:
@@ -397,7 +417,7 @@ paths:
       description: 사용자의 학사일정 알림 활성화 여부를 변경합니다.
       operationId: updateAcademicEventNotification
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
         required: true
         content:
@@ -432,7 +452,7 @@ paths:
       description: 앱 사용성이나 오류 등에 대한 사용자의 피드백을 서버에 전송합니다.
       operationId: saveFeedback
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
         required: true
         content:
@@ -464,7 +484,7 @@ paths:
       description: 사용자가 저장해 둔 공지사항 북마크 목록을 조회합니다.
       operationId: lookupUserBookmarks
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       responses:
         '200':
           description: OK
@@ -497,7 +517,7 @@ paths:
       description: 특정 공지사항을 북마크에 추가합니다.
       operationId: saveBookmark
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
         required: true
         content:
@@ -757,7 +777,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
         required: true
         content:
@@ -801,7 +821,7 @@ paths:
           description: 수정할 댓글 ID
           schema:
             type: string
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
         required: true
         content:
@@ -844,7 +864,7 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       responses:
         '200':
           description: OK
@@ -1411,7 +1431,7 @@ paths:
           schema:
             type: string
             example: 전과 신청 언제까지야?
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       responses:
         '200':
           description: OK
@@ -1492,7 +1512,7 @@ paths:
       description: 부적절한 게시글이나 댓글을 신고합니다.
       operationId: createReport
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
         required: true
         content:
@@ -1530,7 +1550,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
         required: true
         content:
@@ -1558,14 +1578,20 @@ paths:
                         example: 구독에 성공했습니다.
                       data:
                         type: object
-                        nullable: true
-                        example: null
+                        required:
+                          - bookmarkCount
+                        properties:
+                          bookmarkCount:
+                            type: integer
+                            description: 사용자의 동아리 즐겨찾기 개수
+                            example: 5
               examples:
                 Success:
                   value:
                     code: 200
                     message: 구독에 성공했습니다.
-                    data: null
+                    data:
+                      bookmarkCount: 5
       x-stoplight:
         id: avx1ex1702exu
       description: 로그인한 사용자가 동아리 즐겨찾기를 추가합니다.
@@ -1577,7 +1603,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - $ref: ./components/parameters/UserTokenHeaderRequired.yaml
+        - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
         required: true
         content:
@@ -1609,14 +1635,20 @@ paths:
                         example: 구독이 취소되었습니다.
                       data:
                         type: object
-                        nullable: true
-                        example: null
+                        required:
+                          - bookmarkCount
+                        properties:
+                          bookmarkCount:
+                            type: integer
+                            description: 사용자의 동아리 즐겨찾기 개수
+                            example: 4
               examples:
                 Success:
                   value:
                     code: 200
                     message: 구독이 취소되었습니다.
-                    data: null
+                    data:
+                      bookmarkCount: 4
       x-stoplight:
         id: 6qd89rl96a1he
       description: 사용자가 동아리 즐겨찾기를 제거합니다.
