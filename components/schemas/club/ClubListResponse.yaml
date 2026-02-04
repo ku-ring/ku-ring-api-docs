@@ -1,0 +1,7 @@
+type: object
+description: 동아리 목록 응답
+properties:
+  content:
+    type: array
+    items:
+      $ref: ./ClubResponse.yaml
