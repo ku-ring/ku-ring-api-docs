@@ -5,8 +5,7 @@ examples:
     name: 리드미
     summary: '단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임'
     category: ACADEMIC
-    scope: UNIVERSITY
-    affiliation: CENTRAL
+    division: CENTRAL
     isSubscribed: true
     subscriberCount: 128
     instagramUrl: 'https://instagram.com/kuring.official'
@@ -45,12 +44,9 @@ properties:
   category:
     $ref: ./ClubCategory.yaml
     description: 동아리 카테고리
-  scope:
-    $ref: ./ClubScope.yaml
-    description: 동아리 범위 (중앙/단과대/학과/연합)
-  affiliation:
-    $ref: ./ClubAffiliation.yaml
-    description: 동아리 소속 (구체 단과대·학과 등)
+  division:
+    $ref: ./ClubDivision.yaml
+    description: 동아리 소속 (단과대·학과·연합 등)
   # ----------------------------------------
   # [3] 메타 데이터 (좋아요/구독)
   # ----------------------------------------

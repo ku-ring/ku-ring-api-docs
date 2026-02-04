@@ -35,9 +35,6 @@ properties:
       id: y5hnmfqsj9bdu
     example: '2026-06-03T12:18:00.00000'
     description: 공고 마감일
-  scope:
-    $ref: ./ClubScope.yaml
-    description: 동아리 범위
-  affiliation:
-    $ref: ./ClubAffiliation.yaml
+  division:
+    $ref: ./ClubDivision.yaml
     description: 동아리 소속

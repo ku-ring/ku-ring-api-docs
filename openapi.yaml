@@ -7,7 +7,7 @@ info:
     name: Github
     url: 'https://github.com/ku-ring'
     email: kuring.korea@gmail.com
-  termsOfService: ''
+  termsOfService: https://github.com/ku-ring
   license:
     name: "MIT"
     url: "https://opensource.org/licenses/MIT"
@@ -1661,15 +1661,38 @@ paths:
   # ------------------------------------------------------------------
   # [동아리] Club
   # ------------------------------------------------------------------
-  /api/v2/clubs/affiliations:
+  /api/v2/clubs/divisions:
     get:
       tags:
         - Draft
-      summary: 동아리 소속(affiliation) 목록 조회
+      summary: 동아리 소속(division) 목록 조회
       description: |
         동아리 소속 목록이 가변적으로 변할 수 있으므로, 클라이언트에 현재 지원하는 소속 목록을 API로 전달합니다.
         필터 UI(드롭다운 등) 구성 시 이 목록을 사용하세요.
-      operationId: getClubAffiliations
+        
+        가능한 소속 값:
+        - CENTRAL: 중앙 / Central organization under the university
+        - LIBERAL_ARTS: 문과대학 / College of Liberal Arts
+        - SCIENCE: 이과대학 / College of Science
+        - ARCHITECTURE: 건축대학 / College of Architecture
+        - ENGINEERING: 공과대학 / College of Engineering
+        - SOCIAL_SCIENCES: 사회과학대학 / College of Social Sciences
+        - BUSINESS: 경영대학 / College of Business Administration
+        - REAL_ESTATE: 부동산과학원 / College of Real Estate
+        - KU_CONVERGENCE: KU융합과학기술원 / Konkuk Institute of Technology
+        - SANGHUH_LIFE_SCIENCE: 상허생명과학대학 / College of Sang-Huh Life Science
+        - VETERINARY: 수의과대학 / College of Veterinary Medicine
+        - ART_DESIGN: 예술디자인대학 / College of Art & Design
+        - EDUCATION: 사범대학 / College of Education
+        - SANGHUH_GENERAL: 상허교양대학 / Sang-Huh College
+        - INTERNATIONAL: 국제대학 / International College
+        - CONVERGENCE_SCI_TECH: 융합과학기술원 / Institute of Technology
+        - LIFE_SCIENCE: 생명과학대학 / College of Life Science
+        - COMPUTER_SCIENCE: 컴퓨터공학과 / Department of Computer Science
+        - MECHANICAL_ENGINEERING: 기계공학과 / Department of Mechanical Engineering
+        - MULTI_COLLEGE: 다단과대 연합 / Union across multiple colleges
+        - EXTERNAL: 외부 연합 / Union including external organizations
+      operationId: getClubDivisions
       responses:
         '200':
           description: OK
@@ -1681,14 +1704,14 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: ./components/schemas/club/ClubAffiliationListResponse.yaml
+                        $ref: ./components/schemas/club/ClubDivisionListResponse.yaml
               examples:
                 Success:
                   value:
                     code: 200
                     message: 조회되었습니다.
                     data:
-                      affiliations:
+                      divisions:
                         - code: CENTRAL
                           koreanName: 중앙
                         - code: ENGINEERING
@@ -1700,7 +1723,19 @@ paths:
       tags:
         - Draft
       summary: 동아리 목록 조회
-      description: 필터 조건에 맞는 동아리 목록을 커서 페이징으로 조회합니다. data 안에 clubs(배열), cursor, hasNext, totalCount를 반환합니다. affiliation은 0개부터 n개까지 선택 가능합니다.
+      description: |
+        필터 조건에 맞는 동아리 목록을 커서 페이징으로 조회합니다. data 안에 clubs(배열), cursor, hasNext, totalCount를 반환합니다.
+        
+        필터:
+        - category: 동아리 카테고리로 필터 (1개만 선택 가능)
+        - division: 동아리 소속으로 필터. 여러 개 선택 시 콤마(,)로 구분하여 전달 (예: division=CENTRAL,ENGINEERING). 생략 시 소속 무관.
+        
+        페이징:
+        - cursor: 다음 페이지 요청 시 사용할 커서. 동아리 ID(pk) 값입니다. 최초 요청 시 생략하거나 0을 전달하면 첫 페이지부터 조회됩니다. 기본값: 0
+        - size: 단일 요청의 사이즈. 1 ~ 30까지 허용. 기본값: 20
+        
+        정렬:
+        - sortBy: 정렬 기준. name (동아리 이름 순) 또는 recruitEndDate (마감일 임박순). 기본값: name
       operationId: getClubs
       parameters:
         - name: category
@@ -1709,22 +1744,22 @@ paths:
           required: false
           schema:
             $ref: ./components/schemas/club/ClubCategory.yaml
-        - name: affiliation
+        - name: division
           in: query
-          description: 동아리 소속으로 필터. 0개~n개 선택 가능 (여러 개 시 OR 조건). 생략 시 소속 무관.
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: ./components/schemas/club/ClubAffiliation.yaml
-          style: form
-          explode: true
-        - name: cursor
-          in: query
-          description: 다음 페이지 요청 시 사용할 커서 (최초 요청 시 생략)
+          description: '동아리 소속으로 필터. 여러 개 선택 시 콤마(,)로 구분 (예: division=CENTRAL,ENGINEERING). 생략 시 소속 무관.'
           required: false
           schema:
             type: string
+          example: CENTRAL,ENGINEERING
+        - name: cursor
+          in: query
+          description: 다음 페이지 요청 시 사용할 커서 (동아리 ID 값). 최초 요청 시 생략하거나 0 전달 시 첫 페이지부터 조회
+          required: false
+          schema:
+            type: integer
+            format: int64
+            default: 0
+            example: 0
         - name: size
           in: query
           description: 단일 요청의 사이즈, 1 ~ 30까지 허용
@@ -1734,8 +1769,19 @@ paths:
             format: int32
             minimum: 1
             maximum: 30
-            default: 10
-            example: 10
+            default: 20
+            example: 20
+        - name: sortBy
+          in: query
+          description: 정렬 기준. name (동아리 이름 순) 또는 recruitEndDate (마감일 임박순)
+          required: false
+          schema:
+            type: string
+            enum:
+              - name
+              - recruitEndDate
+            default: name
+            example: name
       responses:
         '200':
           description: OK
@@ -1761,20 +1807,20 @@ paths:
                           summary: 건국대학교 공지사항 알림 서비스 개발 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
                           category: ACADEMIC
-                          scope: UNIVERSITY
-                          affiliation: CENTRAL
+                          division: CENTRAL
                           bookmarkCount: 19
+                          recruitStartDate: '2026-05-01T00:00:00'
                           recruitEndDate: '2026-06-03T23:59:59'
                         - id: 2
                           name: 리드미
                           summary: 책 속에 빠져 인사이트를 나누는 독서 모임
                           iconImageUrl: 'https://api.kuring.com/images/club_icon_2.png'
                           category: ACADEMIC
-                          scope: UNIVERSITY
-                          affiliation: CENTRAL
+                          division: CENTRAL
                           bookmarkCount: 128
+                          recruitStartDate: '2026-04-15T00:00:00'
                           recruitEndDate: '2026-05-31T23:59:59'
-                      cursor: "eyJpZCI6MTB9"
+                      cursor: 10
                       hasNext: true
                       totalCount: 42
                 LastPageNoNext:
@@ -1789,9 +1835,9 @@ paths:
                           summary: 건국대 테니스 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_tennis.png'
                           category: ACTIVITY
-                          scope: COLLEGE
-                          affiliation: ENGINEERING
+                          division: ENGINEERING
                           bookmarkCount: 5
+                          recruitStartDate: null
                           recruitEndDate: null
                       cursor: null
                       hasNext: false
@@ -1818,15 +1864,15 @@ paths:
                           summary: 알고리즘 문제 풀이 및 스터디
                           iconImageUrl: 'https://api.kuring.com/images/club_algo.png'
                           category: ACADEMIC
-                          scope: DEPARTMENT
-                          affiliation: COMPUTER_SCIENCE
+                          division: COMPUTER_SCIENCE
                           bookmarkCount: 32
+                          recruitStartDate: '2026-05-10T00:00:00'
                           recruitEndDate: '2026-06-01T23:59:59'
                       cursor: null
                       hasNext: false
                       totalCount: 1
-                FilteredByAffiliation:
-                  summary: 소속 복수 선택 (예 affiliation=CENTRAL&affiliation=ENGINEERING)
+                FilteredByDivision:
+                  summary: 소속 복수 선택 (예 division=CENTRAL,ENGINEERING)
                   value:
                     code: 200
                     message: 조회되었습니다.
@@ -1837,20 +1883,20 @@ paths:
                           summary: 건국대학교 공지사항 알림 서비스 개발 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
                           category: ACADEMIC
-                          scope: UNIVERSITY
-                          affiliation: CENTRAL
+                          division: CENTRAL
                           bookmarkCount: 19
+                          recruitStartDate: '2026-05-01T00:00:00'
                           recruitEndDate: '2026-06-03T23:59:59'
                         - id: 4
                           name: 로봇연구회
                           summary: 공과대 로봇 연구 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_robot.png'
                           category: ACADEMIC
-                          scope: COLLEGE
-                          affiliation: ENGINEERING
+                          division: ENGINEERING
                           bookmarkCount: 28
+                          recruitStartDate: '2026-05-15T00:00:00'
                           recruitEndDate: '2026-06-10T23:59:59'
-                      cursor: "eyJpZCI6NH0"
+                      cursor: 4
                       hasNext: true
                       totalCount: 12
   '/api/v2/clubs/{id}':
@@ -1888,8 +1934,8 @@ paths:
                       id: 1
                       name: 리드미
                       summary: 단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임
-                      scope: UNIVERSITY
-                      affiliation: CENTRAL
+                      category: ACADEMIC
+                      division: CENTRAL
                       isSubscribed: true
                       subscriberCount: 128
   /api/v2/users/bookmarks/clubs:
@@ -1944,9 +1990,9 @@ paths:
                           summary: 건국대학교 공지사항 알림 서비스 개발 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
                           category: ACADEMIC
-                          scope: UNIVERSITY
-                          affiliation: CENTRAL
+                          division: CENTRAL
                           bookmarkCount: 19
+                          recruitStartDate: '2026-05-01T00:00:00'
                           recruitEndDate: '2026-06-03T23:59:59'
                       cursor: null
                       hasNext: false
