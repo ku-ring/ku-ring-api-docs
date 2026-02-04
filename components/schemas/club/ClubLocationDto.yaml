@@ -1,0 +1,22 @@
+type: object
+description: 동아리 위치 정보
+properties:
+  building:
+    $ref: ./ClubBuilding.yaml
+    description: 동아리방 건물 (snake_case)
+  room:
+    type: string
+    description: 동아리 방 호수
+    example: "101"
+  x:
+    type: number
+    format: double
+    description: 지도 X 좌표 (경도 등), 없으면 null
+    nullable: true
+    example: 127.074
+  y:
+    type: number
+    format: double
+    description: 지도 Y 좌표 (위도 등), 없으면 null
+    nullable: true
+    example: 37.541

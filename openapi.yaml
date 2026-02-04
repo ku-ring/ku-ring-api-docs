@@ -1695,8 +1695,7 @@ paths:
         - LIFE_SCIENCE: 생명과학대학 / College of Life Science
         - COMPUTER_SCIENCE: 컴퓨터공학과 / Department of Computer Science
         - MECHANICAL_ENGINEERING: 기계공학과 / Department of Mechanical Engineering
-        - MULTI_COLLEGE: 다단과대 연합 / Union across multiple colleges
-        - EXTERNAL: 외부 연합 / Union including external organizations
+        - ETC: 기타 / Other or unspecified affiliation
       operationId: getClubDivisions
       responses:
         '200':
@@ -1976,8 +1975,8 @@ paths:
                       applyUrl: 'https://forms.gle/xyz...'
                       posterImageUrl: 'https://api.kuring.com/images/club_poster_readme.png'
                       location:
-                        building: Sanghuh Library
-                        room: 101
+                        building: sanghuh_library
+                        room: "101"
                         x: 127.074
                         y: 37.541
         '401':
@@ -2037,6 +2036,7 @@ paths:
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
                           category: academic
                           division: central
+                          isBookmarked: true
                           bookmarkCount: 19
                           recruitStartDate: '2026-05-01T00:00:00'
                           recruitEndDate: '2026-06-03T23:59:59'

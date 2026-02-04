@@ -1,8 +1,0 @@
-type: object
-description: 동아리 소속(affiliation) 목록 응답의 data 필드. 가변적으로 변할 수 있어 API로 제공합니다.
-properties:
-  affiliations:
-    type: array
-    items:
-      $ref: ./ClubAffiliationListItem.yaml
-    description: 현재 서버에서 지원하는 소속 목록 (0개 이상)

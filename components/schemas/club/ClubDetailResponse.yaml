@@ -19,8 +19,8 @@ examples:
     applyUrl: 'https://forms.gle/xyz...'
     posterImageUrl: 'https://api.kuring.com/images/club_poster_readme.png'
     location:
-      building: Sanghuh Library
-      room: 101
+      building: sanghuh_library
+      room: "101"
       x: 127.074
       y: 37.541
 properties:
@@ -105,30 +105,5 @@ properties:
     description: 동아리 포스터 이미지 URL (없으면 null)
     nullable: true
   location:
-    type: object
-    x-stoplight:
-      id: xu4s7c5plrq8q
     description: 동아리 위치 정보
-    properties:
-      building:
-        type: string
-        x-stoplight:
-          id: hafkb0pl5w0e5
-        description: 동아리방 건물
-      room:
-        type: string
-        x-stoplight:
-          id: x0lkhthhf4gy5
-        description: 동아리 방 호수
-      x:
-        type: number
-        format: double
-        description: 지도 X 좌표 (경도 등), 없으면 null
-        nullable: true
-        example: 127.074
-      y:
-        type: number
-        format: double
-        description: 지도 Y 좌표 (위도 등), 없으면 null
-        nullable: true
-        example: 37.541
+    $ref: ./ClubLocationDto.yaml

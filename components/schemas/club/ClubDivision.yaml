@@ -27,8 +27,7 @@ description: |
   - life_science: 생명과학대학 / College of Life Science
   - computer_science: 컴퓨터공학과 / Department of Computer Science
   - mechanical_engineering: 기계공학과 / Department of Mechanical Engineering
-  - multi_college: 다단과대 연합 / Union across multiple colleges
-  - external: 외부 연합 / Union including external organizations
+  - etc: 기타 / Other or unspecified affiliation
 enum:
   - central
   - liberal_arts
@@ -49,5 +48,4 @@ enum:
   - life_science
   - computer_science
   - mechanical_engineering
-  - multi_college
-  - external
+  - etc
