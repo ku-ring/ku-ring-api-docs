@@ -1,0 +1,15 @@
+type: object
+description: 동아리 소속(affiliation) 목록 한 건. 클라이언트 필터/드롭다운용.
+properties:
+  code:
+    type: string
+    description: 소속 코드 (API 필터/요청 시 사용)
+    example: CENTRAL
+  koreanName:
+    type: string
+    description: 한글 표기명
+    example: 중앙
+  description:
+    type: string
+    description: 영문 설명 (선택)
+    example: Central organization under the university

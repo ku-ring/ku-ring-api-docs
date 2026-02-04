@@ -1,0 +1,12 @@
+type: string
+description: |
+  동아리 범위 (소속 단위).
+  - UNIVERSITY: 중앙 동아리 / University-level club affiliated with the university as a whole
+  - COLLEGE: 단과대 동아리 / College-level club affiliated with a specific college
+  - DEPARTMENT: 학과 동아리 / Department-level club affiliated with a specific department
+  - UNION: 연합 동아리 / Union club formed across multiple colleges or departments
+enum:
+  - UNIVERSITY
+  - COLLEGE
+  - DEPARTMENT
+  - UNION

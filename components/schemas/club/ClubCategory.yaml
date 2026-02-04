@@ -1,0 +1,12 @@
+type: string
+description: |
+  동아리 카테고리 (활동 성격).
+  - ACADEMIC: 학술활동 / Academic and study-oriented club activities
+  - CULTURE_ART: 문화예술 / Culture, arts, performance, and creative activities
+  - SOCIAL_VALUE: 사회가치 / Social contribution and volunteering activities
+  - ACTIVITY: 야외활동 / Sports, leisure, and outdoor activities
+enum:
+  - ACADEMIC
+  - CULTURE_ART
+  - SOCIAL_VALUE
+  - ACTIVITY
