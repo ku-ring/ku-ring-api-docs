@@ -1,7 +1,7 @@
 type: object
-description: 응답의 data 필드. data 안에 목록 배열과 cursor, hasNext, totalCount를 담습니다.
+description: 응답의 data 필드. data 안에 clubs(배열), cursor, hasNext, totalCount를 담습니다.
 properties:
-  list:
+  clubs:
     type: array
     items:
       $ref: ./ClubListItemDto.yaml

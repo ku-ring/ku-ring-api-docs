@@ -13,9 +13,8 @@ properties:
     description: 동아리 한줄 소개
     example: 건국대학교 공지사항 알림 서비스 개발 동아리
   category:
-    type: string
+    $ref: ./ClubCategory.yaml
     description: 카테고리
-    example: OUTDOOR
   thumbnailUrl:
     type: string
     description: 썸네일 이미지 URL
@@ -36,9 +35,9 @@ properties:
       id: y5hnmfqsj9bdu
     example: '2026-06-03T12:18:00.00000'
     description: 공고 마감일
-  division:
-    type: string
-    x-stoplight:
-      id: 9bk3s4xaz2uea
-    description: 소속
-    example: CENTRAL
+  scope:
+    $ref: ./ClubScope.yaml
+    description: 동아리 범위
+  affiliation:
+    $ref: ./ClubAffiliation.yaml
+    description: 동아리 소속

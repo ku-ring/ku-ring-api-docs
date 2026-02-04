@@ -9,7 +9,3 @@ properties:
     type: string
     description: 한글 표기명
     example: 중앙
-  description:
-    type: string
-    description: 영문 설명 (선택)
-    example: Central organization under the university

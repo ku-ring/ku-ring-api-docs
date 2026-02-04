@@ -18,13 +18,14 @@ properties:
     description: 동아리 아이콘 이미지 URL
     example: 'https://api.kuring.com/images/club_icon.png'
   category:
-    type: string
+    $ref: ./ClubCategory.yaml
     description: 동아리 카테고리
-    example: OUTDOOR
-  division:
-    type: string
-    description: 동아리 소속 (중앙/단과대 등)
-    example: CENTRAL
+  scope:
+    $ref: ./ClubScope.yaml
+    description: 동아리 범위 (중앙/단과대/학과/연합)
+  affiliation:
+    $ref: ./ClubAffiliation.yaml
+    description: 동아리 소속 (구체 단과대·학과 등)
   bookmarkCount:
     type: integer
     description: 동아리 즐겨찾기 수
