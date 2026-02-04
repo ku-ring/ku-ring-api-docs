@@ -5,10 +5,11 @@ examples:
     name: 리드미
     summary: '단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임'
     category: ACADEMIC
-    division: CENTRAL
-    isSubscribed: true
-    subscriberCount: 128
+    division: central
+    bookmarkCount: 128
+    isBookmarked: true
     instagramUrl: 'https://instagram.com/kuring.official'
+    youtubeUrl: 'https://youtube.com/@kuring'
     description: 저희 리드미는 2020년부터 시작된...
     qualifications: |-
       건국대학교 재학생 및 휴학생 누구나
@@ -17,10 +18,12 @@ examples:
     recruitStartAt: '2026-03-02T00:00:00'
     recruitEndAt: '2026-03-15T23:59:59'
     applyUrl: 'https://forms.gle/xyz...'
-    descriptionImageUrl: string
+    posterImageUrl: 'https://api.kuring.com/images/club_poster_readme.png'
     location:
-      building: string
-      room: string
+      building: 상허도서관
+      room: 101
+      x: 127.074
+      y: 37.541
 properties:
   id:
     type: integer
@@ -50,14 +53,14 @@ properties:
   # ----------------------------------------
   # [3] 메타 데이터 (좋아요/구독)
   # ----------------------------------------
-  isSubscribed:
-    type: boolean
-    description: 현재 사용자의 구독/즐겨찾기 여부 (별 아이콘 채움 여부)
-    example: true
-  subscriberCount:
+  bookmarkCount:
     type: integer
-    description: '총 구독자 수 ({n}+)'
+    description: 동아리 즐겨찾기 수
     example: 128
+  isBookmarked:
+    type: boolean
+    description: 현재 사용자의 동아리 즐겨찾기 여부
+    example: true
   # ----------------------------------------
   # [4] 링크 및 위치 정보 (하이퍼링크)
   # ----------------------------------------
@@ -65,6 +68,10 @@ properties:
     type: string
     description: 인스타그램 프로필 링크 (없으면 null)
     example: 'https://instagram.com/kuring.official'
+  youtubeUrl:
+    type: string
+    description: 유튜브 채널/영상 링크 (없으면 null)
+    example: 'https://youtube.com/@kuring'
   # ----------------------------------------
   # [5] 상세 내용
   # ----------------------------------------
@@ -99,13 +106,10 @@ properties:
     type: string
     description: 지원하기 버튼 클릭 시 이동할 구글폼 URL
     example: 'https://forms.gle/xyz...'
-  descriptionImageUrl:
+  posterImageUrl:
     type: string
-    description: |
-      본문에 포함될 홍보 이미지/포스터 URL 목록
-      (첫 번째 이미지가 대표 썸네일로 사용될 수 있음)
-    x-stoplight:
-      id: tfxf5822txk09
+    description: 동아리 포스터 이미지 URL (없으면 null)
+    nullable: true
   location:
     type: object
     x-stoplight:
@@ -122,3 +126,15 @@ properties:
         x-stoplight:
           id: x0lkhthhf4gy5
         description: 동아리 방 호수
+      x:
+        type: number
+        format: double
+        description: 지도 X 좌표 (경도 등), 없으면 null
+        nullable: true
+        example: 127.074
+      y:
+        type: number
+        format: double
+        description: 지도 Y 좌표 (위도 등), 없으면 null
+        nullable: true
+        example: 37.541

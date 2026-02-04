@@ -5,49 +5,49 @@ description: |
   **값 형식:**
   - 서버 내부 데이터는 UPPERCASE로 저장/관리됩니다 (예: CENTRAL, ENGINEERING)
   - 클라이언트와의 API 통신 시에는 lowercase로 변환하여 사용합니다 (예: central, engineering)
-  - API 요청/응답에서 division 필드는 lowercase 값을 사용합니다.
+  - API 요청/응답에서 division 필드는 lowercase 값을 사용합니다. (즉, 이 enum은 lowercase 값 기준)
   
-  가능한 소속 값 (UPPERCASE 기준):
-  - CENTRAL: 중앙 / Central organization under the university
-  - LIBERAL_ARTS: 문과대학 / College of Liberal Arts
-  - SCIENCE: 이과대학 / College of Science
-  - ARCHITECTURE: 건축대학 / College of Architecture
-  - ENGINEERING: 공과대학 / College of Engineering
-  - SOCIAL_SCIENCES: 사회과학대학 / College of Social Sciences
-  - BUSINESS: 경영대학 / College of Business Administration
-  - REAL_ESTATE: 부동산과학원 / College of Real Estate
-  - KU_CONVERGENCE: KU융합과학기술원 / Konkuk Institute of Technology
-  - SANGHUH_LIFE_SCIENCE: 상허생명과학대학 / College of Sang-Huh Life Science
-  - VETERINARY: 수의과대학 / College of Veterinary Medicine
-  - ART_DESIGN: 예술디자인대학 / College of Art & Design
-  - EDUCATION: 사범대학 / College of Education
-  - SANGHUH_GENERAL: 상허교양대학 / Sang-Huh College
-  - INTERNATIONAL: 국제대학 / International College
-  - CONVERGENCE_SCI_TECH: 융합과학기술원 / Institute of Technology
-  - LIFE_SCIENCE: 생명과학대학 / College of Life Science
-  - COMPUTER_SCIENCE: 컴퓨터공학과 / Department of Computer Science
-  - MECHANICAL_ENGINEERING: 기계공학과 / Department of Mechanical Engineering
-  - MULTI_COLLEGE: 다단과대 연합 / Union across multiple colleges
-  - EXTERNAL: 외부 연합 / Union including external organizations
+  가능한 소속 값 (lowercase 기준):
+  - central: 중앙 / Central organization under the university
+  - liberal_arts: 문과대학 / College of Liberal Arts
+  - science: 이과대학 / College of Science
+  - architecture: 건축대학 / College of Architecture
+  - engineering: 공과대학 / College of Engineering
+  - social_sciences: 사회과학대학 / College of Social Sciences
+  - business: 경영대학 / College of Business Administration
+  - real_estate: 부동산과학원 / College of Real Estate
+  - ku_convergence: KU융합과학기술원 / Konkuk Institute of Technology
+  - sanghuh_life_science: 상허생명과학대학 / College of Sang-Huh Life Science
+  - veterinary: 수의과대학 / College of Veterinary Medicine
+  - art_design: 예술디자인대학 / College of Art & Design
+  - education: 사범대학 / College of Education
+  - sanghuh_general: 상허교양대학 / Sang-Huh College
+  - international: 국제대학 / International College
+  - convergence_sci_tech: 융합과학기술원 / Institute of Technology
+  - life_science: 생명과학대학 / College of Life Science
+  - computer_science: 컴퓨터공학과 / Department of Computer Science
+  - mechanical_engineering: 기계공학과 / Department of Mechanical Engineering
+  - multi_college: 다단과대 연합 / Union across multiple colleges
+  - external: 외부 연합 / Union including external organizations
 enum:
-  - CENTRAL
-  - LIBERAL_ARTS
-  - SCIENCE
-  - ARCHITECTURE
-  - ENGINEERING
-  - SOCIAL_SCIENCES
-  - BUSINESS
-  - REAL_ESTATE
-  - KU_CONVERGENCE
-  - SANGHUH_LIFE_SCIENCE
-  - VETERINARY
-  - ART_DESIGN
-  - EDUCATION
-  - SANGHUH_GENERAL
-  - INTERNATIONAL
-  - CONVERGENCE_SCI_TECH
-  - LIFE_SCIENCE
-  - COMPUTER_SCIENCE
-  - MECHANICAL_ENGINEERING
-  - MULTI_COLLEGE
-  - EXTERNAL
+  - central
+  - liberal_arts
+  - science
+  - architecture
+  - engineering
+  - social_sciences
+  - business
+  - real_estate
+  - ku_convergence
+  - sanghuh_life_science
+  - veterinary
+  - art_design
+  - education
+  - sanghuh_general
+  - international
+  - convergence_sci_tech
+  - life_science
+  - computer_science
+  - mechanical_engineering
+  - multi_college
+  - external

@@ -7,7 +7,8 @@ properties:
       $ref: ./ClubListItemDto.yaml
     description: 동아리 목록 (한 페이지 분)
   cursor:
-    type: string
+    type: integer
+    format: int64
     nullable: true
     description: 다음 페이지 요청 시 사용할 커서 (다음 페이지 없으면 null)
   hasNext:
