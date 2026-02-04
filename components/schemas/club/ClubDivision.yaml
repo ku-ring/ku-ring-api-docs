@@ -1,6 +1,13 @@
 type: string
 description: |
   동아리 소속 (단과대·학과·연합 등).
+  
+  **값 형식:**
+  - 서버 내부 데이터는 UPPERCASE로 저장/관리됩니다 (예: CENTRAL, ENGINEERING)
+  - 클라이언트와의 API 통신 시에는 lowercase로 변환하여 사용합니다 (예: central, engineering)
+  - API 요청/응답에서 division 필드는 lowercase 값을 사용합니다.
+  
+  가능한 소속 값 (UPPERCASE 기준):
   - CENTRAL: 중앙 / Central organization under the university
   - LIBERAL_ARTS: 문과대학 / College of Liberal Arts
   - SCIENCE: 이과대학 / College of Science

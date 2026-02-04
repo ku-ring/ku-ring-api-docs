@@ -1670,7 +1670,12 @@ paths:
         동아리 소속 목록이 가변적으로 변할 수 있으므로, 클라이언트에 현재 지원하는 소속 목록을 API로 전달합니다.
         필터 UI(드롭다운 등) 구성 시 이 목록을 사용하세요.
         
-        가능한 소속 값:
+        **값 형식:**
+        - 서버 내부 데이터는 UPPERCASE로 저장/관리됩니다 (예: CENTRAL, ENGINEERING)
+        - 클라이언트와의 API 통신 시에는 lowercase로 변환하여 사용합니다 (예: central, engineering)
+        - 응답의 code 필드에는 UPPERCASE 값이 포함되며, 클라이언트는 이를 lowercase로 변환하여 사용하거나 그대로 사용할 수 있습니다.
+        
+        가능한 소속 값 (UPPERCASE 기준):
         - CENTRAL: 중앙 / Central organization under the university
         - LIBERAL_ARTS: 문과대학 / College of Liberal Arts
         - SCIENCE: 이과대학 / College of Science
@@ -1728,7 +1733,8 @@ paths:
         
         필터:
         - category: 동아리 카테고리로 필터 (1개만 선택 가능)
-        - division: 동아리 소속으로 필터. 여러 개 선택 시 콤마(,)로 구분하여 전달 (예: division=CENTRAL,ENGINEERING). 생략 시 소속 무관.
+        - division: 동아리 소속으로 필터. 여러 개 선택 시 콤마(,)로 구분하여 전달 (예: division=central,engineering). 생략 시 소속 무관.
+          **값 형식:** 서버 내부는 UPPERCASE로 저장되지만, API 요청/응답에서는 lowercase로 전달됩니다. 요청 시 lowercase 값을 보내고, 응답의 division 필드도 lowercase로 반환됩니다.
         
         페이징:
         - cursor: 다음 페이지 요청 시 사용할 커서. 동아리 ID(pk) 값입니다. 최초 요청 시 생략하거나 0을 전달하면 첫 페이지부터 조회됩니다. 기본값: 0
@@ -1746,11 +1752,16 @@ paths:
             $ref: ./components/schemas/club/ClubCategory.yaml
         - name: division
           in: query
-          description: '동아리 소속으로 필터. 여러 개 선택 시 콤마(,)로 구분 (예: division=CENTRAL,ENGINEERING). 생략 시 소속 무관.'
+          description: |
+            동아리 소속으로 필터. 여러 개 선택 시 콤마(,)로 구분하여 전달합니다. 생략 시 소속 무관.
+            
+            **값 형식:** 서버 내부는 UPPERCASE로 저장되지만, API 요청/응답에서는 lowercase로 전달됩니다.
+            - 요청 시: lowercase 값 사용 (예: division=central,engineering)
+            - 응답 시: division 필드에 lowercase 값 반환 (예: "central", "engineering")
           required: false
           schema:
             type: string
-          example: CENTRAL,ENGINEERING
+          example: central,engineering
         - name: cursor
           in: query
           description: 다음 페이지 요청 시 사용할 커서 (동아리 ID 값). 최초 요청 시 생략하거나 0 전달 시 첫 페이지부터 조회
@@ -1807,7 +1818,7 @@ paths:
                           summary: 건국대학교 공지사항 알림 서비스 개발 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
                           category: ACADEMIC
-                          division: CENTRAL
+                          division: central
                           bookmarkCount: 19
                           recruitStartDate: '2026-05-01T00:00:00'
                           recruitEndDate: '2026-06-03T23:59:59'
@@ -1816,7 +1827,7 @@ paths:
                           summary: 책 속에 빠져 인사이트를 나누는 독서 모임
                           iconImageUrl: 'https://api.kuring.com/images/club_icon_2.png'
                           category: ACADEMIC
-                          division: CENTRAL
+                          division: central
                           bookmarkCount: 128
                           recruitStartDate: '2026-04-15T00:00:00'
                           recruitEndDate: '2026-05-31T23:59:59'
@@ -1835,7 +1846,7 @@ paths:
                           summary: 건국대 테니스 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_tennis.png'
                           category: ACTIVITY
-                          division: ENGINEERING
+                          division: engineering
                           bookmarkCount: 5
                           recruitStartDate: null
                           recruitEndDate: null
@@ -1864,7 +1875,7 @@ paths:
                           summary: 알고리즘 문제 풀이 및 스터디
                           iconImageUrl: 'https://api.kuring.com/images/club_algo.png'
                           category: ACADEMIC
-                          division: COMPUTER_SCIENCE
+                          division: computer_science
                           bookmarkCount: 32
                           recruitStartDate: '2026-05-10T00:00:00'
                           recruitEndDate: '2026-06-01T23:59:59'
@@ -1872,7 +1883,7 @@ paths:
                       hasNext: false
                       totalCount: 1
                 FilteredByDivision:
-                  summary: 소속 복수 선택 (예 division=CENTRAL,ENGINEERING)
+                  summary: 소속 복수 선택 (예 division=central,engineering)
                   value:
                     code: 200
                     message: 조회되었습니다.
@@ -1883,7 +1894,7 @@ paths:
                           summary: 건국대학교 공지사항 알림 서비스 개발 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
                           category: ACADEMIC
-                          division: CENTRAL
+                          division: central
                           bookmarkCount: 19
                           recruitStartDate: '2026-05-01T00:00:00'
                           recruitEndDate: '2026-06-03T23:59:59'
@@ -1892,7 +1903,7 @@ paths:
                           summary: 공과대 로봇 연구 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_robot.png'
                           category: ACADEMIC
-                          division: ENGINEERING
+                          division: engineering
                           bookmarkCount: 28
                           recruitStartDate: '2026-05-15T00:00:00'
                           recruitEndDate: '2026-06-10T23:59:59'
@@ -1935,7 +1946,7 @@ paths:
                       name: 리드미
                       summary: 단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임
                       category: ACADEMIC
-                      division: CENTRAL
+                      division: central
                       isSubscribed: true
                       subscriberCount: 128
   /api/v2/users/bookmarks/clubs:
@@ -1990,7 +2001,7 @@ paths:
                           summary: 건국대학교 공지사항 알림 서비스 개발 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
                           category: ACADEMIC
-                          division: CENTRAL
+                          division: central
                           bookmarkCount: 19
                           recruitStartDate: '2026-05-01T00:00:00'
                           recruitEndDate: '2026-06-03T23:59:59'
