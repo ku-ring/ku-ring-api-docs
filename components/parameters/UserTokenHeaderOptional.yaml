@@ -1,0 +1,7 @@
+name: User-Token
+in: header
+required: false
+schema:
+  type: string
+description: FCM 기반 사용자 기기 식별 토큰
+example: "fcm-token-sample-123"

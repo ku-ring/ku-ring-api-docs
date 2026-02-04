@@ -1,0 +1,46 @@
+type: object
+x-stoplight:
+  id: 8d77e4dcb4de8
+required:
+  - name
+  - content
+  - category
+properties:
+  name:
+    type: string
+    description: 동아리 이름
+    example: 멋쟁이사자처럼
+    x-stoplight:
+      id: a89hkjrgin2gq
+  content:
+    type: string
+    description: 한줄 소개
+    example: 아이디어를 내고 내 손으로 실현한다.
+    x-stoplight:
+      id: e9agmef79qlo8
+  description:
+    type: string
+    description: 상세 소개
+    x-stoplight:
+      id: xm2q6ny9gya2h
+  category:
+    type: string
+    description: 카테고리
+    example: 학술
+    x-stoplight:
+      id: iuvynbpe6ipgt
+  instagramUrl:
+    type: string
+    description: 인스타그램 URL
+    x-stoplight:
+      id: oxwopo64wtmau
+  youtubeUrl:
+    type: string
+    description: 유튜브 URL
+    x-stoplight:
+      id: ssfdhniwpkz1p
+  place:
+    type: string
+    description: 동아리방 위치
+    x-stoplight:
+      id: l7ppc3jzupf1f
