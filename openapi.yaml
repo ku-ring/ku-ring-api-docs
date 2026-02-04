@@ -1633,7 +1633,7 @@ paths:
   /api/v2/clubs:
     get:
       tags:
-        - Club
+        - Draft
       summary: 동아리 목록 조회
       description: 동아리 목록을 조회합니다.
       operationId: getClubs
@@ -1653,7 +1653,7 @@ paths:
   '/api/v2/clubs/{id}':
     get:
       tags:
-        - Club
+        - Draft
       summary: 동아리 상세 조회
       description: 동아리 상세 정보를 조회합니다.
       operationId: getClubDetail
@@ -1679,7 +1679,7 @@ paths:
   /api/v2/users/bookmarks/clubs:
     get:
       tags:
-        - Club
+        - Draft
       summary: 즐겨찾기한 동아리 목록 조회
       description: 사용자가 즐겨찾기한 동아리 목록을 조회합니다.
       operationId: getUserBookmarkedClubs
