@@ -4,23 +4,22 @@ examples:
   - id: 1
     name: 리드미
     summary: '단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임'
-    category: ACADEMIC
+    category: academic
     division: central
     bookmarkCount: 128
     isBookmarked: true
     instagramUrl: 'https://instagram.com/kuring.official'
-    youtubeUrl: 'https://youtube.com/@kuring'
     description: 저희 리드미는 2020년부터 시작된...
     qualifications: |-
       건국대학교 재학생 및 휴학생 누구나
       (매주 목요일 활동 가능하신 분)
-    isRecruiting: true
+    recruitmentStatus: recruiting
     recruitStartAt: '2026-03-02T00:00:00'
     recruitEndAt: '2026-03-15T23:59:59'
     applyUrl: 'https://forms.gle/xyz...'
     posterImageUrl: 'https://api.kuring.com/images/club_poster_readme.png'
     location:
-      building: 상허도서관
+      building: Sanghuh Library
       room: 101
       x: 127.074
       y: 37.541
@@ -68,10 +67,6 @@ properties:
     type: string
     description: 인스타그램 프로필 링크 (없으면 null)
     example: 'https://instagram.com/kuring.official'
-  youtubeUrl:
-    type: string
-    description: 유튜브 채널/영상 링크 (없으면 null)
-    example: 'https://youtube.com/@kuring'
   # ----------------------------------------
   # [5] 상세 내용
   # ----------------------------------------
@@ -88,10 +83,9 @@ properties:
   # ----------------------------------------
   # [6] 모집 관련 정보
   # ----------------------------------------
-  isRecruiting:
-    type: boolean
-    description: 현재 모집 중 여부 (D-day 배지 계산용)
-    example: true
+  recruitmentStatus:
+    $ref: ./ClubRecruitmentStatus.yaml
+    description: 모집 상태 (모집전/모집중/모집완료/상시모집)
   recruitStartAt:
     type: string
     format: date-time

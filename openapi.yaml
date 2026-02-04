@@ -1820,7 +1820,7 @@ paths:
                           name: Kuring
                           summary: 건국대학교 공지사항 알림 서비스 개발 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
-                          category: ACADEMIC
+                          category: academic
                           division: central
                           isBookmarked: false
                           bookmarkCount: 19
@@ -1830,7 +1830,7 @@ paths:
                           name: 리드미
                           summary: 책 속에 빠져 인사이트를 나누는 독서 모임
                           iconImageUrl: 'https://api.kuring.com/images/club_icon_2.png'
-                          category: ACADEMIC
+                          category: academic
                           division: central
                           isBookmarked: true
                           bookmarkCount: 128
@@ -1850,7 +1850,7 @@ paths:
                           name: 테니스 동아리
                           summary: 건국대 테니스 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_tennis.png'
-                          category: ACTIVITY
+                          category: activity
                           division: engineering
                           isBookmarked: false
                           bookmarkCount: 5
@@ -1880,7 +1880,7 @@ paths:
                           name: 알고리즘 스터디
                           summary: 알고리즘 문제 풀이 및 스터디
                           iconImageUrl: 'https://api.kuring.com/images/club_algo.png'
-                          category: ACADEMIC
+                          category: academic
                           division: computer_science
                           isBookmarked: false
                           bookmarkCount: 32
@@ -1900,7 +1900,7 @@ paths:
                           name: Kuring
                           summary: 건국대학교 공지사항 알림 서비스 개발 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
-                          category: ACADEMIC
+                          category: academic
                           division: central
                           isBookmarked: false
                           bookmarkCount: 19
@@ -1910,7 +1910,7 @@ paths:
                           name: 로봇연구회
                           summary: 공과대 로봇 연구 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_robot.png'
-                          category: ACADEMIC
+                          category: academic
                           division: engineering
                           isBookmarked: true
                           bookmarkCount: 28
@@ -1961,23 +1961,22 @@ paths:
                       id: 1
                       name: 리드미
                       summary: 단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임
-                      category: ACADEMIC
+                      category: academic
                       division: central
                       bookmarkCount: 128
                       isBookmarked: true
                       instagramUrl: 'https://instagram.com/kuring.official'
-                      youtubeUrl: 'https://youtube.com/@kuring'
                       description: 저희 리드미는 2020년부터 시작된...
                       qualifications: |-
                         건국대학교 재학생 및 휴학생 누구나
                         (매주 목요일 활동 가능하신 분)
-                      isRecruiting: true
+                      recruitmentStatus: recruiting
                       recruitStartAt: '2026-03-02T00:00:00'
                       recruitEndAt: '2026-03-15T23:59:59'
                       applyUrl: 'https://forms.gle/xyz...'
                       posterImageUrl: 'https://api.kuring.com/images/club_poster_readme.png'
                       location:
-                        building: 상허도서관
+                        building: Sanghuh Library
                         room: 101
                         x: 127.074
                         y: 37.541
@@ -2036,7 +2035,7 @@ paths:
                           name: Kuring
                           summary: 건국대학교 공지사항 알림 서비스 개발 동아리
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
-                          category: ACADEMIC
+                          category: academic
                           division: central
                           bookmarkCount: 19
                           recruitStartDate: '2026-05-01T00:00:00'
