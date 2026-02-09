@@ -1730,8 +1730,6 @@ paths:
       description: |
         필터 조건에 맞는 동아리 목록을 커서 페이징으로 조회합니다. data 안에 clubs(배열), cursor, hasNext, totalCount를 반환합니다.
 
-        **인증:** Bearer(JWT)와 User-Token(FCM)은 선택(optional)입니다. 로그인하지 않은 사용자도 조회 가능하며, 이 경우 isSubscribed는 모두 false로 반환됩니다. 인증 시 사용자의 구독 여부에 따라 isSubscribed가 반영됩니다.
-
         필터:
         - category: 동아리 카테고리로 필터 (1개만 선택 가능)
         - division: 동아리 소속으로 필터. 여러 개 선택 시 콤마(,)로 구분하여 전달 (예: division=central,engineering). 생략 시 소속 무관.
@@ -1932,7 +1930,6 @@ paths:
       summary: 동아리 상세 조회
       description: |
         동아리 상세 정보를 조회합니다.
-        **인증:** Bearer(JWT)와 User-Token(FCM)은 선택(optional)입니다. 로그인하지 않은 사용자도 조회 가능하며, 이 경우 isSubscribed는 false로 반환됩니다. 인증 시 사용자의 구독 여부에 따라 isSubscribed가 반영됩니다.
       operationId: getClubDetail
       security:
         - BearerAuth: []
