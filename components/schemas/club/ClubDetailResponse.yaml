@@ -6,9 +6,9 @@ examples:
     summary: '단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임'
     category: academic
     division: central
-    bookmarkCount: 128
-    isBookmarked: true
-    instagramUrl: 'https://instagram.com/kuring.official'
+    subscriberCount: 128
+    isSubscribed: true
+    homepageUrl: 'https://instagram.com/kuring.official'
     description: 저희 리드미는 2020년부터 시작된...
     qualifications: |-
       건국대학교 재학생 및 휴학생 누구나
@@ -50,22 +50,22 @@ properties:
     $ref: ./ClubDivision.yaml
     description: 동아리 소속 (단과대·학과·연합 등)
   # ----------------------------------------
-  # [3] 메타 데이터 (좋아요/구독)
+  # [3] 메타 데이터 (구독)
   # ----------------------------------------
-  bookmarkCount:
+  subscriberCount:
     type: integer
-    description: 동아리 즐겨찾기 수
+    description: 동아리 구독자 수
     example: 128
-  isBookmarked:
+  isSubscribed:
     type: boolean
-    description: 현재 사용자의 동아리 즐겨찾기 여부
+    description: 현재 사용자의 동아리 구독 여부 (비로그인 시 false)
     example: true
   # ----------------------------------------
   # [4] 링크 및 위치 정보 (하이퍼링크)
   # ----------------------------------------
-  instagramUrl:
+  homepageUrl:
     type: string
-    description: 인스타그램 프로필 링크 (없으면 null)
+    description: 동아리 홈페이지/채널 URL (인스타, 네이버 카페 등, 없으면 null). URL에 따라 클라이언트에서 아이콘 분기.
     example: 'https://instagram.com/kuring.official'
   # ----------------------------------------
   # [5] 상세 내용

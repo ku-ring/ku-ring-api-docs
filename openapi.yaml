@@ -1730,6 +1730,8 @@ paths:
       description: |
         필터 조건에 맞는 동아리 목록을 커서 페이징으로 조회합니다. data 안에 clubs(배열), cursor, hasNext, totalCount를 반환합니다.
         
+        **인증:** Bearer(JWT)와 User-Token(FCM)은 선택(optional)입니다. 로그인하지 않은 사용자도 조회 가능하며, 이 경우 isSubscribed는 모두 false로 반환됩니다. 인증 시 사용자의 구독 여부에 따라 isSubscribed가 반영됩니다.
+        
         필터:
         - category: 동아리 카테고리로 필터 (1개만 선택 가능)
         - division: 동아리 소속으로 필터. 여러 개 선택 시 콤마(,)로 구분하여 전달 (예: division=central,engineering). 생략 시 소속 무관.
@@ -1742,10 +1744,8 @@ paths:
         정렬:
         - sortBy: 정렬 기준. name (동아리 이름 순) 또는 recruitEndDate (마감일 임박순). 기본값: name
       operationId: getClubs
-      security:
-        - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/UserTokenHeaderRequired'
+        - $ref: '#/components/parameters/UserTokenHeaderOptional'
         - name: category
           in: query
           description: 동아리 카테고리로 필터 (ClubCategory enum 값 1개)
@@ -1821,8 +1821,8 @@ paths:
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
                           category: academic
                           division: central
-                          isBookmarked: false
-                          bookmarkCount: 19
+                          isSubscribed: false
+                          subscriberCount: 19
                           recruitStartDate: '2026-05-01T00:00:00'
                           recruitEndDate: '2026-06-03T23:59:59'
                         - id: 2
@@ -1831,8 +1831,8 @@ paths:
                           iconImageUrl: 'https://api.kuring.com/images/club_icon_2.png'
                           category: academic
                           division: central
-                          isBookmarked: true
-                          bookmarkCount: 128
+                          isSubscribed: true
+                          subscriberCount: 128
                           recruitStartDate: '2026-04-15T00:00:00'
                           recruitEndDate: '2026-05-31T23:59:59'
                       cursor: 10
@@ -1851,8 +1851,8 @@ paths:
                           iconImageUrl: 'https://api.kuring.com/images/club_tennis.png'
                           category: activity
                           division: engineering
-                          isBookmarked: false
-                          bookmarkCount: 5
+                          isSubscribed: false
+                          subscriberCount: 5
                           recruitStartDate: null
                           recruitEndDate: null
                       cursor: null
@@ -1881,8 +1881,8 @@ paths:
                           iconImageUrl: 'https://api.kuring.com/images/club_algo.png'
                           category: academic
                           division: computer_science
-                          isBookmarked: false
-                          bookmarkCount: 32
+                          isSubscribed: false
+                          subscriberCount: 32
                           recruitStartDate: '2026-05-10T00:00:00'
                           recruitEndDate: '2026-06-01T23:59:59'
                       cursor: null
@@ -1901,8 +1901,8 @@ paths:
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
                           category: academic
                           division: central
-                          isBookmarked: false
-                          bookmarkCount: 19
+                          isSubscribed: false
+                          subscriberCount: 19
                           recruitStartDate: '2026-05-01T00:00:00'
                           recruitEndDate: '2026-06-03T23:59:59'
                         - id: 4
@@ -1911,8 +1911,8 @@ paths:
                           iconImageUrl: 'https://api.kuring.com/images/club_robot.png'
                           category: academic
                           division: engineering
-                          isBookmarked: true
-                          bookmarkCount: 28
+                          isSubscribed: true
+                          subscriberCount: 28
                           recruitStartDate: '2026-05-15T00:00:00'
                           recruitEndDate: '2026-06-10T23:59:59'
                       cursor: 4
@@ -1927,12 +1927,12 @@ paths:
       tags:
         - Draft
       summary: 동아리 상세 조회
-      description: 동아리 상세 정보를 조회합니다. (JWT + FCM 토큰 필요)
+      description: |
+        동아리 상세 정보를 조회합니다.
+        **인증:** Bearer(JWT)와 User-Token(FCM)은 선택(optional)입니다. 로그인하지 않은 사용자도 조회 가능하며, 이 경우 isSubscribed는 false로 반환됩니다. 인증 시 사용자의 구독 여부에 따라 isSubscribed가 반영됩니다.
       operationId: getClubDetail
-      security:
-        - BearerAuth: []
       parameters:
-        - $ref: '#/components/parameters/UserTokenHeaderRequired'
+        - $ref: '#/components/parameters/UserTokenHeaderOptional'
         - name: id
           in: path
           required: true
@@ -1962,9 +1962,9 @@ paths:
                       summary: 단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임
                       category: academic
                       division: central
-                      bookmarkCount: 128
-                      isBookmarked: true
-                      instagramUrl: 'https://instagram.com/kuring.official'
+                      subscriberCount: 128
+                      isSubscribed: true
+                      homepageUrl: 'https://instagram.com/kuring.official'
                       description: 저희 리드미는 2020년부터 시작된...
                       qualifications: |-
                         건국대학교 재학생 및 휴학생 누구나
@@ -2036,8 +2036,8 @@ paths:
                           iconImageUrl: 'https://api.kuring.com/images/club_icon.png'
                           category: academic
                           division: central
-                          isBookmarked: true
-                          bookmarkCount: 19
+                          isSubscribed: true
+                          subscriberCount: 19
                           recruitStartDate: '2026-05-01T00:00:00'
                           recruitEndDate: '2026-06-03T23:59:59'
                       cursor: null

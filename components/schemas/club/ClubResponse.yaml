@@ -23,11 +23,11 @@ properties:
     type: boolean
     description: '사용자의 구독 여부 (True: 구독중)'
     example: false
-  bookmarkCount:
+  subscriberCount:
     type: integer
     x-stoplight:
       id: iosvd3nzwj77q
-    description: 즐겨찾기 수
+    description: 동아리 구독자 수
     example: 19
   recuritEndDate:
     type: string

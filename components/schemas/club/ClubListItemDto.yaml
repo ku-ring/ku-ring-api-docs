@@ -23,13 +23,13 @@ properties:
   division:
     $ref: ./ClubDivision.yaml
     description: 동아리 소속 (단과대·학과·연합 등)
-  isBookmarked:
+  isSubscribed:
     type: boolean
-    description: 현재 사용자의 동아리 즐겨찾기 여부
+    description: 현재 사용자의 동아리 구독 여부 (비로그인 시 false)
     example: false
-  bookmarkCount:
+  subscriberCount:
     type: integer
-    description: 동아리 즐겨찾기 수
+    description: 동아리 구독자 수
     example: 19
   recruitStartDate:
     type: string
