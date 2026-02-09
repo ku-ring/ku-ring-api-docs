@@ -21,8 +21,8 @@ examples:
     location:
       building: sanghuh_library
       room: "101"
-      x: 127.074
-      y: 37.541
+      lon: 127.074
+      lat: 37.541
 properties:
   id:
     type: integer

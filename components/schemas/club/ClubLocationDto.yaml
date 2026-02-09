@@ -8,15 +8,15 @@ properties:
     type: string
     description: 동아리 방 호수
     example: "101"
-  x:
+  lon:
     type: number
     format: double
-    description: 지도 X 좌표 (경도 등), 없으면 null
+    description: 경도 (longitude, WGS84). 지도 마커용. 미제공 시 null
     nullable: true
     example: 127.074
-  y:
+  lat:
     type: number
     format: double
-    description: 지도 Y 좌표 (위도 등), 없으면 null
+    description: 위도 (latitude, WGS84). 지도 마커용. 미제공 시 null
     nullable: true
     example: 37.541
