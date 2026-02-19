@@ -4,24 +4,27 @@ examples:
   - id: 1
     name: 리드미
     summary: '단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임'
-    category: null
-    affiliation: CENTRAL
-    division: string
-    isSubscribed: true
+    category: academic
+    division: central
     subscriberCount: 128
+    isSubscribed: true
     instagramUrl: 'https://instagram.com/kuring.official'
+    youtubeUrl: null
+    etcUrl: null
     description: 저희 리드미는 2020년부터 시작된...
     qualifications: |-
       건국대학교 재학생 및 휴학생 누구나
       (매주 목요일 활동 가능하신 분)
-    isRecruiting: true
+    recruitmentStatus: recruiting
     recruitStartAt: '2026-03-02T00:00:00'
     recruitEndAt: '2026-03-15T23:59:59'
     applyUrl: 'https://forms.gle/xyz...'
-    descriptionImageUrl: string
+    posterImageUrl: 'https://api.kuring.com/images/club_poster_readme.png'
     location:
-      building: string
-      room: string
+      building: sanghuh_library
+      room: "101"
+      lon: 127.074
+      lat: 37.541
 properties:
   id:
     type: integer
@@ -43,41 +46,37 @@ properties:
   # [2] 배지 및 태그 정보
   # ----------------------------------------
   category:
-    type: string
-    description: 동아리카테고리
-  affiliation:
-    type: string
-    description: |
-      소속 구분 (배지 표시용)
-      * `CENTRAL`: 중앙동아리
-      * `COLLEGE`: 단과대 소모임
-    enum:
-      - CENTRAL
-      - COLLEGE
-    example: CENTRAL
+    $ref: ./ClubCategory.yaml
+    description: 동아리 카테고리
   division:
-    description: |
-      구체적인 소속 부서/단과대명
-      (affiliation이 CENTRAL이면 분과명, COLLEGE면 단과대명)
-    type: string
+    $ref: ./ClubDivision.yaml
+    description: 동아리 소속 (단과대·학과·연합 등)
   # ----------------------------------------
-  # [3] 메타 데이터 (좋아요/구독)
+  # [3] 메타 데이터 (구독)
   # ----------------------------------------
-  isSubscribed:
-    type: boolean
-    description: 현재 사용자의 구독/즐겨찾기 여부 (별 아이콘 채움 여부)
-    example: true
   subscriberCount:
     type: integer
-    description: '총 구독자 수 ({n}+)'
+    description: 동아리 구독자 수
     example: 128
+  isSubscribed:
+    type: boolean
+    description: 현재 사용자의 동아리 구독 여부 (비로그인 시 false)
+    example: true
   # ----------------------------------------
   # [4] 링크 및 위치 정보 (하이퍼링크)
   # ----------------------------------------
   instagramUrl:
     type: string
-    description: 인스타그램 프로필 링크 (없으면 null)
-    example: 'https://instagram.com/kuring.official'
+    nullable: true
+    description: 인스타그램 URL. 없으면 null
+  youtubeUrl:
+    type: string
+    nullable: true
+    description: 유튜브 URL. 없으면 null
+  etcUrl:
+    type: string
+    nullable: true
+    description: 기타 링크(네이버 카페, 홈페이지 등). 없으면 null
   # ----------------------------------------
   # [5] 상세 내용
   # ----------------------------------------
@@ -94,10 +93,9 @@ properties:
   # ----------------------------------------
   # [6] 모집 관련 정보
   # ----------------------------------------
-  isRecruiting:
-    type: boolean
-    description: 현재 모집 중 여부 (D-day 배지 계산용)
-    example: true
+  recruitmentStatus:
+    $ref: ./ClubRecruitmentStatus.yaml
+    description: 모집 상태 (모집전/모집중/모집완료/상시모집)
   recruitStartAt:
     type: string
     format: date-time
@@ -112,26 +110,10 @@ properties:
     type: string
     description: 지원하기 버튼 클릭 시 이동할 구글폼 URL
     example: 'https://forms.gle/xyz...'
-  descriptionImageUrl:
+  posterImageUrl:
     type: string
-    description: |
-      본문에 포함될 홍보 이미지/포스터 URL 목록
-      (첫 번째 이미지가 대표 썸네일로 사용될 수 있음)
-    x-stoplight:
-      id: tfxf5822txk09
+    description: 동아리 포스터 이미지 URL (없으면 null)
+    nullable: true
   location:
-    type: object
-    x-stoplight:
-      id: xu4s7c5plrq8q
     description: 동아리 위치 정보
-    properties:
-      building:
-        type: string
-        x-stoplight:
-          id: hafkb0pl5w0e5
-        description: 동아리방 건물
-      room:
-        type: string
-        x-stoplight:
-          id: x0lkhthhf4gy5
-        description: 동아리 방 호수
+    $ref: ./ClubLocationDto.yaml

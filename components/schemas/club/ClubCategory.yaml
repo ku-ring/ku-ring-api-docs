@@ -1,0 +1,19 @@
+type: string
+description: |
+  동아리 카테고리 (활동 성격).
+  
+  **값 형식:**
+  - 서버 내부 데이터는 UPPERCASE로 저장/관리됩니다 (예: ACADEMIC, ACTIVITY)
+  - 클라이언트와의 API 통신 시에는 lowercase로 변환하여 사용합니다 (예: academic, activity)
+  - API 요청/응답에서 category 필드는 lowercase 값을 사용합니다. (즉, 이 enum은 lowercase 값 기준)
+  
+  가능한 카테고리 값 (lowercase 기준):
+  - academic: 학술활동 / Academic and study-oriented club activities
+  - culture_art: 문화예술 / Culture, arts, performance, and creative activities
+  - social_value: 사회가치 / Social contribution and volunteering activities
+  - activity: 야외활동 / Sports, leisure, and outdoor activities
+enum:
+  - academic
+  - culture_art
+  - social_value
+  - activity

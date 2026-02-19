@@ -1,0 +1,45 @@
+type: object
+description: 동아리 목록/즐겨찾기 목록 공통 항목 (한 건)
+properties:
+  id:
+    type: integer
+    description: 동아리 ID
+    example: 1
+  name:
+    type: string
+    description: 동아리 명
+    example: Kuring
+  summary:
+    type: string
+    description: 동아리 요약 (한 줄 소개)
+    example: 건국대학교 공지사항 알림 서비스 개발 동아리
+  iconImageUrl:
+    type: string
+    description: 동아리 아이콘 이미지 URL
+    example: 'https://api.kuring.com/images/club_icon.png'
+  category:
+    $ref: ./ClubCategory.yaml
+    description: 동아리 카테고리
+  division:
+    $ref: ./ClubDivision.yaml
+    description: 동아리 소속 (단과대·학과·연합 등)
+  isSubscribed:
+    type: boolean
+    description: 현재 사용자의 동아리 구독 여부 (비로그인 시 false)
+    example: false
+  subscriberCount:
+    type: integer
+    description: 동아리 구독자 수
+    example: 19
+  recruitStartDate:
+    type: string
+    format: date-time
+    description: 동아리 모집 시작일
+    example: '2026-05-01T00:00:00'
+    nullable: true
+  recruitEndDate:
+    type: string
+    format: date-time
+    description: 동아리 모집 마감일
+    example: '2026-06-03T23:59:59'
+    nullable: true
