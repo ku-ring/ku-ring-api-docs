@@ -8,7 +8,9 @@ examples:
     division: central
     subscriberCount: 128
     isSubscribed: true
-    homepageUrl: 'https://instagram.com/kuring.official'
+    instagramUrl: 'https://instagram.com/kuring.official'
+    youtubeUrl: null
+    etcUrl: null
     description: 저희 리드미는 2020년부터 시작된...
     qualifications: |-
       건국대학교 재학생 및 휴학생 누구나
@@ -63,10 +65,18 @@ properties:
   # ----------------------------------------
   # [4] 링크 및 위치 정보 (하이퍼링크)
   # ----------------------------------------
-  homepageUrl:
+  instagramUrl:
     type: string
-    description: 동아리 홈페이지/채널 URL (인스타, 네이버 카페 등, 없으면 null). URL에 따라 클라이언트에서 아이콘 분기.
-    example: 'https://instagram.com/kuring.official'
+    nullable: true
+    description: 인스타그램 URL. 없으면 null
+  youtubeUrl:
+    type: string
+    nullable: true
+    description: 유튜브 URL. 없으면 null
+  etcUrl:
+    type: string
+    nullable: true
+    description: 기타 링크(네이버 카페, 홈페이지 등). 없으면 null
   # ----------------------------------------
   # [5] 상세 내용
   # ----------------------------------------

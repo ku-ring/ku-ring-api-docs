@@ -1736,7 +1736,7 @@ paths:
           **값 형식:** 서버 내부는 UPPERCASE로 저장되지만, API 요청/응답에서는 lowercase로 전달됩니다. 요청 시 lowercase 값을 보내고, 응답의 division 필드도 lowercase로 반환됩니다.
 
         페이징:
-        - cursor: 다음 페이지 요청 시 사용할 커서. 동아리 ID(pk) 값입니다. 최초 요청 시 생략하거나 0을 전달하면 첫 페이지부터 조회됩니다. 기본값: 0
+        - cursor: 다음 페이지 요청 시 사용할 커서(문자열). 최초 요청 시 생략하면 첫 페이지부터 조회됩니다.
         - size: 단일 요청의 사이즈. 1 ~ 30까지 허용. 기본값: 20
 
         정렬:
@@ -1767,13 +1767,11 @@ paths:
           example: 'central,engineering'
         - name: cursor
           in: query
-          description: 다음 페이지 요청 시 사용할 커서 (동아리 ID 값). 최초 요청 시 생략하거나 0 전달 시 첫 페이지부터 조회
+          description: 다음 페이지 요청 시 사용할 커서(문자열). 최초 요청 시 생략 시 첫 페이지부터 조회
           required: false
           schema:
-            type: integer
-            format: int64
-            default: 0
-            example: 0
+            type: string
+            example: ''
         - name: size
           in: query
           description: '단일 요청의 사이즈, 1 ~ 30까지 허용'
@@ -1836,7 +1834,7 @@ paths:
                           subscriberCount: 128
                           recruitStartDate: '2026-04-15T00:00:00'
                           recruitEndDate: '2026-05-31T23:59:59'
-                      cursor: 10
+                      cursor: '10'
                       hasNext: true
                       totalCount: 42
                 LastPageNoNext:
@@ -1916,7 +1914,7 @@ paths:
                           subscriberCount: 28
                           recruitStartDate: '2026-05-15T00:00:00'
                           recruitEndDate: '2026-06-10T23:59:59'
-                      cursor: 4
+                      cursor: '4'
                       hasNext: true
                       totalCount: 12
         '400':
@@ -1967,7 +1965,9 @@ paths:
                       division: central
                       subscriberCount: 128
                       isSubscribed: true
-                      homepageUrl: 'https://instagram.com/kuring.official'
+                      instagramUrl: 'https://instagram.com/kuring.official'
+                      youtubeUrl: null
+                      etcUrl: null
                       description: 저희 리드미는 2020년부터 시작된...
                       qualifications: |-
                         건국대학교 재학생 및 휴학생 누구나
