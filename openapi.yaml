@@ -1713,7 +1713,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 조회되었습니다.
+                    message: 지원하는 동아리 소속 조회에 성공하였습니다
                     data:
                       divisions:
                         - code: central
