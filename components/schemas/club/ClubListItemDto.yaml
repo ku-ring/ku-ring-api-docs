@@ -17,6 +17,7 @@ properties:
     type: string
     description: 동아리 아이콘 이미지 URL
     example: 'https://api.kuring.com/images/club_icon.png'
+    nullable: true
   category:
     $ref: ./ClubCategory.yaml
     description: 동아리 카테고리
