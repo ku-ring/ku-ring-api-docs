@@ -1,0 +1,24 @@
+type: object
+description: 운영 공지 전송 요청
+properties:
+  title:
+    type: string
+    description: 푸시 알림 제목
+    example: 서버 점검 안내
+  body:
+    type: string
+    description: 푸시 알림 본문
+    example: 오늘 23시부터 24시까지 서버 점검이 진행됩니다.
+  url:
+    type: string
+    description: 공지 이동 URL
+    example: https://kuring.com/notices/1234
+  adminPassword:
+    type: string
+    description: 관리자 비밀번호
+    example: admin-password
+required:
+  - title
+  - body
+  - url
+  - adminPassword

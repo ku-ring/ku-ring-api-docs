@@ -987,14 +987,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./components/schemas/admin/AdminNoticeRequest.yaml
+              $ref: ./components/schemas/admin/AdminRealNoticeRequest.yaml
             examples:
               Success:
                 value:
-                  subject: 공지 제목
-                  content: 공지 내용
-                  category: app_notice
-                  important: true
+                  title: 서버 점검 안내
+                  body: 오늘 23시부터 24시까지 서버 점검이 진행됩니다.
+                  url: https://kuring.com/notices/1234
+                  adminPassword: admin-password
       responses:
         '200':
           description: OK
@@ -1024,14 +1024,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./components/schemas/admin/AdminNoticeRequest.yaml
+              $ref: ./components/schemas/admin/AdminTestNoticeRequest.yaml
             examples:
               Success:
                 value:
-                  subject: 테스트 공지
-                  content: 테스트 내용
-                  category: app_notice
-                  important: false
+                  category: bachelor
+                  subject: 테스트 공지입니다
+                  noticeId: "1234"
+                  articleId: "1234"
       responses:
         '200':
           description: OK
@@ -1376,6 +1376,17 @@ paths:
       operationId: sendDevAcademicAlert
       security:
         - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./components/schemas/admin/AdminAcademicTestNotificationRequest.yaml
+            examples:
+              Success:
+                value:
+                  title: 개강
+                  body: 오늘은 개강 일정이 있어요.
       responses:
         '200':
           description: OK

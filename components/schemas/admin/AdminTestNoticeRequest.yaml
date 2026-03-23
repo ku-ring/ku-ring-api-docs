@@ -1,0 +1,24 @@
+type: object
+description: 개발용 테스트 공지 전송 요청
+properties:
+  category:
+    type: string
+    description: 공지 카테고리
+    example: bachelor
+  subject:
+    type: string
+    description: 공지 제목
+    example: 테스트 공지입니다
+  noticeId:
+    type: string
+    description: 테스트 공지 식별자
+    example: "1234"
+  articleId:
+    type: string
+    description: 원문 공지 식별자
+    example: "1234"
+required:
+  - category
+  - subject
+  - noticeId
+  - articleId
