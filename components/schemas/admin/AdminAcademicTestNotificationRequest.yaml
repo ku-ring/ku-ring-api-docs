@@ -1,0 +1,14 @@
+type: object
+description: 개발용 테스트 학사일정 알림 전송 요청
+properties:
+  title:
+    type: string
+    description: 알림 제목
+    example: 개강
+  body:
+    type: string
+    description: 알림 본문
+    example: 오늘은 개강 일정이 있어요.
+required:
+  - title
+  - body

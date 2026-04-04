@@ -22,7 +22,7 @@ examples:
     posterImageUrl: 'https://api.kuring.com/images/club_poster_readme.png'
     location:
       building: sanghuh_library
-      room: "101"
+      room: '101'
       lon: 127.074
       lat: 37.541
 properties:
@@ -58,6 +58,7 @@ properties:
     type: integer
     description: 동아리 구독자 수
     example: 128
+    format: int64
   isSubscribed:
     type: boolean
     description: 현재 사용자의 동아리 구독 여부 (비로그인 시 false)
@@ -76,16 +77,18 @@ properties:
   etcUrl:
     type: string
     nullable: true
-    description: 기타 링크(네이버 카페, 홈페이지 등). 없으면 null
+    description: '기타 링크(네이버 카페, 홈페이지 등). 없으면 null'
   # ----------------------------------------
   # [5] 상세 내용
   # ----------------------------------------
   description:
     type: string
+    nullable: true
     description: '동아리 상세 소개글 ({ClubInfoTextLong}) - 줄바꿈(\n) 포함'
     example: 저희 리드미는 2020년부터 시작된...
   qualifications:
     type: string
+    nullable: true
     description: 지원 자격 텍스트 (줄바꿈 포함)
     example: |-
       건국대학교 재학생 및 휴학생 누구나
@@ -99,15 +102,18 @@ properties:
   recruitStartAt:
     type: string
     format: date-time
+    nullable: true
     description: 모집 시작 일시
     example: '2026-03-02T00:00:00'
   recruitEndAt:
     type: string
     format: date-time
+    nullable: true
     description: 모집 마감 일시 (D-day 계산용)
     example: '2026-03-15T23:59:59'
   applyUrl:
     type: string
+    nullable: true
     description: 지원하기 버튼 클릭 시 이동할 구글폼 URL
     example: 'https://forms.gle/xyz...'
   posterImageUrl:
@@ -115,5 +121,7 @@ properties:
     description: 동아리 포스터 이미지 URL (없으면 null)
     nullable: true
   location:
-    description: 동아리 위치 정보
+    nullable: true
     $ref: ./ClubLocationDto.yaml
+    description: 동아리 위치 정보
+title: ''

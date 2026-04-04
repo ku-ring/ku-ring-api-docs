@@ -3,9 +3,11 @@ description: 동아리 위치 정보
 properties:
   building:
     $ref: ./ClubBuilding.yaml
+    nullable: true
     description: 동아리방 건물 (snake_case)
   room:
     type: string
+    nullable: true
     description: 동아리 방 호수
     example: "101"
   lon:
