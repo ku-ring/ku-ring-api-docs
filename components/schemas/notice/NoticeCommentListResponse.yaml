@@ -1,0 +1,21 @@
+type: object
+description: 공지 댓글 목록 조회 응답 데이터
+required:
+  - comments
+  - endCursor
+  - hasNext
+properties:
+  comments:
+    type: array
+    description: 댓글 스레드 목록
+    items:
+      $ref: ./NoticeCommentThreadDto.yaml
+  endCursor:
+    type: string
+    nullable: true
+    description: 다음 페이지 요청 시 사용할 커서. 마지막 페이지면 null입니다.
+    example: "123"
+  hasNext:
+    type: boolean
+    description: 다음 페이지 존재 여부
+    example: false

@@ -36,11 +36,11 @@ properties:
     type: string
     format: date-time
     description: 동아리 모집 시작일
-    example: '2026-05-01T00:00:00'
+    example: '2026-05-01T00:00:00+09:00'
     nullable: true
   recruitEndDate:
     type: string
     format: date-time
     description: 동아리 모집 마감일
-    example: '2026-06-03T23:59:59'
+    example: '2026-06-03T23:59:59+09:00'
     nullable: true

@@ -1,0 +1,13 @@
+type: object
+description: 부모 댓글과 해당 대댓글 목록
+required:
+  - comment
+  - subComments
+properties:
+  comment:
+    $ref: ./NoticeCommentDto.yaml
+  subComments:
+    type: array
+    description: 부모 댓글에 달린 대댓글 목록
+    items:
+      $ref: ./NoticeCommentDto.yaml

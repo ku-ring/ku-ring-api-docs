@@ -1,0 +1,14 @@
+type: object
+description: 공지 댓글 생성 요청
+required:
+  - content
+properties:
+  content:
+    type: string
+    description: 댓글 내용
+    example: 전과 신청 기간은 언제까지인가요?
+  parentId:
+    type: integer
+    nullable: true
+    description: 대댓글 작성 시 부모 댓글 ID. 일반 댓글이면 null입니다.
+    example: 100

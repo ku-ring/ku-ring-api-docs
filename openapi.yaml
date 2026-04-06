@@ -11,6 +11,9 @@ info:
   license:
     name: MIT
     url: 'https://opensource.org/licenses/MIT'
+servers:
+  - url: 'https://api.kuring.com'
+    description: Production API server
 # 1. 보안 설정 및 공통 파라미터 (Try it / 문서 도구에서 헤더·인증 입력란 노출용)
 components:
   securitySchemes:
@@ -19,6 +22,11 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: JWT 액세스 토큰 (로그인 후 발급)
+    UserTokenAuth:
+      type: apiKey
+      in: header
+      name: User-Token
+      description: FCM 기반 사용자 기기 식별 토큰
   parameters:
     UserTokenHeaderRequired:
       name: User-Token
@@ -47,6 +55,16 @@ components:
             isSuccess: false
             resultCode: 401
             resultMsg: 유효하지 않거나 만료된 토큰입니다.
+    BadRequest:
+      description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
+      content:
+        application/json:
+          schema:
+            $ref: ./components/schemas/common/ErrorResponse.yaml
+          example:
+            isSuccess: false
+            resultCode: 400
+            resultMsg: 잘못된 요청입니다.
     BadRequestUserToken:
       description: 잘못된 요청 (User-Token 누락/형식 오류 등)
       content:
@@ -92,6 +110,7 @@ paths:
       summary: 사용자 로그인
       description: 사용자가 이메일과 비밀번호로 로그인하여 액세스 토큰을 발급받습니다.
       operationId: login
+      security: []
       parameters:
         - $ref: '#/components/parameters/UserTokenHeaderOptional'
       requestBody:
@@ -121,11 +140,38 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 로그인되었습니다.
+                    message: 로그인에 성공했습니다.
                     data:
                       accessToken: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ...
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidPassword:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 비밀번호가 틀렸습니다.
+                AlreadyLoggedIn:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 이미 로그인된 사용자입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                UserNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 사용자를 찾을 수 없습니다.
   /api/v2/users/logout:
     post:
       tags:
@@ -148,12 +194,49 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 로그아웃되었습니다.
+                    message: 로그아웃에 성공했습니다.
                     data: null
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                NotLoggedIn:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 로그인한 사용자가 아닙니다.
         '401':
-          $ref: '#/components/responses/UnauthorizedJwt'
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                UserNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 사용자를 찾을 수 없습니다.
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
   /api/v2/users/signup:
     post:
       tags:
@@ -161,6 +244,7 @@ paths:
       summary: 사용자 회원가입
       description: FCM 디바이스 토큰을 포함하여 새로운 사용자를 회원가입 처리합니다.
       operationId: signup
+      security: []
       parameters:
         - $ref: '#/components/parameters/UserTokenHeaderOptional'
       requestBody:
@@ -185,10 +269,20 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 회원가입이 완료되었습니다.
+                    message: 사용자 계정 생성에 성공했습니다.
                     data: null
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                DuplicatedEmail:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 중복된 사용자 이메일입니다.
   /api/v2/users/withdraw:
     delete:
       tags:
@@ -208,11 +302,33 @@ paths:
               examples:
                 Success:
                   value:
-                    code: 200
-                    message: 탈퇴가 완료되었습니다.
+                    code: 204
+                    message: 회원탈퇴 되었습니다
                     data: null
         '401':
-          $ref: '#/components/responses/UnauthorizedJwt'
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
   /api/v2/users/password:
     patch:
       tags:
@@ -244,10 +360,32 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 비밀번호가 변경되었습니다.
+                    message: 비밀번호 변경에 성공했습니다.
                     data: null
         '401':
-          $ref: '#/components/responses/UnauthorizedJwt'
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
   # ------------------------------------------------------------------
   # [사용자 정보]
   # ------------------------------------------------------------------
@@ -281,7 +419,29 @@ paths:
                       email: kuring@konkuk.ac.kr
                       nickname: 쿠링이
         '401':
-          $ref: '#/components/responses/UnauthorizedJwt'
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
   /api/v2/users/ask-counts:
     get:
       tags:
@@ -316,7 +476,34 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
         '401':
-          $ref: '#/components/responses/UnauthorizedJwt'
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                UserNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 사용자를 찾을 수 없습니다.
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
   # ------------------------------------------------------------------
   # [구독 및 알림]
   # ------------------------------------------------------------------
@@ -327,6 +514,8 @@ paths:
       summary: 사용자 학과 조회
       description: 사용자가 구독 중인 학과 목록을 조회합니다.
       operationId: lookupUserSubscribeDepartments
+      security:
+        - UserTokenAuth: []
       parameters:
         - $ref: '#/components/parameters/UserTokenHeaderRequired'
       responses:
@@ -354,12 +543,26 @@ paths:
                         korName: 컴퓨터공학부
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                UserNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 사용자를 찾을 수 없습니다.
     post:
       tags:
         - User
       summary: 사용자 학과 수정
       description: 사용자가 구독할 학과 목록을 추가·수정합니다.
       operationId: editUserSubscribeDepartments
+      security:
+        - UserTokenAuth: []
       parameters:
         - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
@@ -384,10 +587,20 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 학과 구독이 수정되었습니다.
+                    message: 사용자의 학과 구독에 성공하였습니다
                     data: null
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                MissingParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 필수 파라미터가 없습니다.
   /api/v2/users/subscriptions/categories:
     get:
       tags:
@@ -395,6 +608,8 @@ paths:
       summary: 사용자 카테고리 조회
       description: 사용자가 구독 중인 공지 카테고리 목록을 조회합니다.
       operationId: lookupUserSubscribeCategories
+      security:
+        - UserTokenAuth: []
       parameters:
         - $ref: '#/components/parameters/UserTokenHeaderRequired'
       responses:
@@ -422,12 +637,26 @@ paths:
                         korName: 학사
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                UserNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 사용자를 찾을 수 없습니다.
     post:
       tags:
         - User
       summary: 사용자 카테고리 수정
       description: 사용자가 구독할 공지 카테고리 목록을 추가·수정합니다.
       operationId: editUserSubscribeCategories
+      security:
+        - UserTokenAuth: []
       parameters:
         - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
@@ -452,10 +681,20 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 카테고리 구독이 수정되었습니다.
+                    message: 사용자의 학교 공지 카테고리 구독에 성공하였습니다
                     data: null
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                MissingParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 필수 파라미터가 없습니다.
   /api/v2/users/notifications/academic-events:
     patch:
       tags:
@@ -463,6 +702,8 @@ paths:
       summary: 사용자 학사일정 알림 설정 수정
       description: 사용자의 학사일정 알림 활성화 여부를 변경합니다.
       operationId: updateAcademicEventNotification
+      security:
+        - UserTokenAuth: []
       parameters:
         - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
@@ -489,7 +730,29 @@ paths:
                     message: 학사일정 알림 설정이 변경되었습니다.
                     data: null
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                MissingParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 필수 파라미터가 없습니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                UserNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 사용자를 찾을 수 없습니다.
   # ------------------------------------------------------------------
   # [기타 기능]
   # ------------------------------------------------------------------
@@ -500,6 +763,8 @@ paths:
       summary: 사용자 피드백 작성
       description: 앱 사용성이나 오류 등에 대한 사용자의 피드백을 서버에 전송합니다.
       operationId: saveFeedback
+      security:
+        - UserTokenAuth: []
       parameters:
         - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
@@ -523,10 +788,32 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 피드백이 접수되었습니다.
+                    message: 피드백 저장에 성공하였습니다
                     data: null
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                MissingParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 필수 파라미터가 없습니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                UserNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 사용자를 찾을 수 없습니다.
   /api/v2/users/bookmarks:
     get:
       tags:
@@ -534,6 +821,8 @@ paths:
       summary: 사용자 북마크 조회
       description: 사용자가 저장해 둔 공지사항 북마크 목록을 조회합니다.
       operationId: lookupUserBookmarks
+      security:
+        - UserTokenAuth: []
       parameters:
         - $ref: '#/components/parameters/UserTokenHeaderRequired'
       responses:
@@ -563,12 +852,26 @@ paths:
                         baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/...'
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                UserNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 사용자를 찾을 수 없습니다.
     post:
       tags:
         - User
       summary: 사용자 북마크 작성
       description: 특정 공지사항을 북마크에 추가합니다.
       operationId: saveBookmark
+      security:
+        - UserTokenAuth: []
       parameters:
         - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
@@ -592,10 +895,32 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 북마크가 추가되었습니다.
+                    message: 북마크 저장에 성공하였습니다
                     data: null
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                MissingParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 필수 파라미터가 없습니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                UserNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 사용자를 찾을 수 없습니다.
   # ------------------------------------------------------------------
   # [공지사항] Notice
   # ------------------------------------------------------------------
@@ -606,6 +931,7 @@ paths:
       summary: 공지사항 목록 조회
       description: 특정 학과나 카테고리의 공지사항 목록을 조회합니다.
       operationId: getNotices
+      security: []
       parameters:
         - name: type
           in: query
@@ -659,7 +985,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 조회되었습니다.
+                    message: 공지 조회에 성공하였습니다
                     data:
                       notices:
                         - articleId: '56281'
@@ -668,6 +994,23 @@ paths:
                           category: bachelor
                           important: true
                           baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281'
+        '400':
+          description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 파라미터 값 중 잘못된 값이 있습니다.
+                MissingParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 필수 파라미터가 없습니다.
   /api/v2/notices/search:
     get:
       tags:
@@ -675,6 +1018,7 @@ paths:
       summary: 공지사항 키워드 검색
       description: 키워드를 기준으로 학교 및 학과 공지사항을 검색합니다.
       operationId: searchNotices
+      security: []
       parameters:
         - name: content
           in: query
@@ -713,7 +1057,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 조회되었습니다.
+                    message: 공지 조회에 성공하였습니다
                     data:
                       notices:
                         - articleId: '56281'
@@ -722,6 +1066,23 @@ paths:
                           category: bachelor
                           important: true
                           baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281'
+        '400':
+          description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                MissingParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 필수 파라미터가 없습니다.
+                InvalidParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 파라미터 값 중 잘못된 값이 있습니다.
   /api/v2/notices/departments:
     get:
       tags:
@@ -729,6 +1090,7 @@ paths:
       summary: 공지 조회 지원 학과 목록
       description: 공지 조회 기능이 지원되는 학과 목록을 조회합니다.
       operationId: getNoticeDepartments
+      security: []
       responses:
         '200':
           description: OK
@@ -745,11 +1107,13 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 조회되었습니다.
+                    message: 지원하는 학과 조회에 성공하였습니다
                     data:
                       departments:
                         - name: computer_cse
                           korName: 컴퓨터공학부
+        '400':
+          $ref: '#/components/responses/BadRequest'
   /api/v2/notices/categories:
     get:
       tags:
@@ -757,6 +1121,7 @@ paths:
       summary: 공지 조회 지원 카테고리 목록
       description: 공지 조회 기능이 지원되는 카테고리 목록을 조회합니다.
       operationId: getNoticeCategories
+      security: []
       responses:
         '200':
           description: OK
@@ -773,35 +1138,39 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 조회되었습니다.
+                    message: 지원하는 학교 공지 카테고리 조회에 성공하였습니다
                     data:
                       categories:
                         - bachelor
                         - scholarship
+        '400':
+          $ref: '#/components/responses/BadRequest'
                       # ------------------------------------------------------------------
                       # [공지사항 댓글] Notice Comments
                       # ------------------------------------------------------------------
-  '/api/v2/notices/{articleId}/comments':
+  '/api/v2/notices/{id}/comments':
     get:
       tags:
         - Notice
       summary: 공지사항 댓글 조회
       description: 특정 공지에 추가된 모든 댓글을 커서 페이징으로 조회합니다.
       operationId: getNoticeComments
+      security: []
       parameters:
-        - name: articleId
+        - name: id
           in: path
           required: true
           description: 공지 ID (게시글 ID)
           schema:
-            type: string
-            example: '1'
+            type: integer
+            example: 1
         - name: cursor
           in: query
           description: 다음 페이지 요청 시 사용할 커서 (최초 요청 시 생략)
           required: false
           schema:
             type: string
+            example: '123'
         - name: size
           in: query
           description: '단일 요청의 사이즈, 1 ~ 30까지 허용'
@@ -813,6 +1182,13 @@ paths:
             maximum: 30
             default: 10
             example: 10
+        - name: Authorization
+          in: header
+          required: false
+          description: 선택적 Bearer 액세스 토큰. 제공하면 내가 작성한 댓글 여부(`isMine`) 계산에 사용됩니다.
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiJ9...
       responses:
         '200':
           description: OK
@@ -824,56 +1200,89 @@ paths:
                   - type: object
                     properties:
                       data:
-                        type: object
-                        properties:
-                          list:
-                            type: array
-                            items:
-                              $ref: ./components/schemas/notice/NoticeCommentDto.yaml
-                            description: 댓글 목록
-                          cursor:
-                            type: string
-                            nullable: true
-                            description: 다음 페이지 요청 시 사용할 커서 (다음 페이지 없으면 null)
-                          hasNext:
-                            type: boolean
-                            description: 다음 페이지 존재 여부
+                        $ref: ./components/schemas/notice/NoticeCommentListResponse.yaml
               examples:
                 Success:
                   value:
                     code: 200
-                    message: 조회되었습니다.
+                    message: 공지 조회에 성공하였습니다
                     data:
-                      list:
-                        - id: comment_123
-                          content: 전과 신청 기간은 공지 본문을 확인해주세요.
-                          createdAt: '2024-01-21T09:00:00Z'
-                      cursor: eyJpZCI6MTIzfQ
+                      comments:
+                        - comment:
+                            id: 123
+                            parentId: null
+                            userId: 21
+                            nickName: 익명1
+                            noticeId: 56281
+                            content: 전과 신청 기간은 공지 본문을 확인해주세요.
+                            isMine: false
+                            destroyedAt: null
+                            createdAt: '2024-01-21T09:00:00+09:00'
+                            updatedAt: '2024-01-21T09:10:00+09:00'
+                          subComments:
+                            - id: 124
+                              parentId: 123
+                              userId: 22
+                              nickName: 익명2
+                              noticeId: 56281
+                              content: 본문 링크도 같이 확인해보세요.
+                              isMine: true
+                              destroyedAt: null
+                              createdAt: '2024-01-21T09:12:00+09:00'
+                              updatedAt: '2024-01-21T09:12:00+09:00'
+                      endCursor: '123'
                       hasNext: false
+        '400':
+          description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 파라미터 값 중 잘못된 값이 있습니다.
+        '401':
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
     post:
       tags:
         - Notice
       summary: 공지사항 댓글 작성
       description: 특정 공지사항에 새로운 댓글을 작성합니다.
       operationId: createNoticeComment
+      security:
+        - BearerAuth: []
       parameters:
-        - name: articleId
+        - name: id
           in: path
           description: 댓글을 작성할 공지사항의 ID
           required: true
           schema:
-            type: string
-        - $ref: '#/components/parameters/UserTokenHeaderRequired'
+            type: integer
+            example: 56281
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: ./components/schemas/notice/NoticeCommentRequest.yaml
+              $ref: ./components/schemas/notice/NoticeCommentCreateRequest.yaml
             examples:
               Success:
                 value:
                   content: 댓글 내용
+                  parentId: null
       responses:
         '200':
           description: OK
@@ -885,37 +1294,84 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 댓글이 등록되었습니다.
+                    message: 공지에 댓글 추가를 성공하였습니다
                     data: null
-        '400':
-          $ref: '#/components/responses/BadRequestUserToken'
-  '/api/v2/notices/{articleId}/comments/{commentId}':
+        '401':
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
+                NoticeNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 공지를 찾을 수 없습니다.
+                CommentNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 댓글을 찾을 수 없습니다.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                BadWord:
+                  value:
+                    isSuccess: false
+                    resultCode: 422
+                    resultMsg: 금지어가 포함되어 있습니다.
+  '/api/v2/notices/{id}/comments/{commentId}':
     post:
       tags:
         - Notice
       summary: 공지사항 댓글 수정
       description: '주의: REST 표준(PATCH)이 아닌 POST 메서드를 사용합니다.'
       operationId: updateNoticeComment
+      security:
+        - BearerAuth: []
       parameters:
-        - name: articleId
+        - name: id
           in: path
           description: 댓글이 속한 공지사항의 ID
           required: true
           schema:
-            type: string
+            type: integer
+            example: 56281
         - name: commentId
           in: path
           required: true
           description: 수정할 댓글 ID
           schema:
-            type: string
-        - $ref: '#/components/parameters/UserTokenHeaderRequired'
+            type: integer
+            example: 123
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: ./components/schemas/notice/NoticeCommentRequest.yaml
+              $ref: ./components/schemas/notice/NoticeCommentEditRequest.yaml
             examples:
               Success:
                 value:
@@ -931,30 +1387,77 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 댓글이 수정되었습니다.
+                    message: 공지에 댓글 편집을 성공하였습니다
                     data: null
-        '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+        '401':
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
+                NoticeNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 공지를 찾을 수 없습니다.
+                CommentNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 댓글을 찾을 수 없습니다.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                BadWord:
+                  value:
+                    isSuccess: false
+                    resultCode: 422
+                    resultMsg: 금지어가 포함되어 있습니다.
     delete:
       tags:
         - Notice
       summary: 공지사항 댓글 삭제
       description: 특정 공지사항에 달린 댓글을 삭제합니다.
       operationId: deleteNoticeComment
+      security:
+        - BearerAuth: []
       parameters:
-        - name: articleId
+        - name: id
           in: path
           description: 댓글이 속한 공지사항의 ID
           required: true
           schema:
-            type: string
+            type: integer
+            example: 56281
         - name: commentId
           in: path
           description: 삭제할 댓글 ID
           required: true
           schema:
-            type: string
-        - $ref: '#/components/parameters/UserTokenHeaderRequired'
+            type: integer
+            example: 123
       responses:
         '200':
           description: OK
@@ -966,10 +1469,42 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 댓글이 삭제되었습니다.
+                    message: 공지에 댓글 삭제를 성공하였습니다
                     data: null
-        '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+        '401':
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
+                NoticeNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 공지를 찾을 수 없습니다.
+                CommentNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 댓글을 찾을 수 없습니다.
   # ------------------------------------------------------------------
   # [관리자] Admin
   # ------------------------------------------------------------------
@@ -1123,7 +1658,7 @@ paths:
                       - id: alert_999
                         title: 수강신청 10분 전입니다!
                         message: 잊지 말고 준비하세요.
-                        reservedTime: '2024-02-15T09:50:00'
+                        reservedTime: '2024-02-15T09:50:00+09:00'
                         status: PENDING
         '401':
           $ref: '#/components/responses/UnauthorizedJwt'
@@ -1146,7 +1681,7 @@ paths:
                 value:
                   title: 알림 제목
                   message: 알림 내용
-                  reservedTime: '2024-04-20T12:00:00'
+                  reservedTime: '2024-04-20T12:00:00+09:00'
       responses:
         '200':
           description: OK
@@ -1412,6 +1947,7 @@ paths:
       summary: 회원가입용 인증번호 발송
       description: 회원가입을 위해 사용자의 이메일로 인증번호를 발송합니다.
       operationId: sendSignupCode
+      security: []
       requestBody:
         required: true
         content:
@@ -1433,8 +1969,30 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 인증번호가 발송되었습니다.
+                    message: 이메일 전송에 성공했습니다.
                     data: null
+        '400':
+          description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                DuplicatedEmail:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 중복된 사용자 이메일입니다.
+                InvalidDomain:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 건국대학교 이메일 도메인이 아닙니다.
+                InvalidEmailFormat:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 잘못된 이메일 발송 양식입니다.
   /api/v2/verification-code/password-reset:
     post:
       tags:
@@ -1442,6 +2000,7 @@ paths:
       summary: 비밀번호 재설정용 인증번호 발송
       description: 비밀번호 재설정을 위해 사용자의 이메일로 인증번호를 발송합니다.
       operationId: sendPasswordResetCode
+      security: []
       requestBody:
         required: true
         content:
@@ -1463,8 +2022,54 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 인증번호가 발송되었습니다.
+                    message: 이메일 전송에 성공했습니다.
                     data: null
+        '400':
+          description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                BadRequest:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 잘못된 요청입니다.
+                InvalidDomain:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 건국대학교 이메일 도메인이 아닙니다.
+                InvalidEmailFormat:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 잘못된 이메일 발송 양식입니다.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
   /api/v2/verification-code/verify:
     post:
       tags:
@@ -1472,6 +2077,7 @@ paths:
       summary: 인증번호 검증
       description: 이메일로 발송된 인증번호를 검증하여 요청을 승인합니다.
       operationId: verifyCode
+      security: []
       requestBody:
         required: true
         content:
@@ -1494,8 +2100,20 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 인증이 완료되었습니다.
+                    message: 인증에 성공했습니다.
                     data: null
+        '400':
+          description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidCode:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 유효하지 않은 인증코드입니다.
   # ------------------------------------------------------------------
   # [교직원] Staff
   # ------------------------------------------------------------------
@@ -1506,6 +2124,7 @@ paths:
       summary: 교직원 검색
       description: 교직원의 이름이나 학과를 기준으로 검색합니다.
       operationId: searchStaffs
+      security: []
       parameters:
         - name: content
           in: query
@@ -1532,7 +2151,7 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 조회되었습니다.
+                    message: 교직원 조회에 성공하였습니다
                     data:
                       - name: 김건국
                         major: 컴퓨터공학부
@@ -1540,6 +2159,23 @@ paths:
                         phone: 02-450-1234
                         email: kimkk@konkuk.ac.kr
                         dept: 공과대학
+        '400':
+          description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                MissingParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 필수 파라미터가 없습니다.
+                InvalidParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 파라미터 값 중 잘못된 값이 있습니다.
                     # ------------------------------------------------------------------
                     # [AI] Chatbot
                     # ------------------------------------------------------------------
@@ -1550,6 +2186,8 @@ paths:
       summary: AI에게 질문하기
       description: SSE(Server-Sent Events) 스트림 방식으로 응답이 올 수 있습니다.
       operationId: askAI
+      security:
+        - UserTokenAuth: []
       parameters:
         - name: question
           in: query
@@ -1579,7 +2217,63 @@ paths:
                     data:
                       answer: 전과 신청 기간은 공지사항을 기준으로 합니다.
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                MissingParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 필수 파라미터가 없습니다.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                UserNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 사용자를 찾을 수 없습니다.
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
+                UnsupportedNoticeWindow:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 죄송합니다, 해당 내용은 2024년도 6월 이후에 작성된 공지 내용에서 확인할 수 없는 내용입니다.
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AskQuotaExceeded:
+                  value:
+                    isSuccess: false
+                    resultCode: 429
+                    resultMsg: 남은 질문 횟수가 부족합니다.
   # ------------------------------------------------------------------
   # [학사일정] Academic
   # ------------------------------------------------------------------
@@ -1590,6 +2284,7 @@ paths:
       summary: 학사일정 조회
       description: 지정된 기간에 해당하는 학사일정 목록을 조회합니다.
       operationId: getAcademicEvents
+      security: []
       parameters:
         - name: startDate
           in: query
@@ -1625,11 +2320,23 @@ paths:
                 Success:
                   value:
                     code: 200
-                    message: 조회되었습니다.
+                    message: 학사일정 조회에 성공했습니다.
                     data:
                       - subject: 1학기 수강신청
                         startDate: '2024-02-14'
                         endDate: '2024-02-16'
+        '400':
+          description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidRange:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 시작일, 종료일 설정이 잘못되었습니다.
                     # ------------------------------------------------------------------
                     # [신고] Report
                     # ------------------------------------------------------------------
@@ -1640,6 +2347,8 @@ paths:
       summary: 게시글/댓글 신고
       description: 부적절한 게시글이나 댓글을 신고합니다.
       operationId: createReport
+      security:
+        - UserTokenAuth: []
       parameters:
         - $ref: '#/components/parameters/UserTokenHeaderRequired'
       requestBody:
@@ -1655,8 +2364,8 @@ paths:
                   commentId: '1'
                   category: 욕설
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           content:
             application/json:
               schema:
@@ -1664,11 +2373,33 @@ paths:
               examples:
                 Success:
                   value:
-                    code: 200
-                    message: 신고가 접수되었습니다.
+                    code: 201
+                    message: 댓글 신고에 성공했습니다
                     data: null
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidTargetType:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 잘못된 신고 타입입니다.
+                UserNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 사용자를 찾을 수 없습니다.
+                CommentNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 댓글을 찾을 수 없습니다.
   # ------------------------------------------------------------------
   # [동아리] Club
   # ------------------------------------------------------------------
@@ -1708,6 +2439,7 @@ paths:
         - MECHANICAL_ENGINEERING: 기계공학과 / Department of Mechanical Engineering
         - ETC: 기타 / Other or unspecified affiliation
       operationId: getClubDivisions
+      security: []
       responses:
         '200':
           description: OK
@@ -1733,6 +2465,8 @@ paths:
                           koreanName: 공과대학
                         - code: liberal_arts
                           koreanName: 문과대학
+        '400':
+          $ref: '#/components/responses/BadRequest'
   /api/v2/clubs:
     get:
       tags:
@@ -1797,8 +2531,8 @@ paths:
                           division: central
                           isSubscribed: false
                           subscriberCount: 19
-                          recruitStartDate: '2026-05-01T00:00:00'
-                          recruitEndDate: '2026-06-03T23:59:59'
+                          recruitStartDate: '2026-05-01T00:00:00+09:00'
+                          recruitEndDate: '2026-06-03T23:59:59+09:00'
                         - id: 2
                           name: 리드미
                           summary: 책 속에 빠져 인사이트를 나누는 독서 모임
@@ -1807,8 +2541,8 @@ paths:
                           division: central
                           isSubscribed: true
                           subscriberCount: 128
-                          recruitStartDate: '2026-04-15T00:00:00'
-                          recruitEndDate: '2026-05-31T23:59:59'
+                          recruitStartDate: '2026-04-15T00:00:00+09:00'
+                          recruitEndDate: '2026-05-31T23:59:59+09:00'
                 EmptyResult:
                   summary: 조건에 맞는 동아리 없음
                   value:
@@ -1831,8 +2565,8 @@ paths:
                           division: computer_science
                           isSubscribed: false
                           subscriberCount: 32
-                          recruitStartDate: '2026-05-10T00:00:00'
-                          recruitEndDate: '2026-06-01T23:59:59'
+                          recruitStartDate: '2026-05-10T00:00:00+09:00'
+                          recruitEndDate: '2026-06-01T23:59:59+09:00'
                 FilteredByDivision:
                   summary: '소속 복수 선택 (예 division=central,engineering)'
                   value:
@@ -1848,8 +2582,8 @@ paths:
                           division: central
                           isSubscribed: false
                           subscriberCount: 19
-                          recruitStartDate: '2026-05-01T00:00:00'
-                          recruitEndDate: '2026-06-03T23:59:59'
+                          recruitStartDate: '2026-05-01T00:00:00+09:00'
+                          recruitEndDate: '2026-06-03T23:59:59+09:00'
                         - id: 4
                           name: 로봇연구회
                           summary: 공과대 로봇 연구 동아리
@@ -1858,12 +2592,34 @@ paths:
                           division: engineering
                           isSubscribed: true
                           subscriberCount: 28
-                          recruitStartDate: '2026-05-15T00:00:00'
-                          recruitEndDate: '2026-06-10T23:59:59'
+                          recruitStartDate: '2026-05-15T00:00:00+09:00'
+                          recruitEndDate: '2026-06-10T23:59:59+09:00'
         '400':
           $ref: '#/components/responses/BadRequestUserToken'
         '401':
-          $ref: '#/components/responses/UnauthorizedJwt'
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
   '/api/v2/clubs/{id}':
     get:
       tags:
@@ -1916,8 +2672,8 @@ paths:
                         건국대학교 재학생 및 휴학생 누구나
                         (매주 목요일 활동 가능하신 분)
                       recruitmentStatus: recruiting
-                      recruitStartAt: '2026-03-02T00:00:00'
-                      recruitEndAt: '2026-03-15T23:59:59'
+                      recruitStartAt: '2026-03-02T00:00:00+09:00'
+                      recruitEndAt: '2026-03-15T23:59:59+09:00'
                       applyUrl: 'https://forms.gle/xyz...'
                       posterImageUrl: 'https://api.kuring.com/images/club_poster_readme.png'
                       location:
@@ -1926,9 +2682,51 @@ paths:
                         lon: 127.074
                         lat: 37.541
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AlreadySubscribedClub:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 이미 구독한 동아리입니다.
+                MissingParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 필수 파라미터가 없습니다.
         '401':
-          $ref: '#/components/responses/UnauthorizedJwt'
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
+                ClubNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 동아리를 찾을 수 없습니다.
   /api/v2/users/subscriptions/clubs:
     get:
       tags:
@@ -1967,12 +2765,49 @@ paths:
                           division: central
                           isSubscribed: true
                           subscriberCount: 19
-                          recruitStartDate: '2026-05-01T00:00:00'
-                          recruitEndDate: '2026-06-03T23:59:59'
+                          recruitStartDate: '2026-05-01T00:00:00+09:00'
+                          recruitEndDate: '2026-06-03T23:59:59+09:00'
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                ClubNotSubscribed:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 구독하지 않은 동아리입니다.
         '401':
-          $ref: '#/components/responses/UnauthorizedJwt'
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
+                ClubNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 동아리를 찾을 수 없습니다.
     post:
       tags:
         - Club
@@ -2027,9 +2862,51 @@ paths:
                     data:
                       subscriptionCount: 5
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AlreadySubscribedClub:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 이미 구독한 동아리입니다.
+                MissingParam:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 필수 파라미터가 없습니다.
         '401':
-          $ref: '#/components/responses/UnauthorizedJwt'
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
+                ClubNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 동아리를 찾을 수 없습니다.
       x-stoplight:
         id: avx1ex1702exu
       description: 로그인한 사용자가 동아리 구독을 등록합니다.
@@ -2080,9 +2957,46 @@ paths:
                     data:
                       subscriptionCount: 4
         '400':
-          $ref: '#/components/responses/BadRequestUserToken'
+          description: 잘못된 요청 (User-Token 누락/형식 오류 등)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                ClubNotSubscribed:
+                  value:
+                    isSuccess: false
+                    resultCode: 400
+                    resultMsg: 구독하지 않은 동아리입니다.
         '401':
-          $ref: '#/components/responses/UnauthorizedJwt'
+          description: 인증 실패 (JWT 만료/없음/유효하지 않음)
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                InvalidAccessToken:
+                  value:
+                    isSuccess: false
+                    resultCode: 401
+                    resultMsg: 잘못된 Access Token입니다.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/common/ErrorResponse.yaml
+              examples:
+                AccountNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 계정을 찾을 수 없습니다.
+                ClubNotFound:
+                  value:
+                    isSuccess: false
+                    resultCode: 404
+                    resultMsg: 해당 동아리를 찾을 수 없습니다.
       x-stoplight:
         id: 6qd89rl96a1he
       description: 사용자가 동아리 구독을 해제합니다. path의 clubId로 대상 동아리를 지정합니다.

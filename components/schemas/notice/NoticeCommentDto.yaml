@@ -1,24 +1,59 @@
 type: object
 description: 댓글 정보
+required:
+  - id
+  - parentId
+  - userId
+  - nickName
+  - noticeId
+  - content
+  - isMine
+  - destroyedAt
+  - createdAt
+  - updatedAt
 properties:
   id:
-    type: string
+    type: integer
     description: 댓글 ID
-    example: "comment_123"
-  articleId:
+    example: 123
+  parentId:
+    type: integer
+    nullable: true
+    description: 부모 댓글 ID. 일반 댓글이면 null입니다.
+    example: 100
+  userId:
+    type: integer
+    description: 댓글 작성자 사용자 ID
+    example: 21
+  nickName:
     type: string
-    description: 게시글 ID
-    example: "56281"
+    description: 댓글 작성자 닉네임
+    example: 익명1
+  noticeId:
+    type: integer
+    description: 공지 ID
+    example: 56281
   content:
     type: string
     description: 댓글 내용
     example: "전과 신청 기간이 정확히 언제까지인가요?"
-  userId:
+  isMine:
+    type: boolean
+    description: 현재 로그인한 사용자가 작성한 댓글인지 여부
+    example: false
+  destroyedAt:
     type: string
-    description: 작성자 익명 ID
-    example: "kuring***"
+    format: date-time
+    nullable: true
+    description: 삭제된 댓글이면 삭제 시각, 아니면 null입니다.
+    example: null
   createdAt:
     type: string
     format: date-time
     description: 작성 시간
-    example: "2024-01-15T14:30:00"
+    example: "2024-01-15T14:30:00+09:00"
+  updatedAt:
+    type: string
+    format: date-time
+    description: 마지막 수정 시간
+    example: "2024-01-15T14:35:00+09:00"

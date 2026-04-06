@@ -2,7 +2,9 @@ type: object
 description: 동아리 위치 정보
 properties:
   building:
-    $ref: ./ClubBuilding.yaml
+    type: string
+    allOf:
+      - $ref: ./ClubBuilding.yaml
     nullable: true
     description: 동아리방 건물 (snake_case)
   room:
