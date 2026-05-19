@@ -935,12 +935,19 @@ paths:
       parameters:
         - name: type
           in: query
-          description: '조회 타입 (school=학교공지, dep=학과공지)'
+          description: '공지 타입 shortName (bch=학사, sch=장학, lib=도서관, emp=취창업, nat=국제, stu=학생, ind=산학, nor=일반, dep=학과)'
           required: true
           schema:
             type: string
             enum:
-              - school
+              - bch
+              - sch
+              - lib
+              - emp
+              - nat
+              - stu
+              - ind
+              - nor
               - dep
             example: dep
         - name: department
@@ -948,25 +955,37 @@ paths:
           description: 학과 코드 (type이 dep일 때 필수)
           schema:
             type: string
-            example: computer_cse
-        - name: category
+            example: cse
+        - name: important
           in: query
-          description: 카테고리 (type이 school일 때 필수)
+          description: 중요 공지 여부
           schema:
-            type: string
-            example: bachelor
+            type: boolean
+            default: false
+            example: false
+        - name: graduated
+          in: query
+          description: 대학원 공지 여부
+          schema:
+            type: boolean
+            example: false
         - name: page
           in: query
           description: 페이지 번호 (0부터 시작)
+          required: true
           schema:
             type: integer
+            minimum: 0
             default: 0
             example: 0
         - name: size
           in: query
           description: 페이지 크기
+          required: true
           schema:
             type: integer
+            minimum: 1
+            maximum: 30
             default: 10
             example: 10
       responses:
@@ -980,20 +999,24 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: ./components/schemas/notice/NoticeListResponse.yaml
+                        type: array
+                        items:
+                          $ref: ./components/schemas/notice/NoticeRangeLookupResponse.yaml
               examples:
                 Success:
                   value:
                     code: 200
                     message: 공지 조회에 성공하였습니다
                     data:
-                      notices:
-                        - articleId: '56281'
-                          postedDate: '2023-10-31'
-                          subject: '[학사] 2024학년도 1학기 전과 신청 안내'
-                          category: bachelor
-                          important: true
-                          baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281'
+                      - id: 1
+                        articleId: '56281'
+                        postedDate: '2023-10-31'
+                        url: 'https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281'
+                        subject: '[학사] 2024학년도 1학기 전과 신청 안내'
+                        category: bachelor
+                        important: true
+                        graduated: false
+                        commentCount: 3
         '400':
           description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
           content:
@@ -1027,20 +1050,6 @@ paths:
           schema:
             type: string
             example: 장학금
-        - name: page
-          in: query
-          description: 결과 페이지 번호 (0부터 시작)
-          schema:
-            type: integer
-            default: 0
-            example: 0
-        - name: size
-          in: query
-          description: 한 페이지에 포함될 결과 개수
-          schema:
-            type: integer
-            default: 10
-            example: 10
       responses:
         '200':
           description: OK
@@ -1052,20 +1061,21 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: ./components/schemas/notice/NoticeListResponse.yaml
+                        $ref: ./components/schemas/notice/NoticeContentSearchResponse.yaml
               examples:
                 Success:
                   value:
                     code: 200
                     message: 공지 조회에 성공하였습니다
                     data:
-                      notices:
-                        - articleId: '56281'
+                      noticeList:
+                        - id: 1
+                          articleId: '56281'
                           postedDate: '2023-10-31'
                           subject: '[학사] 2024학년도 1학기 전과 신청 안내'
                           category: bachelor
-                          important: true
                           baseUrl: 'https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281'
+                          commentCount: 3
         '400':
           description: 잘못된 요청 (필수 파라미터 누락/형식 오류 등)
           content:
@@ -1102,16 +1112,19 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: ./components/schemas/notice/NoticeDepartmentListResponse.yaml
+                        type: array
+                        items:
+                          $ref: ./components/schemas/notice/NoticeDepartmentNameResponse.yaml
               examples:
                 Success:
                   value:
                     code: 200
                     message: 지원하는 학과 조회에 성공하였습니다
                     data:
-                      departments:
-                        - name: computer_cse
-                          korName: 컴퓨터공학부
+                      - name: computer_science
+                        hostPrefix: cse
+                        korName: 컴퓨터공학부
+                        graduateSupported: true
         '400':
           $ref: '#/components/responses/BadRequest'
   /api/v2/notices/categories:
@@ -1133,16 +1146,21 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: ./components/schemas/notice/NoticeCategoryListResponse.yaml
+                        type: array
+                        items:
+                          $ref: ./components/schemas/notice/NoticeCategoryNameResponse.yaml
               examples:
                 Success:
                   value:
                     code: 200
                     message: 지원하는 학교 공지 카테고리 조회에 성공하였습니다
                     data:
-                      categories:
-                        - bachelor
-                        - scholarship
+                      - name: bachelor
+                        hostPrefix: bch
+                        korName: 학사
+                      - name: scholarship
+                        hostPrefix: sch
+                        korName: 장학
         '400':
           $ref: '#/components/responses/BadRequest'
                       # ------------------------------------------------------------------
@@ -1217,8 +1235,8 @@ paths:
                             content: 전과 신청 기간은 공지 본문을 확인해주세요.
                             isMine: false
                             destroyedAt: null
-                            createdAt: '2024-01-21T09:00:00+09:00'
-                            updatedAt: '2024-01-21T09:10:00+09:00'
+                            createdAt: '2024-01-21T09:00:00'
+                            updatedAt: '2024-01-21T09:10:00'
                           subComments:
                             - id: 124
                               parentId: 123
@@ -1228,8 +1246,8 @@ paths:
                               content: 본문 링크도 같이 확인해보세요.
                               isMine: true
                               destroyedAt: null
-                              createdAt: '2024-01-21T09:12:00+09:00'
-                              updatedAt: '2024-01-21T09:12:00+09:00'
+                              createdAt: '2024-01-21T09:12:00'
+                              updatedAt: '2024-01-21T09:12:00'
                       endCursor: '123'
                       hasNext: false
         '400':

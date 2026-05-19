@@ -43,17 +43,14 @@ properties:
     example: false
   destroyedAt:
     type: string
-    format: date-time
     nullable: true
     description: 삭제된 댓글이면 삭제 시각, 아니면 null입니다.
     example: null
   createdAt:
     type: string
-    format: date-time
     description: 작성 시간
-    example: "2024-01-15T14:30:00+09:00"
+    example: "2024-01-15T14:30:00"
   updatedAt:
     type: string
-    format: date-time
     description: 마지막 수정 시간
-    example: "2024-01-15T14:35:00+09:00"
+    example: "2024-01-15T14:35:00"

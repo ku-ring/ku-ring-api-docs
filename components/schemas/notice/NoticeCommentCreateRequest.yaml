@@ -1,7 +1,5 @@
 type: object
 description: 공지 댓글 생성 요청
-required:
-  - content
 properties:
   content:
     type: string

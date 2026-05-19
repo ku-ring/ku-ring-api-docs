@@ -1,0 +1,11 @@
+type: object
+description: 공지사항 키워드 검색 응답 데이터
+required:
+  - noticeList
+properties:
+  noticeList:
+    type: array
+    description: 검색된 공지 목록
+    items:
+      $ref: ./NoticeContentSearchResult.yaml
+

@@ -1,0 +1,42 @@
+type: object
+description: 공지사항 키워드 검색 단일 응답
+required:
+  - id
+  - articleId
+  - postedDate
+  - subject
+  - category
+  - baseUrl
+  - commentCount
+properties:
+  id:
+    type: integer
+    format: int64
+    description: 공지 ID
+    example: 1
+  articleId:
+    type: string
+    description: 게시글 ID
+    example: "56281"
+  postedDate:
+    type: string
+    description: 게시일
+    example: "2023-10-31"
+  subject:
+    type: string
+    description: 제목
+    example: "[학사] 2024학년도 1학기 전과 신청 안내"
+  category:
+    type: string
+    description: 카테고리
+    example: "bachelor"
+  baseUrl:
+    type: string
+    description: 원본 URL
+    example: "https://www.konkuk.ac.kr/do/MessageBoard/ArticleRead.do?id=56281"
+  commentCount:
+    type: integer
+    format: int64
+    description: 댓글 수
+    example: 3
+

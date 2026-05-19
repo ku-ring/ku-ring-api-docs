@@ -1,0 +1,25 @@
+type: object
+description: 공지사항 지원 학과 응답
+required:
+  - name
+  - hostPrefix
+  - korName
+  - graduateSupported
+properties:
+  name:
+    type: string
+    description: 학과 이름
+    example: "computer_science"
+  hostPrefix:
+    type: string
+    description: 학과 hostPrefix
+    example: "cse"
+  korName:
+    type: string
+    description: 학과 한글명
+    example: "컴퓨터공학부"
+  graduateSupported:
+    type: boolean
+    description: 대학원 공지 지원 여부
+    example: true
+
