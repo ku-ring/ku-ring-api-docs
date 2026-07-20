@@ -121,7 +121,5 @@ properties:
     description: 동아리 포스터 이미지 URL (없으면 null)
     nullable: true
   location:
-    nullable: true
     $ref: ./ClubLocationDto.yaml
     description: 동아리 위치 정보
-title: ''

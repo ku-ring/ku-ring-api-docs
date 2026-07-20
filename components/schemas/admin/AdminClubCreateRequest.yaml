@@ -1,10 +1,14 @@
 type: object
 x-stoplight:
   id: 8d77e4dcb4de8
+description: 동아리 생성 정보
+title: AdminClubCreateRequest
 required:
   - name
-  - content
+  - summary
   - category
+  - division
+  - isAlways
 properties:
   name:
     type: string
@@ -12,35 +16,89 @@ properties:
     example: 멋쟁이사자처럼
     x-stoplight:
       id: a89hkjrgin2gq
-  content:
+    maxLength: 30
+  summary:
     type: string
     description: 한줄 소개
-    example: 아이디어를 내고 내 손으로 실현한다.
+    example: '단순히 책만 읽는 독서모임이 아닌, 책 속에 빠져 인사이트를 나누는 모임'
     x-stoplight:
       id: e9agmef79qlo8
+    maxLength: 30
   description:
     type: string
-    description: 상세 소개
+    description: |
+      동아리 상세 소개
     x-stoplight:
       id: xm2q6ny9gya2h
   category:
-    type: string
-    description: 카테고리
-    example: 학술
+    $ref: ../club/ClubCategory.yaml
+    description: 동아리 카테고리
     x-stoplight:
       id: iuvynbpe6ipgt
-  instagramUrl:
-    type: string
-    description: 인스타그램 URL
+  division:
+    $ref: ../club/ClubDivision.yaml
+    description: |
+      동아리 소속 (단과대·학과·연합 등)
     x-stoplight:
       id: oxwopo64wtmau
-  youtubeUrl:
-    type: string
-    description: 유튜브 URL
+  isAlways:
+    type: boolean
     x-stoplight:
       id: ssfdhniwpkz1p
-  place:
+    description: |
+      상시 모집 여부
+  recruitStartAt:
     type: string
-    description: 동아리방 위치
     x-stoplight:
       id: l7ppc3jzupf1f
+    description: |
+      모집 시작 일시
+    default: 20260701
+  recruitEndAt:
+    type: string
+    x-stoplight:
+      id: mnf073j5zunza
+    example: '20260901'
+    description: 모집 마감 일시
+  applyUrl:
+    type: string
+    x-stoplight:
+      id: wwqpgr4xv5bk0
+    maxLength: 255
+    description: 지원하기 버튼 클릭 시 이동할 구글폼 URL
+    example: 'https://forms.gle/xyz...'
+  qualifications:
+    type: string
+    x-stoplight:
+      id: jeybj8x7tt6ba
+    description: 지원 자격 텍스트 (줄바꿈 포함)
+    example: 건국대학교 재학생 및 휴학생 누구나 (매주 목요일 활동 가능하신 분)
+  instagramUrl:
+    type: string
+    x-stoplight:
+      id: lcsswxohhwj54
+    description: |
+      인스타그램 url
+  youtubeUrl:
+    type: string
+    x-stoplight:
+      id: dhm4vgpmisci5
+    description: |
+      유튜브 url
+  etcUrl:
+    type: string
+    x-stoplight:
+      id: fjtdgoen0g2l1
+    description: '기타 링크(네이버 카페, 홈페이지 등)'
+  buildingId:
+    type: integer
+    x-stoplight:
+      id: lnwt2vebcix0p
+    description: |
+      건물 id
+  room:
+    type: string
+    x-stoplight:
+      id: 7h7mm6cjx7u5v
+    maxLength: 30
+    description: 동아리방 호수

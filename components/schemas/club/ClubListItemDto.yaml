@@ -44,3 +44,9 @@ properties:
     description: 동아리 모집 마감일
     example: '2026-06-03T23:59:59'
     nullable: true
+  recruitmentStatus:
+    $ref: ./ClubRecruitmentStatus.yaml
+    x-stoplight:
+      id: pqnvuv23p01dd
+    description: |
+      모집 상태 (모집전/모집중/모집완료/상시모집)
