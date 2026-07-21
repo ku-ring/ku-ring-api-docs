@@ -1,0 +1,56 @@
+type: object
+description: 카테고리 기반 시설 목록 조회 응답의 data
+required:
+  - campusPlaces
+properties:
+  campusPlaces:
+    type: array
+    description: 요청한 카테고리에 해당하는 시설 목록
+    items:
+      $ref: ./CampusPlaceItem.yaml
+example:
+  campusPlaces:
+    - id: 102
+      name: 학생회관 1층 라운지 프린터
+      category: printer
+      categoryKorName: 프린터
+      imageUrl: https://placehold.co/600x400/png?text=Printer
+      locationType: INDOOR
+      floor: 1F
+      locationDetail: 라운지 안쪽
+      quantity: 3
+      currentOperatingHours:
+        period: SEMESTER
+        dayGroup: WEEKDAY
+        status: SCHEDULED
+        opensAt: '08:00'
+        closesAt: '22:00'
+      externalUrl: null
+      building:
+        id: 4
+        name: 학생회관
+        address: 서울특별시 광진구 능동로 120
+        latitude: 37.5412
+        longitude: 127.0784
+    - id: 203
+      name: 경영관 지하 1층 프린터
+      category: printer
+      categoryKorName: 프린터
+      imageUrl: https://placehold.co/600x400/png?text=Printer
+      locationType: INDOOR
+      floor: B1
+      locationDetail: 엘리베이터 맞은편
+      quantity: 1
+      currentOperatingHours:
+        period: SEMESTER
+        dayGroup: WEEKDAY
+        status: SCHEDULED
+        opensAt: '09:00'
+        closesAt: '21:00'
+      externalUrl: null
+      building:
+        id: 2
+        name: 경영관
+        address: 서울특별시 광진구 능동로 120
+        latitude: 37.54196
+        longitude: 127.07531

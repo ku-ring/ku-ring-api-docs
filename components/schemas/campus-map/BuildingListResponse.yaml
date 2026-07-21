@@ -1,0 +1,32 @@
+type: object
+description: 캠퍼스맵 전체 건물 목록 조회 응답의 data
+required:
+  - buildings
+properties:
+  buildings:
+    type: array
+    description: 캠퍼스에 등록된 건물 목록
+    items:
+      $ref: ./BuildingSummary.yaml
+example:
+  buildings:
+    - id: 1
+      name: 행정관
+      address: 서울특별시 광진구 능동로 120
+      latitude: 37.54241
+      longitude: 127.07382
+    - id: 2
+      name: 경영관
+      address: 서울특별시 광진구 능동로 120
+      latitude: 37.54196
+      longitude: 127.07531
+    - id: 3
+      name: 법학관
+      address: 서울특별시 광진구 능동로 120
+      latitude: 37.54174
+      longitude: 127.07649
+    - id: 4
+      name: 학생회관
+      address: 서울특별시 광진구 능동로 120
+      latitude: 37.5412
+      longitude: 127.0784
