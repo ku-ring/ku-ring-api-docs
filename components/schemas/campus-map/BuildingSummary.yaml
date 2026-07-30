@@ -24,15 +24,15 @@ properties:
     type: number
     format: double
     description: 건물 위도
-    example: 37.5412
+    example: 37.541823
   longitude:
     type: number
     format: double
     description: 건물 경도
-    example: 127.0784
+    example: 127.0779007
 example:
   id: 4
   name: 학생회관
   address: 서울특별시 광진구 능동로 120
-  latitude: 37.5412
-  longitude: 127.0784
+  latitude: 37.541823
+  longitude: 127.0779007

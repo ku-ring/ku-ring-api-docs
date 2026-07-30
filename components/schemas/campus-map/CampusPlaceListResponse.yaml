@@ -10,47 +10,85 @@ properties:
       $ref: ./CampusPlaceItem.yaml
 example:
   campusPlaces:
-    - id: 102
-      name: 학생회관 1층 라운지 프린터
-      category: printer
-      categoryKorName: 프린터
-      imageUrl: https://placehold.co/600x400/png?text=Printer
-      locationType: INDOOR
-      floor: 1F
-      locationDetail: 라운지 안쪽
-      quantity: 3
-      currentOperatingHours:
-        period: SEMESTER
-        dayGroup: WEEKDAY
-        status: SCHEDULED
-        opensAt: '08:00'
-        closesAt: '22:00'
-      externalUrl: null
-      building:
-        id: 4
-        name: 학생회관
-        address: 서울특별시 광진구 능동로 120
-        latitude: 37.5412
-        longitude: 127.0784
-    - id: 203
-      name: 경영관 지하 1층 프린터
+    - id: 301
+      name: 법학관 인쇄소
       category: printer
       categoryKorName: 프린터
       imageUrl: https://placehold.co/600x400/png?text=Printer
       locationType: INDOOR
       floor: B1
-      locationDetail: 엘리베이터 맞은편
+      locationDetail: 법학관 지하 1층
       quantity: 1
-      currentOperatingHours:
-        period: SEMESTER
-        dayGroup: WEEKDAY
-        status: SCHEDULED
-        opensAt: '09:00'
-        closesAt: '21:00'
+      operatingHours:
+        - period: SEMESTER
+          dayGroup: WEEKDAY
+          status: SCHEDULED
+          opensAt: '08:00'
+          closesAt: '22:00'
+          isCurrent: false
+        - period: SEMESTER
+          dayGroup: WEEKEND
+          status: SCHEDULED
+          opensAt: '09:00'
+          closesAt: '18:00'
+          isCurrent: false
+        - period: VACATION
+          dayGroup: WEEKDAY
+          status: SCHEDULED
+          opensAt: '09:00'
+          closesAt: '18:00'
+          isCurrent: true
+        - period: VACATION
+          dayGroup: WEEKEND
+          status: UNKNOWN
+          opensAt: null
+          closesAt: null
+          isCurrent: false
+      externalUrl: null
+      building:
+        id: 3
+        name: 법학관
+        address: 서울특별시 광진구 능동로 120
+        latitude: 37.5417036
+        longitude: 127.0750767
+    - id: 205
+      name: 경영관 흡연부스
+      category: smoking_booth
+      categoryKorName: 흡연부스
+      imageUrl: https://placehold.co/600x400/png?text=Smoking+Booth
+      locationType: OUTDOOR
+      floor: OUTDOOR
+      locationDetail: 경영관 CU 앞
+      quantity: 1
+      operatingHours:
+        - period: SEMESTER
+          dayGroup: WEEKDAY
+          status: OPEN_24_HOURS
+          opensAt: null
+          closesAt: null
+          isCurrent: false
+        - period: SEMESTER
+          dayGroup: WEEKEND
+          status: OPEN_24_HOURS
+          opensAt: null
+          closesAt: null
+          isCurrent: false
+        - period: VACATION
+          dayGroup: WEEKDAY
+          status: OPEN_24_HOURS
+          opensAt: null
+          closesAt: null
+          isCurrent: true
+        - period: VACATION
+          dayGroup: WEEKEND
+          status: OPEN_24_HOURS
+          opensAt: null
+          closesAt: null
+          isCurrent: false
       externalUrl: null
       building:
         id: 2
         name: 경영관
         address: 서울특별시 광진구 능동로 120
-        latitude: 37.54196
-        longitude: 127.07531
+        latitude: 37.5443474
+        longitude: 127.0761119

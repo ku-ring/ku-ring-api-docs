@@ -7,7 +7,23 @@ required:
 properties:
   name:
     type: string
-    description: 시설 목록 조회 요청에 사용하는 카테고리 코드
+    description: |-
+      시설 목록 조회 요청에 사용하는 카테고리 코드입니다.
+      - `cafe`: 카페
+      - `restaurant`: 식당
+      - `printer`: 프린터
+      - `smoking_booth`: 흡연부스
+      - `convenience_store`: 편의점
+      - `lounge`: 휴게실
+      - `kcube`: KCUBE
+    enum:
+      - cafe
+      - restaurant
+      - printer
+      - smoking_booth
+      - convenience_store
+      - lounge
+      - kcube
     example: convenience_store
   korName:
     type: string
@@ -16,5 +32,6 @@ properties:
   displayOrder:
     type: integer
     format: int32
+    minimum: 1
     description: 카테고리 화면 노출 순서
     example: 1

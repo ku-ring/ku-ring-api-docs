@@ -1,0 +1,63 @@
+type: object
+description: 시설 또는 건물에 등록된 기간·요일별 운영시간
+example:
+  period: VACATION
+  dayGroup: WEEKDAY
+  status: SCHEDULED
+  opensAt: '09:00'
+  closesAt: '18:00'
+  isCurrent: true
+required:
+  - period
+  - dayGroup
+  - status
+  - opensAt
+  - closesAt
+  - isCurrent
+properties:
+  period:
+    type: string
+    description: |-
+      운영 기간 구분입니다.
+      - `SEMESTER`: 학기 중
+      - `VACATION`: 방학 중
+    enum:
+      - SEMESTER
+      - VACATION
+    example: VACATION
+  dayGroup:
+    type: string
+    description: |-
+      운영 요일 구분입니다.
+      - `WEEKDAY`: 주중(월요일~금요일)
+      - `WEEKEND`: 주말(토요일~일요일)
+    enum:
+      - WEEKDAY
+      - WEEKEND
+    example: WEEKDAY
+  status:
+    type: string
+    description: |-
+      해당 운영시간의 제공 상태입니다.
+      - `SCHEDULED`: 정해진 운영시간이 있으며 opensAt과 closesAt을 함께 사용
+      - `OPEN_24_HOURS`: 24시간 운영하며 opensAt과 closesAt은 null
+      - `UNKNOWN`: 운영시간 정보가 없으며 opensAt과 closesAt은 null
+    enum:
+      - SCHEDULED
+      - OPEN_24_HOURS
+      - UNKNOWN
+    example: SCHEDULED
+  opensAt:
+    type: string
+    nullable: true
+    description: '운영 시작 시각(HH:mm). SCHEDULED가 아니면 null'
+    example: '09:00'
+  closesAt:
+    type: string
+    nullable: true
+    description: '운영 종료 시각(HH:mm). SCHEDULED가 아니면 null'
+    example: '18:00'
+  isCurrent:
+    type: boolean
+    description: 서버가 현재 날짜를 기준으로 판단한 운영시간인지 여부
+    example: true

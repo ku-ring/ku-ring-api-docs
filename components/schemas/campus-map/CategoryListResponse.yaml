@@ -14,7 +14,7 @@ example:
       korName: 카페
       displayOrder: 1
     - name: restaurant
-      korName: 음식점
+      korName: 식당
       displayOrder: 2
     - name: printer
       korName: 프린터
@@ -26,8 +26,8 @@ example:
       korName: 편의점
       displayOrder: 5
     - name: lounge
-      korName: 휴게공간
+      korName: 휴게실
       displayOrder: 6
     - name: kcube
-      korName: K-Cube
+      korName: KCUBE
       displayOrder: 7

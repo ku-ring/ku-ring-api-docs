@@ -13,20 +13,30 @@ example:
     - id: 1
       name: 행정관
       address: 서울특별시 광진구 능동로 120
-      latitude: 37.54241
-      longitude: 127.07382
+      latitude: 37.5444801
+      longitude: 127.0748518
     - id: 2
       name: 경영관
       address: 서울특별시 광진구 능동로 120
-      latitude: 37.54196
-      longitude: 127.07531
+      latitude: 37.5443474
+      longitude: 127.0761119
     - id: 3
       name: 법학관
       address: 서울특별시 광진구 능동로 120
-      latitude: 37.54174
-      longitude: 127.07649
+      latitude: 37.5417036
+      longitude: 127.0750767
     - id: 4
       name: 학생회관
       address: 서울특별시 광진구 능동로 120
-      latitude: 37.5412
-      longitude: 127.0784
+      latitude: 37.541823
+      longitude: 127.0779007
+    - id: 10
+      name: 상허기념도서관
+      address: 서울특별시 광진구 능동로 120
+      latitude: 37.5420474
+      longitude: 127.0738384
+    - id: 20
+      name: 과학관
+      address: 서울특별시 광진구 능동로 120
+      latitude: 37.541467
+      longitude: 127.0805824
