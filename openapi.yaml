@@ -2131,7 +2131,7 @@ paths:
                           korName: 휴게실
                           displayOrder: 6
                         - name: kcube
-                          korName: KCUBE
+                          korName: K-Cube
                           displayOrder: 7
       operationId: getCampusMapCategories
       x-stoplight:
@@ -2170,31 +2170,37 @@ paths:
                           address: 서울특별시 광진구 능동로 120
                           latitude: 37.5444801
                           longitude: 127.0748518
+                          displayOrder: 1
                         - id: 2
                           name: 경영관
                           address: 서울특별시 광진구 능동로 120
                           latitude: 37.5443474
                           longitude: 127.0761119
+                          displayOrder: 1
                         - id: 3
                           name: 법학관
                           address: 서울특별시 광진구 능동로 120
                           latitude: 37.5417036
                           longitude: 127.0750767
+                          displayOrder: 1
                         - id: 4
                           name: 학생회관
                           address: 서울특별시 광진구 능동로 120
                           latitude: 37.541823
                           longitude: 127.0779007
+                          displayOrder: 2
                         - id: 10
                           name: 상허기념도서관
                           address: 서울특별시 광진구 능동로 120
                           latitude: 37.5420474
                           longitude: 127.0738384
+                          displayOrder: 2
                         - id: 20
                           name: 과학관
                           address: 서울특별시 광진구 능동로 120
                           latitude: 37.541467
                           longitude: 127.0805824
+                          displayOrder: 3
       operationId: getCampusMapBuildings
       x-stoplight:
         id: 9ml6ohwg6sodd
@@ -2203,12 +2209,21 @@ paths:
         건물 상세 정보와 건물 내부 시설 정보는 포함하지 않습니다.
   /api/v2/maps/buildings/search:
     get:
-      summary: 캠퍼스맵 건물 키워드 검색
+      summary: 캠퍼스맵 건물 및 시설 키워드 검색
       tags:
         - Draft
+      parameters:
+        - schema:
+            type: string
+            example: 학생회관
+            minLength: 1
+          in: query
+          name: keyword
+          required: true
+          description: 건물명, 주소, 건물 검색 키워드, 시설명 또는 시설 카테고리 검색어
       responses:
         '200':
-          description: 캠퍼스맵 건물 키워드 검색 성공
+          description: 캠퍼스맵 건물 및 시설 키워드 검색 성공
           content:
             application/json:
               schema:
@@ -2219,12 +2234,12 @@ paths:
                       - data
                     properties:
                       data:
-                        $ref: ./components/schemas/campus-map/BuildingListResponse.yaml
+                        $ref: ./components/schemas/campus-map/CampusMapSearchResponse.yaml
               examples:
                 Success:
                   value:
                     code: 200
-                    message: 캠퍼스 건물 검색에 성공하였습니다
+                    message: 캠퍼스맵 검색에 성공하였습니다
                     data:
                       buildings:
                         - id: 4
@@ -2232,12 +2247,55 @@ paths:
                           address: 서울특별시 광진구 능동로 120
                           latitude: 37.541823
                           longitude: 127.0779007
+                      campusPlaces:
+                        - id: 401
+                          name: 학생회관 식당
+                          category: restaurant
+                          categoryKorName: 식당
+                          imageUrl: https://placehold.co/1200x800/png?text=Student+Center
+                          locationType: INDOOR
+                          floor: 1F
+                          locationDetail: 학생회관 1층
+                          quantity: null
+                          operatingHours:
+                            - period: SEMESTER
+                              dayGroup: WEEKDAY
+                              status: SCHEDULED
+                              opensAt: '08:00'
+                              closesAt: '20:00'
+                              isCurrent: true
+                            - period: SEMESTER
+                              dayGroup: WEEKEND
+                              status: UNKNOWN
+                              opensAt: null
+                              closesAt: null
+                              isCurrent: false
+                            - period: VACATION
+                              dayGroup: WEEKDAY
+                              status: SCHEDULED
+                              opensAt: '09:00'
+                              closesAt: '18:00'
+                              isCurrent: false
+                            - period: VACATION
+                              dayGroup: WEEKEND
+                              status: UNKNOWN
+                              opensAt: null
+                              closesAt: null
+                              isCurrent: false
+                          externalUrl: null
+                          building:
+                            id: 4
+                            name: 학생회관
+                            address: 서울특별시 광진구 능동로 120
+                            latitude: 37.541823
+                            longitude: 127.0779007
                 EmptyResult:
                   value:
                     code: 200
-                    message: 캠퍼스 건물 검색에 성공하였습니다
+                    message: 캠퍼스맵 검색에 성공하였습니다
                     data:
                       buildings: []
+                      campusPlaces: []
         '400':
           description: 검색어 누락 또는 잘못된 검색어
           content:
@@ -2255,21 +2313,13 @@ paths:
                     isSuccess: false
                     resultCode: 400
                     resultMsg: 파라미터 값 중 잘못된 값이 있습니다.
-      operationId: searchCampusMapBuildings
+      operationId: searchCampusMap
       x-stoplight:
         id: 4t1enp1xlx2z9
       description: |-
-        건물명, 주소 또는 건물에 등록된 검색 키워드를 기준으로 건물을 검색합니다.
-        시설명은 검색 대상에 포함하지 않습니다.
-      parameters:
-        - schema:
-            type: string
-            example: 학관
-            minLength: 1
-          in: query
-          name: keyword
-          required: true
-          description: 건물명 또는 건물에 등록된 검색 키워드
+        입력한 키워드로 건물과 캠퍼스 시설을 함께 검색합니다.
+        건물은 건물명, 주소 또는 등록된 건물 검색 키워드를 대상으로 검색합니다.
+        시설은 시설명, 카테고리 코드 또는 카테고리 한글명을 대상으로 검색합니다.
   /api/v2/maps/campus-places:
     get:
       summary: 캠퍼스맵 카테고리 기반 시설 목록 조회
@@ -2295,7 +2345,7 @@ paths:
                 - `smoking_booth`: 흡연부스
                 - `convenience_store`: 편의점
                 - `lounge`: 휴게실
-                - `kcube`: KCUBE
+                - `kcube`: K-Cube
               enum:
                 - cafe
                 - restaurant
@@ -2332,7 +2382,7 @@ paths:
                           name: 법학관 인쇄소
                           category: printer
                           categoryKorName: 프린터
-                          imageUrl: 'https://placehold.co/600x400/png?text=Printer'
+                          imageUrl: 'https://placehold.co/1200x800/png?text=Law+Building'
                           locationType: INDOOR
                           floor: B1
                           locationDetail: 법학관 지하 1층
@@ -2373,7 +2423,7 @@ paths:
                           name: 경영관 흡연부스
                           category: smoking_booth
                           categoryKorName: 흡연부스
-                          imageUrl: 'https://placehold.co/600x400/png?text=Smoking+Booth'
+                          imageUrl: 'https://placehold.co/1200x800/png?text=Business+Building'
                           locationType: OUTDOOR
                           floor: OUTDOOR
                           locationDetail: 경영관 CU 앞
@@ -2475,7 +2525,7 @@ paths:
                       address: 서울특별시 광진구 능동로 120
                       latitude: 37.541823
                       longitude: 127.0779007
-                      imageUrl: https://placehold.co/1200x800/png?text=Konkuk+University
+                      imageUrl: https://placehold.co/1200x800/png?text=Student+Center
                       operatingHours:
                         - period: SEMESTER
                           dayGroup: WEEKDAY
@@ -2506,7 +2556,7 @@ paths:
                           name: 학생회관 복사실
                           category: printer
                           categoryKorName: 프린터
-                          imageUrl: https://placehold.co/600x400/png?text=Printer
+                          imageUrl: https://placehold.co/1200x800/png?text=Student+Center
                           locationType: INDOOR
                           floor: 1F
                           locationDetail: 학생회관 1층
@@ -2541,7 +2591,7 @@ paths:
                           name: 신한은행
                           category: bank_atm
                           categoryKorName: 은행·ATM
-                          imageUrl: https://placehold.co/600x400/png?text=ATM
+                          imageUrl: https://placehold.co/1200x800/png?text=Student+Center
                           locationType: INDOOR
                           floor: 1F
                           locationDetail: 학생회관 1층

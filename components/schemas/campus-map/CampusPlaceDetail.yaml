@@ -32,7 +32,7 @@ properties:
       - `smoking_booth`: 흡연부스
       - `convenience_store`: 편의점
       - `lounge`: 휴게실
-      - `kcube`: KCUBE
+      - `kcube`: K-Cube
       - `bank_atm`: 은행·ATM
       - `post_office`: 우체국
     enum:
@@ -48,14 +48,14 @@ properties:
     example: printer
   categoryKorName:
     type: string
-    description: 클라이언트 화면에 표시할 카테고리 한글명
+    description: 클라이언트 화면에 표시할 카테고리명
     example: 프린터
   imageUrl:
     type: string
     format: uri
     nullable: true
-    description: 시설 이미지 URL. 등록된 이미지가 없으면 null
-    example: https://placehold.co/600x400/png?text=Printer
+    description: 시설이 속한 건물의 이미지 URL. 건물 이미지가 없으면 null
+    example: https://placehold.co/1200x800/png?text=Law+Building
   locationType:
     type: string
     description: |-
@@ -98,7 +98,7 @@ example:
   name: 법학관 인쇄소
   category: printer
   categoryKorName: 프린터
-  imageUrl: https://placehold.co/600x400/png?text=Printer
+  imageUrl: https://placehold.co/1200x800/png?text=Law+Building
   locationType: INDOOR
   floor: B1
   locationDetail: 법학관 지하 1층

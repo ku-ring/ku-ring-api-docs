@@ -1,0 +1,65 @@
+type: object
+description: 캠퍼스맵 건물 및 시설 통합 검색 응답의 data
+required:
+  - buildings
+  - campusPlaces
+properties:
+  buildings:
+    type: array
+    description: 건물명, 주소 또는 등록된 검색 키워드와 일치하는 건물 목록
+    items:
+      $ref: ./BuildingSummary.yaml
+  campusPlaces:
+    type: array
+    description: 시설명 또는 시설 카테고리와 일치하는 시설 목록
+    items:
+      $ref: ./CampusPlaceItem.yaml
+example:
+  buildings:
+    - id: 3
+      name: 법학관
+      address: 서울특별시 광진구 능동로 120
+      latitude: 37.5417036
+      longitude: 127.0750767
+  campusPlaces:
+    - id: 301
+      name: 법학관 인쇄소
+      category: printer
+      categoryKorName: 프린터
+      imageUrl: https://placehold.co/1200x800/png?text=Law+Building
+      locationType: INDOOR
+      floor: B1
+      locationDetail: 법학관 지하 1층
+      quantity: 1
+      operatingHours:
+        - period: SEMESTER
+          dayGroup: WEEKDAY
+          status: SCHEDULED
+          opensAt: '08:00'
+          closesAt: '22:00'
+          isCurrent: true
+        - period: SEMESTER
+          dayGroup: WEEKEND
+          status: UNKNOWN
+          opensAt: null
+          closesAt: null
+          isCurrent: false
+        - period: VACATION
+          dayGroup: WEEKDAY
+          status: SCHEDULED
+          opensAt: '09:00'
+          closesAt: '18:00'
+          isCurrent: false
+        - period: VACATION
+          dayGroup: WEEKEND
+          status: UNKNOWN
+          opensAt: null
+          closesAt: null
+          isCurrent: false
+      externalUrl: null
+      building:
+        id: 3
+        name: 법학관
+        address: 서울특별시 광진구 능동로 120
+        latitude: 37.5417036
+        longitude: 127.0750767

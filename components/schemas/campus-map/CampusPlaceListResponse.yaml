@@ -14,7 +14,7 @@ example:
       name: 법학관 인쇄소
       category: printer
       categoryKorName: 프린터
-      imageUrl: https://placehold.co/600x400/png?text=Printer
+      imageUrl: https://placehold.co/1200x800/png?text=Law+Building
       locationType: INDOOR
       floor: B1
       locationDetail: 법학관 지하 1층
@@ -55,7 +55,7 @@ example:
       name: 경영관 흡연부스
       category: smoking_booth
       categoryKorName: 흡연부스
-      imageUrl: https://placehold.co/600x400/png?text=Smoking+Booth
+      imageUrl: https://placehold.co/1200x800/png?text=Business+Building
       locationType: OUTDOOR
       floor: OUTDOOR
       locationDetail: 경영관 CU 앞

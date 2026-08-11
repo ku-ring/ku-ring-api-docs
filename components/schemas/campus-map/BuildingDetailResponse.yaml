@@ -38,7 +38,7 @@ properties:
     format: uri
     nullable: true
     description: 건물 이미지 URL. 등록된 이미지가 없으면 null
-    example: https://placehold.co/1200x800/png?text=Konkuk+University
+    example: https://placehold.co/1200x800/png?text=Student+Center
   operatingHours:
     type: array
     description: 기간·요일별 전체 운영시간. 배열 순서와 관계없이 isCurrent가 true인 항목이 현재 적용되는 운영시간
@@ -55,7 +55,7 @@ example:
   address: 서울특별시 광진구 능동로 120
   latitude: 37.541823
   longitude: 127.0779007
-  imageUrl: https://placehold.co/1200x800/png?text=Konkuk+University
+  imageUrl: https://placehold.co/1200x800/png?text=Student+Center
   operatingHours:
     - period: SEMESTER
       dayGroup: WEEKDAY
@@ -86,7 +86,7 @@ example:
       name: 학생회관 복사실
       category: printer
       categoryKorName: 프린터
-      imageUrl: https://placehold.co/600x400/png?text=Printer
+      imageUrl: https://placehold.co/1200x800/png?text=Student+Center
       locationType: INDOOR
       floor: 1F
       locationDetail: 학생회관 1층
@@ -121,7 +121,7 @@ example:
       name: 신한은행
       category: bank_atm
       categoryKorName: 은행·ATM
-      imageUrl: https://placehold.co/600x400/png?text=ATM
+      imageUrl: https://placehold.co/1200x800/png?text=Student+Center
       locationType: INDOOR
       floor: 1F
       locationDetail: 학생회관 1층

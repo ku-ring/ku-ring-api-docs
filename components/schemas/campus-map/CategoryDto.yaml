@@ -15,7 +15,7 @@ properties:
       - `smoking_booth`: 흡연부스
       - `convenience_store`: 편의점
       - `lounge`: 휴게실
-      - `kcube`: KCUBE
+      - `kcube`: K-Cube
     enum:
       - cafe
       - restaurant
