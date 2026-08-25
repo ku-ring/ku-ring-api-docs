@@ -6,6 +6,7 @@ required:
   - address
   - latitude
   - longitude
+  - imageUrl
 properties:
   id:
     type: integer
@@ -30,9 +31,16 @@ properties:
     format: double
     description: 건물 경도
     example: 127.0779007
+  imageUrl:
+    type: string
+    format: uri
+    nullable: true
+    description: 건물 이미지 URL. 등록된 이미지가 없으면 null
+    example: https://cdn.example.com/campus-map/student-center.jpg
 example:
   id: 4
   name: 학생회관
   address: 서울특별시 광진구 능동로 120
   latitude: 37.541823
   longitude: 127.0779007
+  imageUrl: https://cdn.example.com/campus-map/student-center.jpg

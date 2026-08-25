@@ -51,6 +51,7 @@ example:
         address: 서울특별시 광진구 능동로 120
         latitude: 37.5417036
         longitude: 127.0750767
+        imageUrl: https://cdn.example.com/campus-map/law-building.jpg
     - id: 205
       name: 경영관 흡연부스
       category: smoking_booth
@@ -92,3 +93,4 @@ example:
         address: 서울특별시 광진구 능동로 120
         latitude: 37.5443474
         longitude: 127.0761119
+        imageUrl: https://cdn.example.com/campus-map/business-building.jpg

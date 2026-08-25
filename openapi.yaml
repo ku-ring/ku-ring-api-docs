@@ -2247,12 +2247,13 @@ paths:
                           address: 서울특별시 광진구 능동로 120
                           latitude: 37.541823
                           longitude: 127.0779007
+                          imageUrl: https://cdn.example.com/campus-map/student-center.jpg
                       campusPlaces:
                         - id: 401
                           name: 학생회관 식당
                           category: restaurant
                           categoryKorName: 식당
-                          imageUrl: https://placehold.co/1200x800/png?text=Student+Center
+                          imageUrl: https://cdn.example.com/campus-map/student-center.jpg
                           locationType: INDOOR
                           floor: 1F
                           locationDetail: 학생회관 1층
@@ -2289,6 +2290,7 @@ paths:
                             address: 서울특별시 광진구 능동로 120
                             latitude: 37.541823
                             longitude: 127.0779007
+                            imageUrl: https://cdn.example.com/campus-map/student-center.jpg
                 EmptyResult:
                   value:
                     code: 200
@@ -2419,6 +2421,7 @@ paths:
                             address: 서울특별시 광진구 능동로 120
                             latitude: 37.5417036
                             longitude: 127.0750767
+                            imageUrl: https://placehold.co/1200x800/png?text=Law+Building
                         - id: 205
                           name: 경영관 흡연부스
                           category: smoking_booth
@@ -2460,6 +2463,7 @@ paths:
                             address: 서울특별시 광진구 능동로 120
                             latitude: 37.5443474
                             longitude: 127.0761119
+                            imageUrl: https://placehold.co/1200x800/png?text=Business+Building
                 EmptyResult:
                   value:
                     code: 200

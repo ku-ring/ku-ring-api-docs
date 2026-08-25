@@ -134,3 +134,4 @@ example:
     address: 서울특별시 광진구 능동로 120
     latitude: 37.5417036
     longitude: 127.0750767
+    imageUrl: https://cdn.example.com/campus-map/law-building.jpg
