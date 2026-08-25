@@ -1,0 +1,154 @@
+type: object
+description: 캠퍼스맵 건물 상세 조회 응답의 data
+required:
+  - id
+  - name
+  - address
+  - latitude
+  - longitude
+  - imageUrl
+  - operatingHours
+  - campusPlaces
+properties:
+  id:
+    type: integer
+    format: int64
+    description: 건물 ID
+    example: 4
+  name:
+    type: string
+    description: 건물명
+    example: 학생회관
+  address:
+    type: string
+    description: 건물 주소
+    example: 서울특별시 광진구 능동로 120
+  latitude:
+    type: number
+    format: double
+    description: 건물 위도
+    example: 37.541823
+  longitude:
+    type: number
+    format: double
+    description: 건물 경도
+    example: 127.0779007
+  imageUrl:
+    type: string
+    format: uri
+    nullable: true
+    description: 건물 이미지 URL. 등록된 이미지가 없으면 null
+    example: https://placehold.co/1200x800/png?text=Student+Center
+  operatingHours:
+    type: array
+    description: 기간·요일별 전체 운영시간. 배열 순서와 관계없이 isCurrent가 true인 항목이 현재 적용되는 운영시간
+    items:
+      $ref: ./OperatingHoursDto.yaml
+  campusPlaces:
+    type: array
+    description: 건물에 등록된 주요시설 및 편의시설 목록
+    items:
+      $ref: ./CampusPlaceDetail.yaml
+example:
+  id: 4
+  name: 학생회관
+  address: 서울특별시 광진구 능동로 120
+  latitude: 37.541823
+  longitude: 127.0779007
+  imageUrl: https://placehold.co/1200x800/png?text=Student+Center
+  operatingHours:
+    - period: SEMESTER
+      dayGroup: WEEKDAY
+      status: SCHEDULED
+      opensAt: '08:00'
+      closesAt: '22:00'
+      isCurrent: false
+    - period: SEMESTER
+      dayGroup: WEEKEND
+      status: SCHEDULED
+      opensAt: '09:00'
+      closesAt: '18:00'
+      isCurrent: false
+    - period: VACATION
+      dayGroup: WEEKDAY
+      status: SCHEDULED
+      opensAt: '09:00'
+      closesAt: '18:00'
+      isCurrent: true
+    - period: VACATION
+      dayGroup: WEEKEND
+      status: UNKNOWN
+      opensAt: null
+      closesAt: null
+      isCurrent: false
+  campusPlaces:
+    - id: 402
+      name: 학생회관 복사실
+      category: printer
+      categoryKorName: 프린터
+      imageUrl: https://placehold.co/1200x800/png?text=Student+Center
+      locationType: INDOOR
+      floor: 1F
+      locationDetail: 학생회관 1층
+      quantity: 2
+      operatingHours:
+        - period: SEMESTER
+          dayGroup: WEEKDAY
+          status: SCHEDULED
+          opensAt: '08:00'
+          closesAt: '22:00'
+          isCurrent: false
+        - period: SEMESTER
+          dayGroup: WEEKEND
+          status: SCHEDULED
+          opensAt: '09:00'
+          closesAt: '18:00'
+          isCurrent: false
+        - period: VACATION
+          dayGroup: WEEKDAY
+          status: SCHEDULED
+          opensAt: '09:00'
+          closesAt: '18:00'
+          isCurrent: true
+        - period: VACATION
+          dayGroup: WEEKEND
+          status: UNKNOWN
+          opensAt: null
+          closesAt: null
+          isCurrent: false
+      externalUrl: null
+    - id: 406
+      name: 신한은행
+      category: bank_atm
+      categoryKorName: 은행·ATM
+      imageUrl: https://placehold.co/1200x800/png?text=Student+Center
+      locationType: INDOOR
+      floor: 1F
+      locationDetail: 학생회관 1층
+      quantity: null
+      operatingHours:
+        - period: SEMESTER
+          dayGroup: WEEKDAY
+          status: SCHEDULED
+          opensAt: '08:00'
+          closesAt: '22:00'
+          isCurrent: false
+        - period: SEMESTER
+          dayGroup: WEEKEND
+          status: SCHEDULED
+          opensAt: '09:00'
+          closesAt: '18:00'
+          isCurrent: false
+        - period: VACATION
+          dayGroup: WEEKDAY
+          status: SCHEDULED
+          opensAt: '09:00'
+          closesAt: '18:00'
+          isCurrent: true
+        - period: VACATION
+          dayGroup: WEEKEND
+          status: UNKNOWN
+          opensAt: null
+          closesAt: null
+          isCurrent: false
+      externalUrl: null

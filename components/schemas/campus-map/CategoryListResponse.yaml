@@ -1,0 +1,33 @@
+type: object
+description: 캠퍼스맵 카테고리 목록 조회 응답의 data
+required:
+  - categories
+properties:
+  categories:
+    type: array
+    description: 화면 노출 순서로 정렬된 캠퍼스맵 카테고리 목록
+    items:
+      $ref: ./CategoryDto.yaml
+example:
+  categories:
+    - name: cafe
+      korName: 카페
+      displayOrder: 1
+    - name: restaurant
+      korName: 식당
+      displayOrder: 2
+    - name: printer
+      korName: 프린터
+      displayOrder: 3
+    - name: smoking_booth
+      korName: 흡연부스
+      displayOrder: 4
+    - name: convenience_store
+      korName: 편의점
+      displayOrder: 5
+    - name: lounge
+      korName: 휴게실
+      displayOrder: 6
+    - name: kcube
+      korName: K-Cube
+      displayOrder: 7

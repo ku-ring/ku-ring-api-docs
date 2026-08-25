@@ -1,0 +1,67 @@
+type: object
+description: 캠퍼스맵 건물 및 시설 통합 검색 응답의 data
+required:
+  - buildings
+  - campusPlaces
+properties:
+  buildings:
+    type: array
+    description: 검색어와 일치하는 건물 목록
+    items:
+      $ref: ./BuildingSummary.yaml
+  campusPlaces:
+    type: array
+    description: 검색어와 일치하는 캠퍼스 시설 목록
+    items:
+      $ref: ./CampusPlaceItem.yaml
+example:
+  buildings:
+    - id: 4
+      name: 학생회관
+      address: 서울특별시 광진구 능동로 120
+      latitude: 37.541823
+      longitude: 127.0779007
+      imageUrl: https://cdn.example.com/campus-map/student-center.jpg
+  campusPlaces:
+    - id: 401
+      name: 학생회관 식당
+      category: restaurant
+      categoryKorName: 식당
+      imageUrl: https://cdn.example.com/campus-map/student-center.jpg
+      locationType: INDOOR
+      floor: 1F
+      locationDetail: 학생회관 1층
+      quantity: null
+      operatingHours:
+        - period: SEMESTER
+          dayGroup: WEEKDAY
+          status: SCHEDULED
+          opensAt: '08:00'
+          closesAt: '20:00'
+          isCurrent: true
+        - period: SEMESTER
+          dayGroup: WEEKEND
+          status: UNKNOWN
+          opensAt: null
+          closesAt: null
+          isCurrent: false
+        - period: VACATION
+          dayGroup: WEEKDAY
+          status: SCHEDULED
+          opensAt: '09:00'
+          closesAt: '18:00'
+          isCurrent: false
+        - period: VACATION
+          dayGroup: WEEKEND
+          status: UNKNOWN
+          opensAt: null
+          closesAt: null
+          isCurrent: false
+      externalUrl: null
+      building:
+        id: 4
+        name: 학생회관
+        address: 서울특별시 광진구 능동로 120
+        latitude: 37.541823
+        longitude: 127.0779007
+        imageUrl: https://cdn.example.com/campus-map/student-center.jpg
